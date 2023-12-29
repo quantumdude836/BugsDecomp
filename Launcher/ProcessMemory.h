@@ -25,6 +25,27 @@ private:
     /// <param name="memBase">Base address of memory region</param>
     /// <param name="memSize">Size, in bytes, of memory region</param>
     ProcessMemory(HANDLE hProcess, void *memBase, size_t memSize);
+public:
+    ProcessMemory(const ProcessMemory &) = delete;
+    /// <summary>
+    /// Move constructor.
+    /// </summary>
+    /// <param name="from">Instance to move from</param>
+    ProcessMemory(ProcessMemory &&from) noexcept;
+    ProcessMemory &operator =(const ProcessMemory &) = delete;
+    /// <summary>
+    /// Move assignment operator.
+    /// </summary>
+    /// <param name="from">Instance to move from</param>
+    /// <returns>Reference to this</returns>
+    ProcessMemory &operator =(ProcessMemory &&from) noexcept;
+
+public:
+    /// <summary>
+    /// Returns the base address of the memory.
+    /// </summary>
+    /// <returns>Base address of the memory, in remote process space</returns>
+    void *baseAddress() const { return memBase; }
 
 public:
     /// <summary>

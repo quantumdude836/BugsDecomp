@@ -29,6 +29,25 @@ ProcessMemory::ProcessMemory(HANDLE hProcess, void *memBase, size_t memSize) :
 {
 }
 
+ProcessMemory::ProcessMemory(ProcessMemory &&from) noexcept :
+    hProcess(from.hProcess),
+    memBase(from.memBase),
+    memSize(from.memSize)
+{
+    from.memBase = nullptr;
+}
+
+ProcessMemory &ProcessMemory::operator =(ProcessMemory &&from) noexcept
+{
+    hProcess = from.hProcess;
+    memBase = from.memBase;
+    memSize = from.memSize;
+
+    from.memBase = nullptr;
+
+    return *this;
+}
+
 
 size_t ProcessMemory::write(size_t dstOffset, const void *src, size_t size)
 {
@@ -59,6 +78,7 @@ size_t ProcessMemory::write(size_t dstOffset, const void *src, size_t size)
 
 ProcessMemory::~ProcessMemory()
 {
-    VirtualFreeEx(hProcess, memBase, 0, MEM_RELEASE);
+    if (memBase)
+        VirtualFreeEx(hProcess, memBase, 0, MEM_RELEASE);
     // process handle is borrowed; do not release it
 }
