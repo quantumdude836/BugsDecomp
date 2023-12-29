@@ -40,8 +40,7 @@ int Launcher::run(int argc, char **argv)
 {
     assert(argc > 0);
     assert(argv);
-    // argv[0] goes to prog name; rest go to args
-    std::string progName(argv[0]);
+    // skip argv[0] (prog name); rest go to args
     std::vector<const char *> args(&argv[1], &argv[argc]);
 
     // parse args
