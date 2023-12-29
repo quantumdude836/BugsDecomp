@@ -13,5 +13,6 @@
 #include <string.h>
 
 // C++ std headers
+#include <optional>
 #include <string>
 #include <vector>

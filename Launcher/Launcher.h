@@ -12,6 +12,18 @@ public:
     /// </summary>
     Launcher();
 
+private:
+    /// <summary>
+    /// Prints launcher usage.
+    /// </summary>
+    void showUsage();
+    /// <summary>
+    /// Parses program arguments.
+    /// </summary>
+    /// <param name="args">List of args</param>
+    /// <returns>Optional program return code</returns>
+    std::optional<int> parseArgs(std::vector<const char *> &&args);
+
 public:
     /// <summary>
     /// Runs the launcher.
