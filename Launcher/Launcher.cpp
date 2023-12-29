@@ -21,7 +21,8 @@ static const char *checkArgPrefix(const char *arg, const char *prefix)
 }
 
 
-Launcher::Launcher()
+Launcher::Launcher() :
+    cmdline(" /b00 /win /x1024 /y768 /opengl")
 {
 }
 
@@ -31,6 +32,7 @@ void Launcher::showUsage()
     puts("Launcher options:");
     puts("    /help               Show this help and exit");
     puts("    /path:<bblit path>  Set BBLiT root path");
+    puts("    /cmdline:<cmdline>  Specify command line for the game");
 }
 
 std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
@@ -52,6 +54,9 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
 
         if (const char *val = checkArgPrefix(arg, "/path:"))
             rootPath = val;
+
+        if (const char *val = checkArgPrefix(arg, "/cmdline:"))
+            cmdline = val;
     }
 
     return std::nullopt;
@@ -67,10 +72,6 @@ std::string Launcher::getGameExePath() const
 bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 {
     std::string exePath = getGameExePath();
-
-    // for now, set a default command line for the game
-    // this is based on typical vanilla launcher behavior
-    std::string cmdline(" /b00 /win /x1024 /y768 /opengl");
 
     STARTUPINFO startInfo = { 0 };
     startInfo.cb = sizeof startInfo;

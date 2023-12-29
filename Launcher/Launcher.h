@@ -49,4 +49,6 @@ public:
 private:
     // root path for BBLiT
     std::string rootPath;
+    // command line for game process
+    std::string cmdline;
 };
