@@ -23,7 +23,7 @@ decompilation DLL.
 
 Launcher options:
 - `/help` - shows launcher help and exits
-- `/path:<root path>` - sets the root path to a BBLiT copy
+- `/exe:<exe path>` - sets the path to the game to launch
 - `/cmdline:<cmdline>` - specifies command line for the game
 - `/dll:<dll path>` - set path to the DLL to inject
 

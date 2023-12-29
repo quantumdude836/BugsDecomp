@@ -54,9 +54,9 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
             return 0;
         }
 
-        if (const char *val = checkArgPrefix(arg, "/path:"))
+        if (const char *val = checkArgPrefix(arg, "/exe:"))
         {
-            rootPath = val;
+            exePath = val;
             continue;
         }
 
@@ -80,16 +80,8 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
 }
 
 
-std::string Launcher::getGameExePath() const
-{
-    // for now, assume root path has no trailing slashes
-    return rootPath + "\\bin\\Bugs.exe";
-}
-
 bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 {
-    std::string exePath = getGameExePath();
-
     puts("About to create game process");
     printf("  path: %s\n", exePath.c_str());
     printf("  args: %s\n", cmdline.c_str());
@@ -173,10 +165,10 @@ int Launcher::run(int argc, char **argv)
     if (auto res = parseArgs(std::move(args)))
         return *res;
 
-    // at this point, root path must be set
-    if (rootPath.empty())
+    // at this point, exe path must be set
+    if (exePath.empty())
     {
-        fputs("BBLiT root path not specified\n", stderr);
+        fputs("BBLiT exe path not specified\n", stderr);
         return 2;
     }
     // DLL path must also be set
