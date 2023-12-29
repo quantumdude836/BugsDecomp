@@ -53,10 +53,19 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
         }
 
         if (const char *val = checkArgPrefix(arg, "/path:"))
+        {
             rootPath = val;
+            continue;
+        }
 
         if (const char *val = checkArgPrefix(arg, "/cmdline:"))
+        {
             cmdline = val;
+            continue;
+        }
+
+        fprintf(stderr, "Invalid argument '%s'\n", arg);
+        return 1;
     }
 
     return std::nullopt;
