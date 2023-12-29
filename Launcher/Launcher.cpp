@@ -3,6 +3,24 @@
 #include "Launcher.h"
 
 
+/// <summary>
+/// Checks an argument string for a prefix, and returns the suffix on match.
+/// </summary>
+/// <param name="arg">Argument string to check</param>
+/// <param name="prefix">Prefix to check for</param>
+/// <returns>
+/// Pointer within the arg to the suffix, or `nullptr` for no match
+/// </returns>
+static const char *checkArgPrefix(const char *arg, const char *prefix)
+{
+    size_t n = strlen(prefix);
+    if (!strncmp(arg, prefix, n))
+        return arg + n;
+
+    return nullptr;
+}
+
+
 Launcher::Launcher()
 {
 }
@@ -11,7 +29,8 @@ Launcher::Launcher()
 void Launcher::showUsage()
 {
     puts("Launcher options:");
-    puts("    /help           Show this help and exit");
+    puts("    /help               Show this help and exit");
+    puts("    /path:<bblit path>  Set BBLiT root path");
 }
 
 std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
@@ -30,14 +49,56 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
             showUsage();
             return 0;
         }
+
+        if (const char *val = checkArgPrefix(arg, "/path:"))
+            rootPath = val;
     }
 
     return std::nullopt;
 }
 
 
+std::string Launcher::getGameExePath() const
+{
+    // for now, assume root path has no trailing slashes
+    return rootPath + "\\bin\\Bugs.exe";
+}
+
+bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
+{
+    std::string exePath = getGameExePath();
+
+    // for now, set a default command line for the game
+    // this is based on typical vanilla launcher behavior
+    std::string cmdline(" /b00 /win /x1024 /y768 /opengl");
+
+    STARTUPINFO startInfo = { 0 };
+    startInfo.cb = sizeof startInfo;
+
+    // start the game!
+    BOOL res = CreateProcessA(
+        exePath.c_str(),
+        const_cast<char *>(cmdline.c_str()),
+        nullptr,
+        nullptr,
+        FALSE,
+        0,
+        nullptr,
+        nullptr,
+        &startInfo,
+        &procInfo
+    );
+    if (!res)
+        return false;
+
+    return true;
+}
+
+
 int Launcher::run(int argc, char **argv)
 {
+    PROCESS_INFORMATION procInfo;
+
     assert(argc > 0);
     assert(argv);
     // skip argv[0] (prog name); rest go to args
@@ -47,6 +108,21 @@ int Launcher::run(int argc, char **argv)
     if (auto res = parseArgs(std::move(args)))
         return *res;
 
-    puts("What are you doing here? There's nothing implemented yet!");
+    // at this point, root path must be set
+    if (rootPath.empty())
+    {
+        fputs("BBLiT root path not specified\n", stderr);
+        return 2;
+    }
+
+    // launch game process
+    if (!launchGame(procInfo))
+    {
+        fputs("Unable to start game\n", stderr);
+        return 3;
+    }
+
+    CloseHandle(procInfo.hThread);
+    CloseHandle(procInfo.hProcess);
     return 0;
 }
