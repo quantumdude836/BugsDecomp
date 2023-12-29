@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include "GameVersion.h"
 
 
 BOOL APIENTRY DllMain(
@@ -11,6 +12,12 @@ BOOL APIENTRY DllMain(
     switch (ulReason)
     {
     case DLL_PROCESS_ATTACH:
+        // go ahead and try to detect game version; if it fails, don't allow DLL
+        // to continue loading
+        if (!detectVersion())
+            return FALSE;
+        break;
+
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:

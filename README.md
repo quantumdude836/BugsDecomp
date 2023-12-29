@@ -14,7 +14,9 @@ The VS solution consists of the following projects:
 
 ## BugsDecomp {#decomp}
 
-DLL project which contains all the decompiled code for the game.
+DLL project which contains all the decompiled code for the game. Will attempt to
+detect the version of the game, allowing it to be used in both the 1.0 and 1.6
+versions.
 
 ## Launcher {#launcher}
 
@@ -27,8 +29,8 @@ Launcher options:
 - `/cmdline:<cmdline>` - specifies command line for the game
 - `/dll:<dll path>` - set path to the DLL to inject
 
-Currently, the `/path:` option is required; in the future, the launcher will
-have the ability to check the registry for an installed copy of BBLiT.
+Currently, the `/exe:` option is required; in the future, the launcher will have
+the ability to check the registry for an installed copy of BBLiT.
 
 The default command line is `/b00 /win /x1024 /y768 /opengl`, which starts the
 game in windowed mode, 1024x768, with the OpenGL renderer. More information

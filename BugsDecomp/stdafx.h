@@ -6,3 +6,6 @@
 
 // Windows headers
 #include <Windows.h>
+
+// C++ headers
+#include <optional>
