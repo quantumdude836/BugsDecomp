@@ -2,6 +2,10 @@
 Decompilation project for the PC game "Bugs Bunny: Lost in Time!" (aka BBLiT)
 by Behaviour Interactive.
 
+The decompiled code is built into a DLL; a custom launcher starts the game and
+injects the DLL into the game's process, allowing the decompiled functions to be
+patched over their original versions without modifying the binary on disk.
+
 # Solution Layout
 
 The VS solution consists of the following projects:
@@ -14,8 +18,8 @@ DLL project which contains all the decompiled code for the game.
 
 ## Launcher {#launcher}
 
-A simple command-line utility for starting the game. Will eventually be used to
-inject the DLL containing decompiled code.
+A simple command-line utility for starting the game and injecting the
+decompilation DLL.
 
 Launcher options:
 - `/help` - shows launcher help and exits
