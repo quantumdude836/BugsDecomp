@@ -90,6 +90,10 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 {
     std::string exePath = getGameExePath();
 
+    puts("About to create game process");
+    printf("  path: %s\n", exePath.c_str());
+    printf("  args: %s\n", cmdline.c_str());
+
     STARTUPINFO startInfo = { 0 };
     startInfo.cb = sizeof startInfo;
 
@@ -109,6 +113,8 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
     if (!res)
         return false;
 
+    printf("Success! PID: %u\n", procInfo.dwProcessId);
+
     return true;
 }
 
@@ -116,6 +122,8 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 bool Launcher::injectDll(HANDLE hProcess) const
 {
     DWORD threadId;
+
+    printf("Injecting DLL: %s\n", dllPath.c_str());
 
     size_t size = dllPath.length() + 1;
 
@@ -144,6 +152,8 @@ bool Launcher::injectDll(HANDLE hProcess) const
     // wait for thread to exit, signalling the DLL has finished patching itself
     // into the game
     WaitForSingleObject(hThread, INFINITE);
+
+    puts("Success!");
 
     CloseHandle(hThread);
     return true;
