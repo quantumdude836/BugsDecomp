@@ -33,6 +33,7 @@ void Launcher::showUsage()
     puts("    /help               Show this help and exit");
     puts("    /path:<bblit path>  Set BBLiT root path");
     puts("    /cmdline:<cmdline>  Specify command line for the game");
+    puts("    /dll:<dll path>     Set path to the DLL to inject");
 }
 
 std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
@@ -61,6 +62,12 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
         if (const char *val = checkArgPrefix(arg, "/cmdline:"))
         {
             cmdline = val;
+            continue;
+        }
+
+        if (const char *val = checkArgPrefix(arg, "/dll:"))
+        {
+            dllPath = val;
             continue;
         }
 
@@ -122,6 +129,12 @@ int Launcher::run(int argc, char **argv)
     if (rootPath.empty())
     {
         fputs("BBLiT root path not specified\n", stderr);
+        return 2;
+    }
+    // DLL path must also be set
+    if (dllPath.empty())
+    {
+        fputs("DLL path not specified\n", stderr);
         return 2;
     }
 

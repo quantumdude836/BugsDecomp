@@ -51,4 +51,6 @@ private:
     std::string rootPath;
     // command line for game process
     std::string cmdline;
+    // path to the injected DLL
+    std::string dllPath;
 };

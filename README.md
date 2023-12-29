@@ -21,6 +21,7 @@ Launcher options:
 - `/help` - shows launcher help and exits
 - `/path:<root path>` - sets the root path to a BBLiT copy
 - `/cmdline:<cmdline>` - specifies command line for the game
+- `/dll:<dll path>` - set path to the DLL to inject
 
 Currently, the `/path:` option is required; in the future, the launcher will
 have the ability to check the registry for an installed copy of BBLiT.
@@ -28,3 +29,6 @@ have the ability to check the registry for an installed copy of BBLiT.
 The default command line is `/b00 /win /x1024 /y768 /opengl`, which starts the
 game in windowed mode, 1024x768, with the OpenGL renderer. More information
 about game options can be found [here](doc\internals.md#options).
+
+The `/dll:` option is required; while the launcher could be coded to launch the
+game without DLL injection, it'd be just as easy to use the vanilla launcher.
