@@ -37,6 +37,14 @@ private:
     /// <returns>Whether the launch succeeded</returns>
     bool launchGame(PROCESS_INFORMATION &procInfo) const;
 
+private:
+    /// <summary>
+    /// Injects the DLL into the process.
+    /// </summary>
+    /// <param name="hProcess">Handle to the game process</param>
+    /// <returns>Whether the inject succeeded</returns>
+    bool injectDll(HANDLE hProcess) const;
+
 public:
     /// <summary>
     /// Runs the launcher.

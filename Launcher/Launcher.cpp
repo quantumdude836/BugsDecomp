@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "Launcher.h"
+#include "ProcessMemory.h"
 
 
 /// <summary>
@@ -112,6 +113,43 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 }
 
 
+bool Launcher::injectDll(HANDLE hProcess) const
+{
+    DWORD threadId;
+
+    size_t size = dllPath.length() + 1;
+
+    // allocate some space in the process for DLL path (with NUL terminator)
+    auto mem = ProcessMemory::tryCreate(hProcess, size);
+    if (!mem)
+        return false;
+
+    // write path + NUL terminator
+    if (mem->write(0, dllPath.c_str(), size) != size)
+        return false;
+
+    // create a temporary thread in the process to load the DLL
+    HANDLE hThread = CreateRemoteThread(
+        hProcess,
+        nullptr,
+        0,
+        reinterpret_cast<LPTHREAD_START_ROUTINE>(LoadLibraryA),
+        mem->baseAddress(),
+        0,
+        &threadId
+    );
+    if (!hThread)
+        return false;
+
+    // wait for thread to exit, signalling the DLL has finished patching itself
+    // into the game
+    WaitForSingleObject(hThread, INFINITE);
+
+    CloseHandle(hThread);
+    return true;
+}
+
+
 int Launcher::run(int argc, char **argv)
 {
     PROCESS_INFORMATION procInfo;
@@ -143,6 +181,17 @@ int Launcher::run(int argc, char **argv)
     {
         fputs("Unable to start game\n", stderr);
         return 3;
+    }
+
+    // inject the DLL into the process
+    if (!injectDll(procInfo.hProcess))
+    {
+        // go ahead and kill the game process
+        TerminateProcess(procInfo.hProcess, 1);
+        CloseHandle(procInfo.hThread);
+        CloseHandle(procInfo.hProcess);
+        fputs("Unable to inject DLL\n", stderr);
+        return 4;
     }
 
     // game's main thread is ready to run now
