@@ -99,7 +99,7 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
         nullptr,
         nullptr,
         FALSE,
-        0,
+        CREATE_SUSPENDED,
         nullptr,
         nullptr,
         &startInfo,
@@ -144,6 +144,9 @@ int Launcher::run(int argc, char **argv)
         fputs("Unable to start game\n", stderr);
         return 3;
     }
+
+    // game's main thread is ready to run now
+    ResumeThread(procInfo.hThread);
 
     CloseHandle(procInfo.hThread);
     CloseHandle(procInfo.hProcess);
