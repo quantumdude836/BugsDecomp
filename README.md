@@ -5,7 +5,12 @@ by Behaviour Interactive.
 # Solution Layout
 
 The VS solution consists of the following projects:
+- [BugsDecomp](#decomp) - DLL containing decompiled code
 - [Launcher](#launcher) - CLI game launcher
+
+## BugsDecomp {#decomp}
+
+DLL project which contains all the decompiled code for the game.
 
 ## Launcher {#launcher}
 
