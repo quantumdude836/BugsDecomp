@@ -42,6 +42,30 @@ extern "C" int rcos(int a);
 extern "C" int rsin(int a);
 
 /// <summary>
+/// Computes a rotation matrix in XYZ order.
+/// </summary>
+/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="m">Out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m);
+
+/// <summary>
+/// Computes a rotation matrix in YXZ order.
+/// </summary>
+/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="m">Out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m);
+
+/// <summary>
+/// Computes a rotation matrix in ZYX order.
+/// </summary>
+/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="m">Out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m);
+
+/// <summary>
 /// Left-multiplies a matrix by an X-axis rotation.
 /// </summary>
 /// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>

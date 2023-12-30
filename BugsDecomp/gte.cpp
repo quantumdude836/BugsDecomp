@@ -32,6 +32,54 @@ extern "C" int rsin(int a)
     return rsin_tbl[(a + 0x1000) & 0xfff];
 }
 
+PATCH_CODE(0x407a70, 0x407a50, RotMatrix);
+extern "C" MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m)
+{
+    // initialize m to Z-rotation matrix
+    int c = rcos(r->vz), s = rsin(r->vz);
+    m->m[0][0] = c;      m->m[0][1] = -s;     m->m[0][2] = 0x0000;
+    m->m[1][0] = s;      m->m[1][1] = c;      m->m[1][2] = 0x0000;
+    m->m[2][0] = 0x0000; m->m[2][1] = 0x0000; m->m[2][2] = 0x1000;
+
+    // apply additional rotations
+    RotMatrixY(r->vy, m);
+    RotMatrixX(r->vx, m);
+
+    return m;
+}
+
+PATCH_CODE(0x407b10, 0x407af0, RotMatrixYXZ);
+extern "C" MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m)
+{
+    // initialize m to Z-rotation matrix
+    int c = rcos(r->vz), s = rsin(r->vz);
+    m->m[0][0] = c;      m->m[0][1] = -s;     m->m[0][2] = 0x0000;
+    m->m[1][0] = s;      m->m[1][1] = c;      m->m[1][2] = 0x0000;
+    m->m[2][0] = 0x0000; m->m[2][1] = 0x0000; m->m[2][2] = 0x1000;
+
+    // apply additional rotations
+    RotMatrixX(r->vx, m);
+    RotMatrixY(r->vy, m);
+
+    return m;
+}
+
+PATCH_CODE(0x407bb0, 0x407b90, RotMatrixZYX);
+extern "C" MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m)
+{
+    // initialize m to X-rotation matrix
+    int c = rcos(r->vx), s = rsin(r->vx);
+    m->m[0][0] = 0x1000; m->m[0][1] = 0x0000; m->m[0][2] = 0x0000;
+    m->m[1][0] = 0x0000; m->m[1][1] = c;      m->m[1][2] = -s;
+    m->m[2][0] = 0x0000; m->m[2][1] = s;      m->m[2][2] = c;
+
+    // apply additional rotations
+    RotMatrixY(r->vy, m);
+    RotMatrixZ(r->vz, m);
+
+    return m;
+}
+
 PATCH_CODE(0x407c50, 0x407c30, RotMatrixX);
 extern "C" MATRIX *RotMatrixX(int r, MATRIX *m)
 {
