@@ -1,6 +1,7 @@
 
 Decompilation project for the PC game "Bugs Bunny: Lost in Time!" (aka BBLiT)
 by Behaviour Interactive. Specifically, it supports the two known versions:
+
 - 1.0 (Bugs.exe MD5 = 59731F0354F8A66E63502BD3B521BD82)
 - 1.6 (Bugs.exe MD5 = 121DB63D76ED5077D69837B111163CAC)
 
@@ -11,6 +12,7 @@ patched over their original versions without modifying the binary on disk.
 # Solution Layout
 
 The VS solution consists of the following projects:
+
 - [BugsDecomp](#bugsdecomp) - DLL containing decompiled code
 - [Launcher](#launcher) - CLI game launcher
 
@@ -31,6 +33,7 @@ Decompiled functions do not follow any sort of strict naming conventions, as
 there's no knowledge of the original function names (other than a macro or
 inline function named `getMem`). That being said, the following are used as
 guidelines:
+
 - Names specific to a version should be suffixed with `_major_minor` (e.g.
 `_1_6`)
 - Names that clash with existing declarations (such as C runtime functions)
@@ -46,6 +49,7 @@ A simple command-line utility for starting the game and injecting the
 decompilation DLL.
 
 Launcher options:
+
 - `/help` - shows launcher help and exits
 - `/exe:<exe path>` - sets the path to the game to launch
 - `/cmdline:<cmdline>` - specifies command line for the game

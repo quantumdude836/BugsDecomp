@@ -1,10 +1,10 @@
 
-// Miscellaneous Bugs definitions.
+// Miscellaneous game definitions.
 
 #pragma once
 
 
-// Game window handle.
+// game window handle
 #define hWndGame (*reinterpret_cast<HWND *>(0x4b1cec))
 
 
