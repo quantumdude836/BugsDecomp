@@ -15,6 +15,10 @@
 #include <stdio.h>
 #include <string.h>
 
+// POSIX headers
+#include <io.h>
+#include <fcntl.h>
+
 // C++ headers
 #include <optional>
 #include <vector>

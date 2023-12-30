@@ -23,6 +23,19 @@ provides the macros `PATCH_CODE_1_0` and `PATCH_CODE_1_6` to register patches
 for version 1.0 and 1.6, respectively. These macros MUST be used at the global
 scope to be registered/applied properly!
 
+Decompiled functions do not follow any sort of strict naming conventions, as
+there's no knowledge of the original function names (other than a macro or
+inline function named `getMem`). That being said, the following are used as
+guidelines:
+- Names specific to a version should be suffixed with `_major_minor` (e.g.
+`_1_6`)
+- Names that clash with existing declarations (such as C runtime functions)
+should be suffixed with `_bugs`
+
+When decompiling code, any references to C runtime functions that use or modify
+global state MUST refer to the existing versions in the game! This is to ensure
+the global state is kept consistent between old and new code.
+
 ## Launcher {#launcher}
 
 A simple command-line utility for starting the game and injecting the

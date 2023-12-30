@@ -22,3 +22,6 @@ std::optional<GameVersion> detectVersion();
 // is known to be valid
 #define IS_1_0() (*detectVersion() == GameVersion::Version1_0)
 #define IS_1_6() (*detectVersion() == GameVersion::Version1_6)
+
+// helper macro for picking values depending on version
+#define VER(v1_0, v1_6) (IS_1_0() ? (v1_0) : (v1_6))

@@ -36,6 +36,9 @@
     <ClCompile Include="misc.cpp">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
+    <ClCompile Include="fs.cpp">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="crt.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="fs.h">
+      <Filter>Header Files\Bugs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
