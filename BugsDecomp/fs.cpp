@@ -5,6 +5,9 @@
 #include "crt.h"
 
 
+#define datasRootDir (reinterpret_cast<char *>(0x4b1928))
+
+
 PATCH_CODE_1_0(0x4056c0, FsOpen);
 PATCH_CODE_1_6(0x4056c0, FsOpen);
 extern "C" int FsOpen(const char *path, int oflag, ...)

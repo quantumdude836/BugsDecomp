@@ -4,9 +4,6 @@
 #pragma once
 
 
-#define datasRootDir (reinterpret_cast<char *>(0x4b1928))
-
-
 /// <summary>
 /// Opens a file descriptor for the given path. If it fails, retries with the
 /// path relative to the datas root.
