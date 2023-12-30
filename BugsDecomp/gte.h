@@ -163,6 +163,23 @@ extern "C" MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1);
 extern "C" MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1);
 
 /// <summary>
+/// Composes two matrices.
+/// </summary>
+/// <param name="m0">In LHS matrix</param>
+/// <param name="m1">In RHS matrix</param>
+/// <param name="m2">Out matrix</param>
+/// <returns>m2</returns>
+extern "C" MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
+
+/// <summary>
+/// Composes two matrices.
+/// </summary>
+/// <param name="m0">In LHS matrix</param>
+/// <param name="m1">In LHS/out matrix</param>
+/// <returns>m1</returns>
+extern "C" MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1);
+
+/// <summary>
 /// Sets the 3x3 part of a matrix to the identity transform.
 /// </summary>
 /// <param name="m">In/out matrix</param>

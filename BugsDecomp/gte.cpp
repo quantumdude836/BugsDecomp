@@ -283,6 +283,43 @@ extern "C" MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1)
     return m1;
 }
 
+PATCH_CODE(0x4086b0, 0x408690, CompMatrixLV);
+extern "C" MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
+{
+    // multiply 3x3 parts
+    MulMatrix0(m0, m1, m2);
+
+    // compute translation
+    m2->t[0] = m0->t[0] + ((
+        m0->m[0][0] * m1->t[0] +
+        m0->m[0][1] * m1->t[1] +
+        m0->m[0][2] * m1->t[2]
+    ) >> 12);
+    m2->t[1] = m0->t[1] + ((
+        m0->m[1][0] * m1->t[0] +
+        m0->m[1][1] * m1->t[1] +
+        m0->m[1][2] * m1->t[2]
+    ) >> 12);
+    m2->t[2] = m0->t[2] + ((
+        m0->m[2][0] * m1->t[0] +
+        m0->m[2][1] * m1->t[1] +
+        m0->m[2][2] * m1->t[2]
+    ) >> 12);
+
+    return m2;
+}
+
+PATCH_CODE(0x4088d0, 0x4088b0, CompMatrix2LV);
+extern "C" MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1)
+{
+    MATRIX tmp;
+
+    CompMatrixLV(m0, m1, &tmp);
+    *m1 = tmp;
+
+    return m1;
+}
+
 PATCH_CODE(0x408a40, 0x408a20, IdentMatrix);
 extern "C" MATRIX *IdentMatrix(MATRIX *m)
 {
