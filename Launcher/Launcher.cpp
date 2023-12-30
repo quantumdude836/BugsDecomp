@@ -33,6 +33,7 @@ void Launcher::showUsage()
     puts("Launcher options:");
     puts("    /help               Show this help and exit");
     puts("    /path:<bblit path>  Set BBLiT root path");
+    puts("    /cwd:<work dir>     Set game working directory");
     puts("    /cmdline:<cmdline>  Specify command line for the game");
     puts("    /dll:<dll path>     Set path to the DLL to inject");
 }
@@ -60,6 +61,12 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
             continue;
         }
 
+        if (const char *val = checkArgPrefix(arg, "/cwd:"))
+        {
+            cwdPath = val;
+            continue;
+        }
+
         if (const char *val = checkArgPrefix(arg, "/cmdline:"))
         {
             cmdline = val;
@@ -84,6 +91,7 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 {
     puts("About to create game process");
     printf("  path: %s\n", exePath.c_str());
+    printf("   cwd: %s\n", cwdPath.c_str());
     printf("  args: %s\n", cmdline.c_str());
 
     STARTUPINFO startInfo = { 0 };
@@ -98,7 +106,7 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
         FALSE,
         CREATE_SUSPENDED,
         nullptr,
-        nullptr,
+        cwdPath.c_str(),
         &startInfo,
         &procInfo
     );
@@ -111,9 +119,27 @@ bool Launcher::launchGame(PROCESS_INFORMATION &procInfo) const
 }
 
 
+std::string Launcher::getFullDllPath() const
+{
+    char path[MAX_PATH];
+
+    DWORD res = GetFullPathNameA(dllPath.c_str(), sizeof path, path, nullptr);
+    if (!res)
+        return std::string();
+
+    return path;
+}
+
 bool Launcher::injectDll(HANDLE hProcess) const
 {
     DWORD threadId;
+
+    // The DLL is loaded by a thread spawned in the game process, which means
+    // relative paths depend on the game's working directory. Because the
+    // launcher sets a potentially different working directory for the game, the
+    // DLL path needs to be resolved to a full path now so the remote thread can
+    // find it.
+    std::string dllPath = getFullDllPath();
 
     printf("Injecting DLL: %s\n", dllPath.c_str());
 
@@ -165,10 +191,15 @@ int Launcher::run(int argc, char **argv)
     if (auto res = parseArgs(std::move(args)))
         return *res;
 
-    // at this point, exe path must be set
+    // at this point, exe and cwd path must be set
     if (exePath.empty())
     {
         fputs("BBLiT exe path not specified\n", stderr);
+        return 2;
+    }
+    if (cwdPath.empty())
+    {
+        fputs("BBLiT working directory not specified\n", stderr);
         return 2;
     }
     // DLL path must also be set

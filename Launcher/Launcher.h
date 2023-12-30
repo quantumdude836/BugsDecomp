@@ -34,6 +34,11 @@ private:
 
 private:
     /// <summary>
+    /// Gets the full path to the DLL.
+    /// </summary>
+    /// <returns>Full path to the DLL</returns>
+    std::string getFullDllPath() const;
+    /// <summary>
     /// Injects the DLL into the process.
     /// </summary>
     /// <param name="hProcess">Handle to the game process</param>
@@ -52,6 +57,8 @@ public:
 private:
     // path to the game to launch
     std::string exePath;
+    // working directory for the game
+    std::string cwdPath;
     // command line for game process
     std::string cmdline;
     // path to the injected DLL
