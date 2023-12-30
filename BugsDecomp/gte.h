@@ -1,7 +1,8 @@
 
 // High-level emulation of PS1's GTE (Geometry Transform Engine) API.
 // Non-integer numbers are typically stored in Q12 format (i.e. fixed 12 bits
-// after decimal point).
+// after decimal point). Angles are normalized so that 1.0 (in Q12) represents
+// 360-degrees.
 
 #pragma once
 
@@ -32,19 +33,19 @@ struct MATRIX
 // integer square root
 extern "C" long SquareRoot0(long a);
 
-// Q12 atan2; angle is normalized to [0.0, 1.0)
+// Q12 atan2
 extern "C" long ratan2(long y, long x);
 
-// Q12 cos; angle is normalized to [0.0, 1.0)
+// Q12 cos
 extern "C" int rcos(int a);
 
-// Q12 sin; angle is normalized to [0.0, 1.0)
+// Q12 sin
 extern "C" int rsin(int a);
 
 /// <summary>
 /// Computes a rotation matrix in XYZ order.
 /// </summary>
-/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m);
@@ -52,7 +53,7 @@ extern "C" MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m);
 /// <summary>
 /// Computes a rotation matrix in YXZ order.
 /// </summary>
-/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m);
@@ -60,7 +61,7 @@ extern "C" MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m);
 /// <summary>
 /// Computes a rotation matrix in ZYX order.
 /// </summary>
-/// <param name="r">In Q12 vector of angles, normalized to [0.0, 1.0)</param>
+/// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m);
@@ -68,7 +69,7 @@ extern "C" MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m);
 /// <summary>
 /// Left-multiplies a matrix by an X-axis rotation.
 /// </summary>
-/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrixX(int r, MATRIX *m);
@@ -76,7 +77,7 @@ extern "C" MATRIX *RotMatrixX(int r, MATRIX *m);
 /// <summary>
 /// Left-multiplies a matrix by a Y-axis rotation.
 /// </summary>
-/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrixY(int r, MATRIX *m);
@@ -84,7 +85,7 @@ extern "C" MATRIX *RotMatrixY(int r, MATRIX *m);
 /// <summary>
 /// Left-multiplies a matrix by a Z-axis rotation.
 /// </summary>
-/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
 extern "C" MATRIX *RotMatrixZ(int r, MATRIX *m);
