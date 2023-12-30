@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Bugs">
+      <UniqueIdentifier>{e6d9c4e8-35e6-4827-a3bf-97c6ebee0abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bugs">
+      <UniqueIdentifier>{5716f1f6-1c9e-4031-9aab-ef604405a10f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -27,6 +33,9 @@
     <ClCompile Include="CodePatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="misc.cpp">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CodePatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="misc.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
