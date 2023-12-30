@@ -18,6 +18,11 @@ DLL project which contains all the decompiled code for the game. Will attempt to
 detect the version of the game, allowing it to be used in both the 1.0 and 1.6
 versions.
 
+In order to register functions to be patched, the header file `CodePatch.h`
+provides the macros `PATCH_CODE_1_0` and `PATCH_CODE_1_6` to register patches
+for version 1.0 and 1.6, respectively. These macros MUST be used at the global
+scope to be registered/applied properly!
+
 ## Launcher {#launcher}
 
 A simple command-line utility for starting the game and injecting the

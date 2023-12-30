@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "GameVersion.h"
+#include "CodePatch.h"
 
 
 BOOL APIENTRY DllMain(
@@ -15,6 +16,10 @@ BOOL APIENTRY DllMain(
         // go ahead and try to detect game version; if it fails, don't allow DLL
         // to continue loading
         if (!detectVersion())
+            return FALSE;
+
+        // apply code patches; abort DLL load if any fail
+        if (!CodePatch::applyAll())
             return FALSE;
         break;
 

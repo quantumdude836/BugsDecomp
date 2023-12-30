@@ -9,3 +9,4 @@
 
 // C++ headers
 #include <optional>
+#include <vector>
