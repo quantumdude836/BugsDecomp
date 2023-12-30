@@ -30,3 +30,18 @@ extern "C" int FsOpen(const char *path, int oflag, ...);
 /// <param name="mode">Open mode</param>
 /// <returns>File object, or null</returns>
 extern "C" FILE *FsFOpen(const char *path, const char *mode);
+
+// wrapper around _lseek
+extern "C" long FsSeek(int fd, long offset, int whence);
+
+// wrapper around _read
+extern "C" int FsRead(int fd, void *buf, unsigned n);
+
+// wrapper around _close
+extern "C" int FsClose(int fd);
+
+/// <summary>
+/// Searches system drives for the datas root directory.
+/// </summary>
+/// <returns>Whether the datas root was found</returns>
+extern "C" BOOL FsFindRoot(void);
