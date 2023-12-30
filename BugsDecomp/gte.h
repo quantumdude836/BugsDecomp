@@ -42,6 +42,30 @@ extern "C" int rcos(int a);
 extern "C" int rsin(int a);
 
 /// <summary>
+/// Left-multiplies a matrix by an X-axis rotation.
+/// </summary>
+/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="m">In/out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrixX(int r, MATRIX *m);
+
+/// <summary>
+/// Left-multiplies a matrix by a Y-axis rotation.
+/// </summary>
+/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="m">In/out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrixY(int r, MATRIX *m);
+
+/// <summary>
+/// Left-multiplies a matrix by a Z-axis rotation.
+/// </summary>
+/// <param name="r">Q12 angle, normalized to [0.0, 1.0)</param>
+/// <param name="m">In/out matrix</param>
+/// <returns>m</returns>
+extern "C" MATRIX *RotMatrixZ(int r, MATRIX *m);
+
+/// <summary>
 /// Scales a matrix's columns by corresponding vector components.
 /// </summary>
 /// <param name="m">In/out matrix</param>

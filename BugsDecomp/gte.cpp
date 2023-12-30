@@ -32,6 +32,88 @@ extern "C" int rsin(int a)
     return rsin_tbl[(a + 0x1000) & 0xfff];
 }
 
+PATCH_CODE(0x407c50, 0x407c30, RotMatrixX);
+extern "C" MATRIX *RotMatrixX(int r, MATRIX *m)
+{
+    // precompute cos/sin of angle
+    int c = rcos(r), s = rsin(r);
+
+    // compute middle row of results into temp vars (since original elements are
+    // still needed for computing bottom row)
+    // NOTE: game does the normalizing shifts BEFORE addition/subtraction;
+    // replicating that here
+    short m10 = ((c * m->m[1][0]) >> 12) - ((s * m->m[2][0]) >> 12);
+    short m11 = ((c * m->m[1][1]) >> 12) - ((s * m->m[2][1]) >> 12);
+    short m12 = ((c * m->m[1][2]) >> 12) - ((s * m->m[2][2]) >> 12);
+
+    // compute bottom row in-place
+    m->m[2][0] = ((s * m->m[1][0]) >> 12) + ((c * m->m[2][0]) >> 12);
+    m->m[2][1] = ((s * m->m[1][1]) >> 12) + ((c * m->m[2][1]) >> 12);
+    m->m[2][2] = ((s * m->m[1][2]) >> 12) + ((c * m->m[2][2]) >> 12);
+
+    // write middle row
+    m->m[1][0] = m10;
+    m->m[1][1] = m11;
+    m->m[1][2] = m12;
+
+    return m;
+}
+
+PATCH_CODE(0x407dc0, 0x407da0, RotMatrixY);
+extern "C" MATRIX *RotMatrixY(int r, MATRIX *m)
+{
+    // NOTE: Psy-Q documentation shows the wrong Y rotation matrix (it shows the
+    // inverse/transpose of the correct matrix)
+
+    // see RotMatrixX above for more notes
+
+    // precompute cos/sin of angle
+    int c = rcos(r), s = rsin(r);
+
+    // compute top row of results into temp vars
+    short m00 = ((c * m->m[0][0]) >> 12) + ((s * m->m[2][0]) >> 12);
+    short m01 = ((c * m->m[0][1]) >> 12) + ((s * m->m[2][1]) >> 12);
+    short m02 = ((c * m->m[0][2]) >> 12) + ((s * m->m[2][2]) >> 12);
+
+    // compute bottom row in-place
+    m->m[2][0] = ((-s * m->m[0][0]) >> 12) + ((c * m->m[2][0]) >> 12);
+    m->m[2][1] = ((-s * m->m[0][1]) >> 12) + ((c * m->m[2][1]) >> 12);
+    m->m[2][2] = ((-s * m->m[0][2]) >> 12) + ((c * m->m[2][2]) >> 12);
+
+    // write top row
+    m->m[0][0] = m00;
+    m->m[0][1] = m01;
+    m->m[0][2] = m02;
+
+    return m;
+}
+
+PATCH_CODE(0x407f20, 0x407f00, RotMatrixZ);
+extern "C" MATRIX *RotMatrixZ(int r, MATRIX *m)
+{
+    // see RotMatrixX above for more notes
+
+    // precompute cos/sin of angle
+    int c = rcos(r), s = rsin(r);
+
+    // compute top row of results into temp vars
+    short m00 = ((c * m->m[0][0]) >> 12) - ((s * m->m[1][0]) >> 12);
+    short m01 = ((c * m->m[0][1]) >> 12) - ((s * m->m[1][1]) >> 12);
+    short m02 = ((c * m->m[0][2]) >> 12) - ((s * m->m[1][2]) >> 12);
+
+    // compute middle row in-place
+    m->m[1][0] = ((s * m->m[0][0]) >> 12) + ((c * m->m[1][0]) >> 12);
+    m->m[1][1] = ((s * m->m[0][1]) >> 12) + ((c * m->m[1][1]) >> 12);
+    m->m[1][2] = ((s * m->m[0][2]) >> 12) + ((c * m->m[1][2]) >> 12);
+
+    // write top row
+    m->m[0][0] = m00;
+    m->m[0][1] = m01;
+    m->m[0][2] = m02;
+
+    return m;
+}
+
 PATCH_CODE(0x408080, 0x408060, ScaleMatrix);
 extern "C" MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v)
 {
