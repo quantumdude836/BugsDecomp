@@ -5,13 +5,13 @@ formats, game options, and known IDs.
 Decompiled code should be documented to the extent of its known usage in the
 header/source files, not here.
 
-# Launch Options {#options}
+# Launch Options
 
 All options may be specified in all uppercase or all lowercase. For options with
 values, there's no space between the option and the value.
 
 - /b`N` - skips the main menu and starts immediately in level ID `N` (see
-the [level list](#levels) for IDs); e.g. `/b51` to go straight to "Nowhere"
+the [level list](#level-list) for IDs); e.g. `/b51` to go straight to "Nowhere"
 - /p:`?` - unknown
 - /r:`?` - unknown
 - /x`N` - sets horizontal resolution, in pixels
@@ -42,7 +42,7 @@ the [level list](#levels) for IDs); e.g. `/b51` to go straight to "Nowhere"
 - /mul`N` - unknown
 - /gam`N` - unknown
 
-# config.pc {#config}
+# config.pc
 
 This binary file contains the game's settings. It is 128 bytes and is directly
 loaded into memory, so the in-memory structure matches the file layout.
@@ -106,7 +106,7 @@ to 0 after first launch
 - CheckGDI - whether to check for OpenGL acceleration (which affects available
 renderer options)
 
-# Level List {#levels}
+# Level List
 
 | ID  | filename   | description                                                          |
 |-----|------------|----------------------------------------------------------------------|

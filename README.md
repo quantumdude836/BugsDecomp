@@ -11,10 +11,10 @@ patched over their original versions without modifying the binary on disk.
 # Solution Layout
 
 The VS solution consists of the following projects:
-- [BugsDecomp](#decomp) - DLL containing decompiled code
+- [BugsDecomp](#bugsdecomp) - DLL containing decompiled code
 - [Launcher](#launcher) - CLI game launcher
 
-## BugsDecomp {#decomp}
+## BugsDecomp
 
 DLL project which contains all the decompiled code for the game. Will attempt to
 detect the version of the game, allowing it to be used in both the 1.0 and 1.6
@@ -38,7 +38,7 @@ When decompiling code, any references to C runtime functions that use or modify
 global state MUST refer to the existing versions in the game! This is to ensure
 the global state is kept consistent between old and new code.
 
-## Launcher {#launcher}
+## Launcher
 
 A simple command-line utility for starting the game and injecting the
 decompilation DLL.
@@ -54,7 +54,7 @@ the ability to check the registry for an installed copy of BBLiT.
 
 The default command line is `/b00 /win /x1024 /y768 /opengl`, which starts the
 game in windowed mode, 1024x768, with the OpenGL renderer. More information
-about game options can be found [here](doc\internals.md#options).
+about game options can be found [here](doc/internals.md#launch-options).
 
 The `/dll:` option is required; while the launcher could be coded to launch the
 game without DLL injection, it'd be just as easy to use the vanilla launcher.
