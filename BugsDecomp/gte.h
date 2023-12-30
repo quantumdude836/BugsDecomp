@@ -147,7 +147,7 @@ extern "C" VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1);
 extern "C" MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
 
 /// <summary>
-/// Multiplies the 3x3 part of two matrices
+/// Multiplies the 3x3 part of two matrices.
 /// </summary>
 /// <param name="m0">In LHS matrix</param>
 /// <param name="m1">In RHS/out matrix</param>
@@ -155,7 +155,7 @@ extern "C" MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
 extern "C" MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1);
 
 /// <summary>
-/// Multiplies the 3x3 part of two matrices. Same as MulMatrix2
+/// Multiplies the 3x3 part of two matrices. Same as MulMatrix2.
 /// </summary>
 /// <param name="m0">In LHS matrix</param>
 /// <param name="m1">In RHS/out matrix</param>
