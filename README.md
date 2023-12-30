@@ -23,7 +23,9 @@ versions.
 In order to register functions to be patched, the header file `CodePatch.h`
 provides the macros `PATCH_CODE_1_0` and `PATCH_CODE_1_6` to register patches
 for version 1.0 and 1.6, respectively. These macros MUST be used at the global
-scope to be registered/applied properly!
+scope to be registered/applied properly! For convenience, there's also a
+`PATCH_CODE` macro for registering the same function for both versions (but with
+potentially different addresses).
 
 Decompiled functions do not follow any sort of strict naming conventions, as
 there's no knowledge of the original function names (other than a macro or
