@@ -1,6 +1,8 @@
 
 Decompilation project for the PC game "Bugs Bunny: Lost in Time!" (aka BBLiT)
-by Behaviour Interactive.
+by Behaviour Interactive. Specifically, it supports the two known versions:
+- 1.0 (Bugs.exe MD5 = 59731F0354F8A66E63502BD3B521BD82)
+- 1.6 (Bugs.exe MD5 = 121DB63D76ED5077D69837B111163CAC)
 
 The decompiled code is built into a DLL; a custom launcher starts the game and
 injects the DLL into the game's process, allowing the decompiled functions to be
