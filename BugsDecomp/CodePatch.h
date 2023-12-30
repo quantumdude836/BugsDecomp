@@ -52,3 +52,6 @@ public:
         reinterpret_cast<DWORD>(tgtAddr), \
         GameVersion::Version1_6 \
     )
+#define PATCH_CODE(patchAddr_1_0, patchAddr_1_6, tgtAddr) \
+    PATCH_CODE_1_0(patchAddr_1_0, tgtAddr); \
+    PATCH_CODE_1_6(patchAddr_1_6, tgtAddr)

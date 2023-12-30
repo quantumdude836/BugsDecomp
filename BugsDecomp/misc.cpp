@@ -8,8 +8,7 @@
 #define hConsoleOutput (*reinterpret_cast<HANDLE *>(0x4b1cf4))
 
 
-PATCH_CODE_1_0(0x4055d0, ConPrintf);
-PATCH_CODE_1_6(0x4055d0, ConPrintf);
+PATCH_CODE(0x4055d0, 0x4055d0, ConPrintf);
 extern "C" void ConPrintf(const char *fmt, ...)
 {
     DWORD nWritten;
@@ -23,8 +22,7 @@ extern "C" void ConPrintf(const char *fmt, ...)
     WriteConsoleA(hConsoleOutput, buf, strlen(buf), &nWritten, nullptr);
 }
 
-PATCH_CODE_1_0(0x405640, ShowRetryDialog);
-PATCH_CODE_1_6(0x405640, ShowRetryDialog);
+PATCH_CODE(0x405640, 0x405640, ShowRetryDialog);
 extern "C" int ShowRetryDialog(const char *fmt, ...)
 {
     char buf[1024];
