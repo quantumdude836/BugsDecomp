@@ -11,6 +11,7 @@
 #include <Windows.h>
 
 // C headers
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -22,3 +23,8 @@
 // C++ headers
 #include <optional>
 #include <vector>
+
+
+// pi and tau (aka 2*pi)
+#define PI 3.1415926535897932384626433832795
+#define TAU (2.0 * PI)

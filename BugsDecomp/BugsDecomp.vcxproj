@@ -88,6 +88,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="fs.cpp" />
     <ClCompile Include="GameVersion.cpp" />
+    <ClCompile Include="gte.cpp" />
     <ClCompile Include="misc.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -100,6 +101,7 @@
     <ClInclude Include="crt.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="GameVersion.h" />
+    <ClInclude Include="gte.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

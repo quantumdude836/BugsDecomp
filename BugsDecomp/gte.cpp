@@ -1,0 +1,187 @@
+
+#include "stdafx.h"
+#include "common.h"
+#include "gte.h"
+
+
+#define rsin_tbl (reinterpret_cast<const int *>(0x45f3f0))
+#define rcos_tbl (reinterpret_cast<const int *>(0x4633f0))
+
+
+PATCH_CODE(0x4079e0, 0x4079c0, SquareRoot0);
+extern "C" long SquareRoot0(long a)
+{
+    return long(sqrt(double(a)));
+}
+
+PATCH_CODE(0x407a00, 0x4079e0, ratan2);
+extern "C" long ratan2(long y, long x)
+{
+    return long(atan2(double(y), double(x)) * BDBL(0x45c270, 4096.0 / TAU));
+}
+
+PATCH_CODE(0x407a30, 0x407a10, rcos);
+extern "C" int rcos(int a)
+{
+    return rcos_tbl[abs(a) & 0xfff];
+}
+
+PATCH_CODE(0x407a50, 0x407a30, rsin);
+extern "C" int rsin(int a)
+{
+    return rsin_tbl[(a + 0x1000) & 0xfff];
+}
+
+PATCH_CODE(0x408080, 0x408060, ScaleMatrix);
+extern "C" MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v)
+{
+    m->m[0][0] = short((m->m[0][0] * v->vx) >> 12);
+    m->m[0][1] = short((m->m[0][1] * v->vy) >> 12);
+    m->m[0][2] = short((m->m[0][2] * v->vz) >> 12);
+    m->m[1][0] = short((m->m[1][0] * v->vx) >> 12);
+    m->m[1][1] = short((m->m[1][1] * v->vy) >> 12);
+    m->m[1][2] = short((m->m[1][2] * v->vz) >> 12);
+    m->m[2][0] = short((m->m[2][0] * v->vx) >> 12);
+    m->m[2][1] = short((m->m[2][1] * v->vy) >> 12);
+    m->m[2][2] = short((m->m[2][2] * v->vz) >> 12);
+
+    return m;
+}
+
+PATCH_CODE(0x408120, 0x408100, TransMatrix);
+extern "C" MATRIX *TransMatrix(MATRIX *m, const VECTOR *v)
+{
+    m->t[0] = v->vx;
+    m->t[1] = v->vy;
+    m->t[2] = v->vz;
+    return m;
+}
+
+PATCH_CODE(0x408140, 0x408120, ApplyMatrix);
+extern "C" VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
+{
+    // despite Psy-Q documentation, translation is NOT applied
+    v1->vx =
+        (m->m[0][0] * v0->vx + m->m[0][1] * v0->vy + m->m[0][2] * v0->vz) >> 12;
+    v1->vy =
+        (m->m[1][0] * v0->vx + m->m[1][1] * v0->vy + m->m[1][2] * v0->vz) >> 12;
+    v1->vz =
+        (m->m[2][0] * v0->vx + m->m[2][1] * v0->vy + m->m[2][2] * v0->vz) >> 12;
+    return v1;
+}
+
+PATCH_CODE(0x4081e0, 0x4081c0, ApplyMatrixSV);
+extern "C" SVECTOR *ApplyMatrixSV(
+    const MATRIX *m,
+    const SVECTOR *v0,
+    SVECTOR *v1
+)
+{
+    SVECTOR tmp;
+
+    tmp.vx =
+        (m->m[0][0] * v0->vx + m->m[0][1] * v0->vy + m->m[0][2] * v0->vz) >> 12;
+    tmp.vy =
+        (m->m[1][0] * v0->vx + m->m[1][1] * v0->vy + m->m[1][2] * v0->vz) >> 12;
+    tmp.vz =
+        (m->m[2][0] * v0->vx + m->m[2][1] * v0->vy + m->m[2][2] * v0->vz) >> 12;
+
+    *v1 = tmp;
+    return v1;
+}
+
+PATCH_CODE(0x408280, 0x408260, ApplyMatrixLV);
+extern "C" VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1)
+{
+    VECTOR tmp;
+
+    tmp.vx =
+        (m->m[0][0] * v0->vx + m->m[0][1] * v0->vy + m->m[0][2] * v0->vz) >> 12;
+    tmp.vy =
+        (m->m[1][0] * v0->vx + m->m[1][1] * v0->vy + m->m[1][2] * v0->vz) >> 12;
+    tmp.vz =
+        (m->m[2][0] * v0->vx + m->m[2][1] * v0->vy + m->m[2][2] * v0->vz) >> 12;
+
+    *v1 = tmp;
+    return v1;
+}
+
+PATCH_CODE(0x408310, 0x4082f0, MulMatrix0);
+extern "C" MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
+{
+    for (unsigned r = 0; r < 3; r++)
+    {
+        for (unsigned c = 0; c < 3; c++)
+        {
+            m2->m[r][c] = (
+                m0->m[r][0] * m1->m[0][c] +
+                m0->m[r][1] * m1->m[1][c] +
+                m0->m[r][2] * m1->m[2][c]
+            ) >> 12;
+        }
+    }
+    return m2;
+}
+
+PATCH_CODE(0x4084b0, 0x408490, MulMatrix2);
+extern "C" MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1)
+{
+    MATRIX tmp;
+
+    MulMatrix0(m0, m1, &tmp);
+
+    // only copy up to translation part
+    memcpy(m1, &tmp, FIELD_OFFSET(MATRIX, t));
+
+    return m1;
+}
+
+PATCH_CODE(0x408660, 0x408640, MulMatrix2_0);
+extern "C" MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1)
+{
+    MATRIX tmp;
+
+    MulMatrix0(m0, m1, &tmp);
+
+    // copy translation from dst...
+    tmp.t[0] = m1->t[0];
+    tmp.t[1] = m1->t[1];
+    tmp.t[2] = m1->t[2];
+    // ... then copy everything to dst
+    *m1 = tmp;
+
+    return m1;
+}
+
+PATCH_CODE(0x408a40, 0x408a20, IdentMatrix);
+extern "C" MATRIX *IdentMatrix(MATRIX *m)
+{
+    m->m[0][0] = 0x1000; m->m[0][1] = 0x0000; m->m[0][2] = 0x0000;
+    m->m[1][0] = 0x0000; m->m[1][1] = 0x1000; m->m[1][2] = 0x0000;
+    m->m[2][0] = 0x0000; m->m[2][1] = 0x0000; m->m[2][2] = 0x1000;
+    return m;
+}
+
+PATCH_CODE(0x408a80, 0x408a60, ApplyMatrix_0);
+extern "C" VECTOR *ApplyMatrix_0(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
+{
+    return ApplyMatrix(m, v0, v1);
+}
+
+PATCH_CODE(0x408b20, 0x408b00, ApplyMatrixSV_0);
+extern "C" SVECTOR *ApplyMatrixSV_0(
+    const MATRIX *m,
+    const SVECTOR *v0,
+    SVECTOR *v1
+)
+{
+    return ApplyMatrixSV(m, v0, v1);
+}
+
+PATCH_CODE(0x408bc0, 0x408ba0, Square0);
+extern "C" void Square0(const VECTOR *v0, VECTOR *v1)
+{
+    v1->vx = v0->vx * v0->vx;
+    v1->vy = v0->vy * v0->vy;
+    v1->vz = v0->vz * v0->vz;
+}

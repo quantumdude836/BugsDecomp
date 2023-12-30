@@ -11,3 +11,5 @@
 // helper macro for referencing a string located in game memory; the string
 // param is only for documentation
 #define BSTR(addr, str) (reinterpret_cast<const char *>(addr))
+// ditto for double-precision floats
+#define BDBL(addr, val) (*reinterpret_cast<const double *>(addr))
