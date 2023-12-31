@@ -147,6 +147,18 @@ extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
     }
 }
 
+PATCH_CODE(0x409ce0, 0x409c80, SaveAltConfig);
+extern "C" void SaveAltConfig()
+{
+    altConfig = config;
+}
+
+PATCH_CODE(0x409d00, 0x409ca0, LoadAltConfig);
+extern "C" void LoadAltConfig()
+{
+    config = altConfig;
+}
+
 PATCH_CODE(0x409d20, 0x409cc0, ReadConfig);
 extern "C" void ReadConfig()
 {

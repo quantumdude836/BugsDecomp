@@ -105,6 +105,16 @@ extern "C" void WriteConfig();
 extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg);
 
 /// <summary>
+/// Saves the current config to the alt config.
+/// </summary>
+extern "C" void SaveAltConfig();
+
+/// <summary>
+/// Loads the alt config to the current config.
+/// </summary>
+extern "C" void LoadAltConfig();
+
+/// <summary>
 /// Reads the current configuration from file, or loads defaults.
 /// </summary>
 extern "C" void ReadConfig();
