@@ -49,14 +49,14 @@ loaded into memory, so the in-memory structure matches the file layout.
 
 | offset | type     | usage         | notes     |
 |--------|----------|---------------|-----------|
-| 0x00   | int      |               |           |
+| 0x00   | int      | version       | = 0x10    |
 | 0x04   | int      | renderer      | see below |
 | 0x08   | int      | language      | see below |
 | 0x0c   | int      |               |           |
 | 0x10   | int      | width         | pixels    |
 | 0x14   | int      | height        | pixels    |
 | 0x18   | bool32   | fullscreen    |           |
-| 0x1c   | int      | fog depth     |           |
+| 0x1c   | int      | fog distance  | see below |
 | 0x20   | double   |               |           |
 | 0x28   | double   |               |           |
 | 0x30   | int      | sound volume  | percent   |
@@ -88,9 +88,33 @@ loaded into memory, so the in-memory structure matches the file layout.
 - 4 - Italian
 - 5 - Dutch
 
+`fog distance` values:
+- 0 - near
+- 1 - normal
+- 2 - far
+
 joystick map TBD
 
-keyboard map (entries are scancodes) TBD
+keyboard map (entries are scancodes):
+
+| index | usage         |
+|-------|---------------|
+| 0     | up/forward    |
+| 1     | down/backward |
+| 2     | right         |
+| 3     | left          |
+| 4     | camera right  |
+| 5     | camera left   |
+| 6     | roll          |
+| 7     | action        |
+| 8     | look          |
+| 9     | crouch        |
+| 10    | jump          |
+| 11    | kick          |
+| 12    | unknown       |
+| 13    | unknown       |
+| 14    | unknown       |
+| 15    | unknown       |
 
 # bugs.ini
 

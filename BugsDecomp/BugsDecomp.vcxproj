@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cfg.cpp" />
     <ClCompile Include="CodePatch.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="fs.cpp" />
@@ -96,6 +97,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cfg.h" />
     <ClInclude Include="CodePatch.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="crt.h" />
