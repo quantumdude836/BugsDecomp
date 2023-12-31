@@ -221,3 +221,7 @@ renderer options)
 | 108 | `l_thall`  | LS for end                                                           |
 | 109 | `screen4`  | file does not exist                                                  |
 | 110 | `screen5`  | file does not exist                                                  |
+
+# Level Format
+
+The BZE file format is detailed [here](bze.md).
