@@ -32,7 +32,7 @@ void Launcher::showUsage()
 {
     puts("Launcher options:");
     puts("    /help               Show this help and exit");
-    puts("    /path:<bblit path>  Set BBLiT root path");
+    puts("    /exe:<exe path>     Set path to game to launch");
     puts("    /cwd:<work dir>     Set game working directory");
     puts("    /cmdline:<cmdline>  Specify command line for the game");
     puts("    /dll:<dll path>     Set path to the DLL to inject");

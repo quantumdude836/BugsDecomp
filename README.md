@@ -52,11 +52,13 @@ Launcher options:
 
 - `/help` - shows launcher help and exits
 - `/exe:<exe path>` - sets the path to the game to launch
+- `/cwd:<work dir>` - sets the working directory for the game
 - `/cmdline:<cmdline>` - specifies command line for the game
 - `/dll:<dll path>` - set path to the DLL to inject
 
-Currently, the `/exe:` option is required; in the future, the launcher will have
-the ability to check the registry for an installed copy of BBLiT.
+Currently, the `/exe:` and `/cwd:` options are required; in the future, the
+launcher will have the ability to check the registry for an installed copy of
+BBLiT to set up defaults.
 
 The default command line is `/b00 /win /x1024 /y768 /opengl`, which starts the
 game in windowed mode, 1024x768, with the OpenGL renderer. More information
