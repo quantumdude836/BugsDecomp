@@ -16,7 +16,7 @@ struct TRACK
     DWORD field_38;
     DWORD field_3C;
     DWORD field_40;
-    DWORD field_44;
+    DWORD loopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
     WORD field_4C;
     WORD field_4E;
@@ -38,10 +38,10 @@ struct TRACK
 // params for audio tracks
 struct TRACK_PARAMS
 {
-    size_t msSoundBufLen; // length of DS buffer, in milliseconds
-    size_t msConvBufLen; // length of conversion buffer, in milliseconds
-    size_t field_8; // in milliseconds
-    size_t field_C; // in milliseconds
+    DWORD msSoundBufLen; // length of DS buffer, in milliseconds
+    DWORD msConvBufLen; // length of conversion buffer, in milliseconds
+    DWORD field_8; // in milliseconds
+    DWORD field_C; // in milliseconds
 };
 
 

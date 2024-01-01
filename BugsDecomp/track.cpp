@@ -66,7 +66,7 @@ extern "C" int InitTrack(
     dsBufDesc.dwBufferBytes = DWORD(
         double(params->msSoundBufLen) *
         wfxOut->nAvgBytesPerSec *
-        BDBL(0x45c224, 1.0 / 1000.0)
+        BFLT(0x45c224, 1.0 / 1000.0)
     );
     dsBufDesc.lpwfxFormat = const_cast<LPWAVEFORMATEX>(wfxOut);
     dsBufDesc.dwFlags =
@@ -88,7 +88,7 @@ extern "C" int InitTrack(
         return 3;
 
     // precompute number of bytes per millisecond (for timing param conversion)
-    double msBytes = wfxOut->nAvgBytesPerSec * BDBL(0x45c224, 1.0 / 1000.0);
+    double msBytes = wfxOut->nAvgBytesPerSec * BFLT(0x45c224, 1.0 / 1000.0);
 
     // setup conversion buffer
     if (convBuf)
@@ -148,7 +148,7 @@ extern "C" void ResetTrack(TRACK *track)
     track->field_38 = 0;
     track->field_3C = 0;
     track->field_40 = 0;
-    track->field_44 = 0;
+    track->loopCount = 0;
     track->trackOutSize = 0;
     track->field_4C = 0;
     track->field_50 = 0;
