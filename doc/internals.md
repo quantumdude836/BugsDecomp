@@ -52,7 +52,7 @@ loaded into memory, so the in-memory structure matches the file layout.
 | 0x00   | int      | version       | = 0x10    |
 | 0x04   | int      | renderer      | see below |
 | 0x08   | int      | language      | see below |
-| 0x0c   | int      |               |           |
+| 0x0c   | int      | display type? | see below |
 | 0x10   | int      | width         | pixels    |
 | 0x14   | int      | height        | pixels    |
 | 0x18   | bool32   | fullscreen    |           |
@@ -73,13 +73,13 @@ loaded into memory, so the in-memory structure matches the file layout.
 | 0x78   | byte     |               |           |
 | 0x79   | byte[7]  | padding       |           |
 
-`renderer` choices:
+`renderer` values:
 
 - 0 - software renderer for "slow" computers (8-bit color)
 - 1 - software renderer for "fast" computers (24-bit color)
 - 2 - hardware (OpenGL) renderer
 
-`language` codes:
+`language` values:
 
 - 0 - English
 - 1 - French
@@ -88,7 +88,14 @@ loaded into memory, so the in-memory structure matches the file layout.
 - 4 - Italian
 - 5 - Dutch
 
+`display type` values:
+
+- 0 - unknown
+- 1 - unknown
+- 2 - unknown
+
 `fog distance` values:
+
 - 0 - near
 - 1 - normal
 - 2 - far

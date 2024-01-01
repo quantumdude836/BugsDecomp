@@ -34,13 +34,22 @@ enum FOG_DIST
 };
 
 
+// display type options
+enum DISP_TYPE
+{
+    DISP_TYPE_UNK0,
+    DISP_TYPE_UNK1,
+    DISP_TYPE_UNK2,
+};
+
+
 // config.pc structure
 struct CONFIG_PC
 {
     int version;
     RENDERER renderer;
     LANG language;
-    DWORD field_C;
+    DISP_TYPE displayType;
     int width;
     int height;
     BOOL fullscreen;

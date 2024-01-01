@@ -28,7 +28,7 @@ PATCH_CODE(0x409ac0, 0x409a90, SetConfigDefaults);
 extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
 {
     // FIXME: temp
-    auto LoadGL = reinterpret_cast<int(*)()>(VER(0x40e0b0, 0x40e050));
+    auto LoadGL = reinterpret_cast<BOOL (*)()>(VER(0x40e0b0, 0x40e050));
 
     // always set version
     cfg->version = CONFIG_VERSION;
@@ -88,7 +88,7 @@ extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
         }
 
         cfg->fogDist = FOG_FAR;
-        cfg->field_C = LoadGL();
+        cfg->displayType = LoadGL() ? DISP_TYPE_UNK1 : DISP_TYPE_UNK0;
         cfg->fullscreen = TRUE;
         cfg->field_20 = 1.0;
     }
