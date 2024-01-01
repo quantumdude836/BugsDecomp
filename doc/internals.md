@@ -11,36 +11,40 @@ All options may be specified in all uppercase or all lowercase. For options with
 values, there's no space between the option and the value.
 
 - /b`N` - skips the main menu and starts immediately in level ID `N` (see
-the [level list](#level-list) for IDs); e.g. `/b51` to go straight to "Nowhere"
-- /p:`?` - unknown
-- /r:`?` - unknown
+the [level list](#level-list) for IDs); e.g. `/b51` to go straight to "Nowhere";
+defaults to 2, i.e. the (non-existent) language select level
+- /p:`path` - loads data previously dumped by `/r:` from `path`
+- /r:`path` - dumps some unknown data to `path` on game exit
 - /x`N` - sets horizontal resolution, in pixels
 - /y`N` - sets vertical resolution, in pixels
-- /no_sync - disables V-sync?
-- /no_skip - unknown; opposite of `/skip_intro`?
+- /no_sync - unknown
+- /no_skip - unknown; related to `/no_sync`
 - /full - starts in fullscreen mode
 - /win - starts in windowed mode
 - /ogl, /opengl - selects hardware (OpenGL) renderer
 - /soft, /softrgb, /soft16, /soft24 - selects 24-bit color software renderer
 - /soft8, /softpal - selects 8-bit color software renderer
 - /skip_intro - skips the first 3 startup screens
-- /cons - unknown
-- /fntp - unknown
-- /dll:`S` - sets the name of the OpenGL library; default is "opengl32.dll"
-- /pal - unknown
-- /pal:`?` - unknown
+- /cons - unknown; appears to be unused
+- /fntp - unknown; appears to be unused
+- /dll:`name` - sets the name of the OpenGL library; default is "opengl32.dll"
+- /pal - unknown; `/b<N>` must be specified first; dumps a palette BMP of the
+selected level?
+- /pal:`name` - unknown; `name` is relative to "bze" directory of BBLiT; seems
+to be bugged (relying on an uninitialized variable)
 - /? - unknown
-- /q`N` - unknown
-- /sam`N` - unknown
-- /r`N` - unknown
-- /o`N` - unknown
-- /w`N` - unknown
+- /q`N` - unknown; legal values appear to be 0,1,2
+- /sam`N` - unknown; appears to be unused
+- /r`N` - unknown; not to be confused with `/r:`; legal values appear to be
+(0,)1,2,3,4,5,8
+- /o`N` - unknown; appears to be unused
+- /w`N` - unknown; legal values appear to be (0,)1,2,3
 - /n - unknown
-- /sort`N` - unknown
-- /lum`N` - unknown
-- /sat`N` - unknown
-- /mul`N` - unknown
-- /gam`N` - unknown
+- /sort`N` - unknown; appears to be unused
+- /lum`N` - unknown; value scaled by 1/100
+- /sat`N` - unknown; value scaled by 1/100
+- /mul`N` - unknown; value scaled by 1/100
+- /gam`N` - unknown; value scaled by 1/100
 
 # config.pc
 
