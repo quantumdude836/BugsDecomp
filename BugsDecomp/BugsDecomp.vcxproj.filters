@@ -45,6 +45,9 @@
     <ClCompile Include="cfg.cpp">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
+    <ClCompile Include="track.cpp">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
     <ClInclude Include="cfg.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="track.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
   </ItemGroup>

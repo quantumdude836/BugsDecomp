@@ -2,7 +2,11 @@
 // C runtime functions in the game's code.
 
 #pragma once
+ 
 
+#define free_bugs (reinterpret_cast< \
+    void (*)(void *) \
+>(VER(0x44ff10, 0x44fd70)))
 
 #define _lseek_bugs (reinterpret_cast< \
     long (*)(int, long, int) \
