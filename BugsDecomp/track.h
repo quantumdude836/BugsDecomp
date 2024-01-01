@@ -110,3 +110,45 @@ extern "C" void PlayTrack(TRACK *track);
 /// </summary>
 /// <param name="track">Track to stop</param>
 extern "C" void StopTrack(TRACK *track);
+
+/// <summary>
+/// Converts a chunk of track audio.
+/// </summary>
+/// <param name="track">Track used for conversion</param>
+/// <param name="src">Source audio data</param>
+/// <param name="dst">Conversion destination</param>
+/// <param name="count">Number of elements to convert</param>
+extern "C" void ConvertTrackAudio(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+);
+
+/// <summary>
+/// Converts stereo ADPCM audio.
+/// </summary>
+/// <param name="track">Track used for conversion</param>
+/// <param name="src">Source audio data</param>
+/// <param name="dst">Conversion destination</param>
+/// <param name="count">Number of elements to convert</param>
+extern "C" void CvtStereoAdpcm(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+);
+
+/// <summary>
+/// Converts mono ADPCM audio.
+/// </summary>
+/// <param name="track">Track used for conversion</param>
+/// <param name="src">Source audio data</param>
+/// <param name="dst">Conversion destination</param>
+/// <param name="count">Number of elements to convert</param>
+extern "C" void CvtMonoAdpcm(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+);

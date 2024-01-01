@@ -182,3 +182,90 @@ extern "C" void StopTrack(TRACK *track)
     track->dsBuffer->Stop();
     track->playing = FALSE;
 }
+
+PATCH_CODE(0x401af0, 0x401af0, ConvertTrackAudio);
+extern "C" void ConvertTrackAudio(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+)
+{
+    // if input/output formats are the same, just straight copy the audio
+    if (track->wfxIn.wBitsPerSample == track->wfxOut.wBitsPerSample &&
+        track->wfxIn.nSamplesPerSec == track->wfxOut.nSamplesPerSec &&
+        track->wfxIn.nChannels == track->wfxOut.nChannels &&
+        track->wfxIn.wFormatTag == track->wfxOut.wFormatTag)
+    {
+        memcpy(dst, src, track->wfxIn.nBlockAlign * count);
+        return;
+    }
+
+    // if input isn't ADPCM, or output isn't PCM, don't convert
+    if (track->wfxIn.wFormatTag != WAVE_FORMAT_ADPCM ||
+        track->wfxOut.wFormatTag != WAVE_FORMAT_PCM)
+    {
+        return;
+    }
+
+    if (track->wfxIn.nChannels == 2 && track->wfxOut.nChannels == 2)
+    {
+        // input stereo, output stereo
+
+        // don't support sample rate conversion
+        if (track->wfxIn.nSamplesPerSec != track->wfxOut.nSamplesPerSec)
+            return;
+        // input must be 4bps, output 16bs
+        if (track->wfxIn.wBitsPerSample != 4 ||
+            track->wfxOut.wBitsPerSample != 16)
+        {
+            return;
+        }
+
+        CvtStereoAdpcm(track, src, dst, count);
+    }
+    else if (track->wfxIn.nChannels == 1 && track->wfxOut.nChannels == 2)
+    {
+        // input mono, output stero
+
+        // don't support sample rate conversion
+        if (track->wfxIn.nSamplesPerSec != track->wfxOut.nSamplesPerSec)
+            return;
+        // input must be 4bps, output 16bs
+        if (track->wfxIn.wBitsPerSample != 4 ||
+            track->wfxOut.wBitsPerSample != 16)
+        {
+            return;
+        }
+
+        CvtMonoAdpcm(track, src, dst, count);
+    }
+}
+
+extern "C" void CvtStereoAdpcm(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+)
+{
+    // use old function for now
+    auto fn = reinterpret_cast<
+        void (*)(TRACK *, const void *, void *, size_t)
+    >(0x401be0);
+    fn(track, src, dst, count);
+}
+
+extern "C" void CvtMonoAdpcm(
+    TRACK *track,
+    const void *src,
+    void *dst,
+    size_t count
+)
+{
+    // use old function for now
+    auto fn = reinterpret_cast<
+        void (*)(TRACK *, const void *, void *, size_t)
+    >(0x401e10);
+    fn(track, src, dst, count);
+}
