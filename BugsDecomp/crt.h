@@ -2,7 +2,11 @@
 // C runtime functions in the game's code.
 
 #pragma once
- 
+
+
+#define malloc_bugs (reinterpret_cast< \
+    void *(*)(size_t) \
+>(VER(0x44fdd0, 0x44fc30)))
 
 #define free_bugs (reinterpret_cast< \
     void (*)(void *) \

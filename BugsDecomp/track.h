@@ -25,13 +25,23 @@ struct TRACK
     BOOL flag_54;
     BOOL convBufOwned; // whether `convBuf` should be freed on finalization
     size_t soundBufSize; // size, in bytes, of the DS buffer
-    DWORD field_60;
-    DWORD field_64;
-    DWORD field_68;
-    IDirectSoundBuffer *dsBuffer;
+    size_t convBufSize; // size, in bytes, of the audio conversion buffer
+    size_t field_64; // byte-size equivalent of TRACK_PARAMS.field_8
+    size_t field_68; // byte-size equivalent of TRACK_PARAMS.field_C
+    LPDIRECTSOUNDBUFFER dsBuffer;
     BOOL flag_70;
     BOOL playing;
     DWORD field_78;
+};
+
+
+// params for audio tracks
+struct TRACK_PARAMS
+{
+    size_t msSoundBufLen; // length of DS buffer, in milliseconds
+    size_t msConvBufLen; // length of conversion buffer, in milliseconds
+    size_t field_8; // in milliseconds
+    size_t field_C; // in milliseconds
 };
 
 
@@ -48,6 +58,33 @@ struct TRACK
 // currently playing music track
 #define musicTrack (*reinterpret_cast<TRACK *>(0x553320))
 
+
+/// <summary>
+/// Initializes an audio track.
+/// </summary>
+/// <param name="track">Track to initialize</param>
+/// <param name="dsound">DirectSound instance</param>
+/// <param name="wfxIn">Format of audio from file</param>
+/// <param name="wfxOut">Format of audio to DS buffer</param>
+/// <param name="params">Timing params</param>
+/// <param name="convBuf">
+/// Conversion buffer to use, or null to allocate one
+/// </param>
+/// <returns>
+/// 0 for success, or non-zero for error:
+/// - 2 - track already has a DirectSound buffer allocated
+/// - 3 - unable to create DirectSound buffer
+/// - 4 - invalid audio format
+/// - 5 - invalid timing params
+/// </returns>
+extern "C" int InitTrack(
+    TRACK *track,
+    LPDIRECTSOUND dsound,
+    LPCWAVEFORMATEX wfxIn,
+    LPCWAVEFORMATEX wfxOut,
+    const TRACK_PARAMS *params,
+    void *convBuf
+);
 
 /// <summary>
 /// Finalizes a track, releasing all owned resources.

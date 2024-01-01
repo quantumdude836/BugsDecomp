@@ -5,6 +5,120 @@
 #include "crt.h"
 
 
+PATCH_CODE(0x401000, 0x401000, InitTrack);
+extern "C" int InitTrack(
+    TRACK *track,
+    LPDIRECTSOUND dsound,
+    LPCWAVEFORMATEX wfxIn,
+    LPCWAVEFORMATEX wfxOut,
+    const TRACK_PARAMS *params,
+    void *convBuf
+)
+{
+    LPDIRECTSOUNDBUFFER dsBuffer;
+
+    // track should not have a DS buffer already allocated
+    if (track->dsBuffer)
+        return 2;
+
+    // validate formats
+    // output must be PCM
+    bool valid = wfxOut->wFormatTag == WAVE_FORMAT_PCM;
+    // channel counds must match
+    if (wfxOut->wFormatTag == WAVE_FORMAT_PCM)
+        valid = wfxOut->nChannels == wfxIn->nChannels;
+    if (!valid)
+        return 4;
+    // if input is PCM, sample sizes must mach
+    if (wfxIn->wFormatTag == WAVE_FORMAT_PCM)
+        valid = wfxOut->wBitsPerSample == wfxIn->wBitsPerSample;
+    if (!valid)
+        return 4;
+    // sample rates must match
+    valid = wfxOut->nSamplesPerSec == wfxIn->nSamplesPerSec;
+    if (!valid)
+        return 4;
+    // if input is ADPCM, input/output must have 4/16 bits per sample, resp.
+    if (wfxIn->wFormatTag == WAVE_FORMAT_ADPCM)
+        valid = wfxIn->wBitsPerSample == 4 && wfxOut->wBitsPerSample == 16;
+    if (!valid)
+        return 4;
+    // also validate block align and bytes per sec
+    if (wfxIn->nBlockAlign != wfxIn->nChannels * wfxIn->wBitsPerSample / 8)
+        return 4;
+    if (wfxOut->nBlockAlign != wfxOut->nChannels * wfxOut->wBitsPerSample / 8)
+        return 4;
+    if (wfxIn->nAvgBytesPerSec != wfxIn->nBlockAlign * wfxIn->nSamplesPerSec)
+        return 4;
+    if (wfxOut->nAvgBytesPerSec != wfxOut->nBlockAlign * wfxOut->nSamplesPerSec)
+        return 4;
+
+    // validate timing params
+    if (params->field_8 + params->msConvBufLen >= params->msSoundBufLen)
+        return 5;
+
+    // start track out with default state
+    *track = trackDefault;
+
+    // build up DS buffer desc
+    DSBUFFERDESC1 dsBufDesc = { 0 };
+    dsBufDesc.dwSize = sizeof dsBufDesc;
+    dsBufDesc.dwBufferBytes = DWORD(
+        double(params->msSoundBufLen) *
+        wfxOut->nAvgBytesPerSec *
+        BDBL(0x45c224, 1.0 / 1000.0)
+    );
+    dsBufDesc.lpwfxFormat = const_cast<LPWAVEFORMATEX>(wfxOut);
+    dsBufDesc.dwFlags =
+        DSBCAPS_GETCURRENTPOSITION2 |
+        DSBCAPS_CTRLVOLUME |
+        DSBCAPS_CTRLPAN |
+        DSBCAPS_CTRLFREQUENCY;
+
+    // create DS buffer
+    HRESULT hr = dsound->CreateSoundBuffer(
+        reinterpret_cast<const DSBUFFERDESC *>(&dsBufDesc),
+        &dsBuffer,
+        nullptr
+    );
+    if (hr != S_OK)
+        dsBuffer = nullptr;
+    track->dsBuffer = dsBuffer;
+    if (!dsBuffer)
+        return 3;
+
+    // precompute number of bytes per millisecond (for timing param conversion)
+    double msBytes = wfxOut->nAvgBytesPerSec * BDBL(0x45c224, 1.0 / 1000.0);
+
+    // setup conversion buffer
+    if (convBuf)
+    {
+        // caller provided a buffer to borrow
+        track->convBuf = convBuf;
+        track->convBufOwned = FALSE;
+    }
+    else
+    {
+        // need to allocate a buffer
+        track->convBuf = malloc_bugs(
+            size_t(params->msConvBufLen * msBytes + 0.5)
+        );
+        track->convBufOwned = TRUE;
+    }
+
+    // copy wave formats
+    track->wfxIn = *wfxIn;
+    track->wfxOut = *wfxOut;
+
+    // convert timing params
+    track->soundBufSize = size_t(params->msSoundBufLen * msBytes + 0.5);
+    track->convBufSize = size_t(params->msConvBufLen * msBytes + 0.5);
+    track->field_64 = size_t(params->field_8 * msBytes + 0.5);
+    track->field_68 = size_t(params->field_C * msBytes + 0.5);
+
+    return 0;
+}
+
 PATCH_CODE(0x401330, 0x401330, FiniTrack);
 extern "C" void FiniTrack(TRACK *track)
 {
