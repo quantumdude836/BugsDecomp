@@ -19,9 +19,12 @@ struct CodePatchEntry
 };
 
 
-// list of registered patches
-static std::vector<CodePatchEntry> codePatches;
-
+std::vector<CodePatchEntry> &CodePatch::codePatches()
+{
+    // workaround to avoid static initialization order fiasco
+    static std::vector<CodePatchEntry> *list = new std::vector<CodePatchEntry>;
+    return *list;
+}
 
 bool CodePatch::patchCodeBytes(void *dst, const void *src, size_t size)
 {
@@ -49,7 +52,7 @@ bool CodePatch::applyAll()
     BYTE buf[5];
     GameVersion curVer = *detectVersion();
 
-    for (const auto &entry : codePatches)
+    for (const auto &entry : codePatches())
     {
         // only apply the patch if it applies to the current running version
         if (entry.ver != curVer)
@@ -77,5 +80,5 @@ bool CodePatch::applyAll()
 
 CodePatch::CodePatch(DWORD patchAddr, DWORD tgtAddr, GameVersion ver)
 {
-    codePatches.emplace_back(patchAddr, tgtAddr, ver);
+    codePatches().emplace_back(patchAddr, tgtAddr, ver);
 }

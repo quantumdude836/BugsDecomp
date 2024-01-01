@@ -7,9 +7,17 @@
 #include "GameVersion.h"
 
 
+struct CodePatchEntry;
+
+
 class CodePatch
 {
 private:
+    /// <summary>
+    /// Gets the list of code patches to apply.
+    /// </summary>
+    /// <returns>Code patch list</returns>
+    static std::vector<CodePatchEntry> &codePatches();
     /// <summary>
     /// Patches some bytes into code space.
     /// </summary>
