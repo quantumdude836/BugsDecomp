@@ -147,13 +147,13 @@ extern "C" void ResetTrack(TRACK *track)
     track->readBytes = 0;
     track->field_38 = 0;
     track->field_3C = 0;
-    track->field_40 = 0;
+    track->prevPlayPos = 0;
     track->loopCount = 0;
     track->trackOutSize = 0;
     track->field_4C = 0;
     track->field_50 = 0;
     track->flag_54 = FALSE;
-    track->flag_70 = FALSE;
+    track->trackDone = FALSE;
     track->field_78 = 0;
 }
 
@@ -165,7 +165,7 @@ extern "C" void PlayTrack(TRACK *track)
         return;
 
     // unknown additional condition check
-    if (track->flag_70)
+    if (track->trackDone)
         return;
 
     track->dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
@@ -181,6 +181,92 @@ extern "C" void StopTrack(TRACK *track)
 
     track->dsBuffer->Stop();
     track->playing = FALSE;
+}
+
+PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
+extern "C" BOOL CheckTrackDone(TRACK *track)
+{
+    DWORD curPlayPos, curWritePos;
+    BOOL trackDone;
+
+    track->dsBuffer->GetCurrentPosition(&curPlayPos, &curWritePos);
+    if (!track->flag_54)
+        trackDone = FALSE;
+    else
+    {
+        // compute total number of bytes played
+        DWORD trackPlayedBytes =
+            track->loopCount * track->soundBufSize + curPlayPos;
+        // check if it's past the requested size to play
+        trackDone = trackPlayedBytes >= track->trackOutSize;
+    }
+
+    // if the track just hit the end, stop it
+    if (trackDone && !track->trackDone)
+        StopTrack(track);
+    track->trackDone = trackDone;
+
+    return trackDone;
+}
+
+PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
+extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
+{
+    DWORD curPlayPos, curWritePos;
+
+    track->dsBuffer->GetCurrentPosition(&curPlayPos, &curWritePos);
+    DWORD actualPlayPos = curPlayPos;
+    if (actualPlayPos < track->prevPlayPos)
+    {
+        // play position has wrapped since last call; unwrap position and
+        // increment loop count
+        actualPlayPos += track->soundBufSize;
+        track->loopCount++;
+    }
+
+    if (track->field_78)
+        return 0;
+
+    DWORD samples = 0;
+    *wasStopped = FALSE;
+    DWORD t2 = track->field_3C;
+    if (t2 < track->field_38)
+        t2 += track->soundBufSize;
+
+    if (actualPlayPos >= track->field_38 && actualPlayPos <= t2)
+    {
+        // stop playing the track; either it's done playing, or the DS buffer's
+        // position will be changed
+        if (track->playing)
+        {
+            StopTrack(track);
+            *wasStopped = TRUE;
+        }
+
+        if (!CheckTrackDone(track))
+        {
+            samples = track->convBufSize / track->wfxOut.nBlockAlign;
+            track->dsBuffer->SetCurrentPosition(track->field_38);
+            if (curPlayPos < track->prevPlayPos &&
+                curPlayPos < track->field_38)
+            {
+                track->loopCount--;
+            }
+        }
+    }
+    else
+    {
+        actualPlayPos -= track->prevPlayPos;
+        if (actualPlayPos < track->field_68)
+            actualPlayPos = 0;
+
+        samples = actualPlayPos / track->wfxOut.nBlockAlign;
+    }
+
+    if (samples)
+        track->prevPlayPos = curPlayPos;
+
+    return samples;
 }
 
 PATCH_CODE(0x401af0, 0x401af0, ConvertTrackAudio);

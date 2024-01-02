@@ -15,7 +15,7 @@ struct TRACK
     WAVEFORMATEX wfxOut; // format of audio to DirectSound buffer
     DWORD field_38;
     DWORD field_3C;
-    DWORD field_40;
+    DWORD prevPlayPos;
     DWORD loopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
     WORD field_4C;
@@ -29,7 +29,7 @@ struct TRACK
     size_t field_64; // byte-size equivalent of TRACK_PARAMS.field_8
     size_t field_68; // byte-size equivalent of TRACK_PARAMS.field_C
     LPDIRECTSOUNDBUFFER dsBuffer;
-    BOOL flag_70;
+    BOOL trackDone;
     BOOL playing;
     DWORD field_78;
 };
@@ -110,6 +110,21 @@ extern "C" void PlayTrack(TRACK *track);
 /// </summary>
 /// <param name="track">Track to stop</param>
 extern "C" void StopTrack(TRACK *track);
+
+/// <summary>
+/// Check if a track is done playing, stopping it if so.
+/// </summary>
+/// <param name="track">Track to check</param>
+/// <returns>Whether the track is done playing</returns>
+extern "C" BOOL CheckTrackDone(TRACK *track);
+
+/// <summary>
+/// Updates an audio track.
+/// </summary>
+/// <param name="track">Audio track to update</param>
+/// <param name="wasStopped">Whether the track was playing, then stopped</param>
+/// <returns>Sample position</returns>
+extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped);
 
 /// <summary>
 /// Converts a chunk of track audio.
