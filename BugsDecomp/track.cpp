@@ -152,7 +152,7 @@ extern "C" void ResetTrack(TRACK *track)
     track->prevPlayPos = 0;
     track->loopCount = 0;
     track->trackOutSize = 0;
-    memset(&track->field_4C, 0, sizeof track->field_4C);
+    memset(&track->adpcmState, 0, sizeof track->adpcmState);
     track->flag_54 = FALSE;
     track->trackDone = FALSE;
     track->field_78 = 0;
@@ -329,6 +329,7 @@ extern "C" void ConvertTrackAudio(
     }
 }
 
+PATCH_CODE(0x401be0, 0x401be0, CvtStereoAdpcm);
 extern "C" void CvtStereoAdpcm(
     TRACK *track,
     const void *src,
@@ -336,11 +337,106 @@ extern "C" void CvtStereoAdpcm(
     size_t count
 )
 {
-    // use old function for now
-    auto fn = reinterpret_cast<
-        void (*)(TRACK *, const void *, void *, size_t)
-    >(0x401be0);
-    fn(track, src, dst, count);
+    int leftSamp, rightSamp;
+    int rightState, leftState;
+    int leftVal, rightVal;
+    int mag;
+    BOOL sign;
+    int sampDelta;
+
+    const BYTE *srcPtr = reinterpret_cast<const BYTE *>(src);
+    short *dstPtr = reinterpret_cast<short *>(dst);
+
+    if (track)
+    {
+        // use provided track object for initial state
+        leftSamp = track->adpcmState.leftSamp;
+        rightSamp = track->adpcmState.rightSamp;
+        leftState = track->adpcmState.leftState;
+        rightState = track->adpcmState.rightState;
+    }
+    else
+    {
+        // otherwise use zeroes for initial state
+        leftSamp = 0;
+        rightSamp = 0;
+        leftState = 0;
+        rightState = 0;
+    }
+
+    while (count--)
+    {
+        BYTE srcSamp = *(srcPtr++);
+
+        // decode left channel
+        leftVal = adpcmStateDecode[leftState];
+        BYTE srcLeft = srcSamp & 0xf;
+        leftState += adpcmStateAdj[srcLeft];
+        if (leftState < 0)
+            leftState = 0;
+        else if (leftState > 88)
+            leftState = 88;
+
+        sign = !!(srcLeft & 8);
+        mag = srcLeft & 7;
+        sampDelta = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            if (mag & (1 << (2 - i)))
+                sampDelta += leftVal >> i;
+        }
+        sampDelta += leftVal >> 3;
+        if (sign)
+            leftSamp -= sampDelta;
+        else
+            leftSamp += sampDelta;
+
+        // clamp sample and write
+        if (leftSamp > 0x7fff)
+            leftSamp = 0x7fff;
+        else if (leftSamp < -0x8000)
+            leftSamp = -0x8000;
+        *(dstPtr++) = leftSamp;
+
+        // decode right channel
+        rightVal = adpcmStateDecode[rightState];
+        BYTE srcRight = (srcSamp >> 4) & 0xf;
+        rightState += adpcmStateAdj[srcRight];
+        if (rightState < 0)
+            rightState = 0;
+        else if (rightState > 88)
+            rightState = 88;
+
+        sign = !!(srcRight & 8);
+        mag = srcRight & 7;
+        sampDelta = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            if (mag & (1 << (2 - i)))
+                sampDelta += rightVal >> i;
+        }
+        sampDelta += rightVal >> 3;
+        if (sign)
+            rightSamp -= sampDelta;
+        else
+            rightSamp += sampDelta;
+
+        // clamp sample and write
+        if (rightSamp > 0x7fff)
+            rightSamp = 0x7fff;
+        else if (rightSamp < -0x8000)
+            rightSamp = -0x8000;
+        *(dstPtr++) = rightSamp;
+    }
+
+    if (track)
+    {
+        // write back decode state
+        track->adpcmState.leftSamp = leftSamp;
+        track->adpcmState.rightSamp = rightSamp;
+        track->adpcmState.leftState = leftState;
+        track->adpcmState.rightState = rightState;
+    }
 }
 
 PATCH_CODE(0x401e10, 0x401e10, CvtMonoAdpcm);

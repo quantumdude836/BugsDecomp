@@ -19,11 +19,11 @@ struct TRACK
     DWORD loopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
     struct {
-        WORD field_0;
-        WORD field_2;
-        WORD field_4;
-        WORD field_6;
-    } field_4C;
+        short leftSamp;
+        short rightSamp;
+        short leftState;
+        short rightState;
+    } adpcmState;
     BOOL flag_54;
     BOOL convBufOwned; // whether `convBuf` should be freed on finalization
     size_t soundBufSize; // size, in bytes, of the DS buffer
@@ -49,6 +49,12 @@ struct TRACK_PARAMS
 
 // "default" state for an uninitialized track
 #define trackDefault (*reinterpret_cast<const TRACK *>(0x45c000))
+
+// LUT for "state" adjustment based on input sample
+#define adpcmStateAdj (reinterpret_cast<const int *>(0x45c080))
+
+// LUT for base value based on current "state"
+#define adpcmStateDecode (reinterpret_cast<const int *>(0x45c0c0))
 
 // byte size of audio segments in the speech files; indexed by language, then by
 // segment number (index 0 = segment 2?)
