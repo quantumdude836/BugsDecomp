@@ -7,7 +7,6 @@
 #include "misc.h"
 
 
-PATCH_CODE(0x409a40, 0x409a10, WriteConfig);
 extern "C" void WriteConfig()
 {
     char path[MAX_PATH];
@@ -24,7 +23,6 @@ extern "C" void WriteConfig()
     fclose_bugs(fp);
 }
 
-PATCH_CODE(0x409ac0, 0x409a90, SetConfigDefaults);
 extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
 {
     // FIXME: temp
@@ -147,19 +145,16 @@ extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
     }
 }
 
-PATCH_CODE(0x409ce0, 0x409c80, SaveAltConfig);
 extern "C" void SaveAltConfig()
 {
     altConfig = config;
 }
 
-PATCH_CODE(0x409d00, 0x409ca0, LoadAltConfig);
 extern "C" void LoadAltConfig()
 {
     config = altConfig;
 }
 
-PATCH_CODE(0x409d20, 0x409cc0, ReadConfig);
 extern "C" void ReadConfig()
 {
     char path[MAX_PATH];

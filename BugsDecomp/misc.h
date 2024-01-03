@@ -19,6 +19,7 @@
 /// </summary>
 /// <param name="fmt">Format string</param>
 extern "C" void ConPrintf(const char *fmt, ...);
+PATCH_CODE(0x4055d0, 0x4055d0, ConPrintf);
 
 /// <summary>
 /// Shows a Retry/Cancel dialog with formatted text.
@@ -26,3 +27,4 @@ extern "C" void ConPrintf(const char *fmt, ...);
 /// <param name="fmt">Format string</param>
 /// <returns>Selected dialog option</returns>
 extern "C" int ShowRetryDialog(const char *fmt, ...);
+PATCH_CODE(0x405640, 0x405640, ShowRetryDialog);

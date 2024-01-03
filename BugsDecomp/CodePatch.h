@@ -47,6 +47,8 @@ public:
 };
 
 
+#ifdef REGISTER_PATCHES
+
 // helper macros for registering code patches
 #define PATCH_CODE_1_0(patchAddr, tgtAddr) \
     static const CodePatch _patch_##patchAddr##_1_0( \
@@ -63,3 +65,11 @@ public:
 #define PATCH_CODE(patchAddr_1_0, patchAddr_1_6, tgtAddr) \
     PATCH_CODE_1_0(patchAddr_1_0, tgtAddr); \
     PATCH_CODE_1_6(patchAddr_1_6, tgtAddr)
+
+#else
+
+#define PATCH_CODE_1_0(patchAddr, tgtAddr)
+#define PATCH_CODE_1_6(patchAddr, tgtAddr)
+#define PATCH_CODE(patchAddr_1_0, patchAddr_1_6, tgtAddr)
+
+#endif

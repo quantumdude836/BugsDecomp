@@ -93,12 +93,14 @@ extern "C" int InitTrack(
     const TRACK_PARAMS *params,
     void *convBuf
 );
+PATCH_CODE(0x401000, 0x401000, InitTrack);
 
 /// <summary>
 /// Finalizes a track, releasing all owned resources.
 /// </summary>
 /// <param name="track">Track to finalize</param>
 extern "C" void FiniTrack(TRACK *track);
+PATCH_CODE(0x401330, 0x401330, FiniTrack);
 
 /// <summary>
 /// Resets a track to a default state. If the track is currently playing, it is
@@ -106,18 +108,21 @@ extern "C" void FiniTrack(TRACK *track);
 /// </summary>
 /// <param name="track">Track to reset</param>
 extern "C" void ResetTrack(TRACK *track);
+PATCH_CODE(0x401490, 0x401490, ResetTrack);
 
 /// <summary>
 /// Starts playing a music track.
 /// </summary>
 /// <param name="track">Track to play</param>
 extern "C" void PlayTrack(TRACK *track);
+PATCH_CODE(0x4018d0, 0x4018d0, PlayTrack);
 
 /// <summary>
 /// Stops playing a music track.
 /// </summary>
 /// <param name="track">Track to stop</param>
 extern "C" void StopTrack(TRACK *track);
+PATCH_CODE(0x401910, 0x401910, StopTrack);
 
 /// <summary>
 /// Check if a track is done playing, stopping it if so.
@@ -125,6 +130,7 @@ extern "C" void StopTrack(TRACK *track);
 /// <param name="track">Track to check</param>
 /// <returns>Whether the track is done playing</returns>
 extern "C" BOOL CheckTrackDone(TRACK *track);
+PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
 
 /// <summary>
 /// Updates an audio track.
@@ -133,6 +139,7 @@ extern "C" BOOL CheckTrackDone(TRACK *track);
 /// <param name="wasStopped">Whether the track was playing, then stopped</param>
 /// <returns>Sample position</returns>
 extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped);
+PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
 
 /// <summary>
 /// Converts a chunk of track audio.
@@ -147,6 +154,7 @@ extern "C" void ConvertTrackAudio(
     void *dst,
     size_t count
 );
+PATCH_CODE(0x401af0, 0x401af0, ConvertTrackAudio);
 
 /// <summary>
 /// Converts stereo ADPCM audio.
@@ -161,6 +169,7 @@ extern "C" void CvtStereoAdpcm(
     void *dst,
     size_t count
 );
+PATCH_CODE(0x401be0, 0x401be0, CvtStereoAdpcm);
 
 /// <summary>
 /// Converts mono ADPCM audio.
@@ -175,3 +184,4 @@ extern "C" void CvtMonoAdpcm(
     void *dst,
     size_t count
 );
+PATCH_CODE(0x401e10, 0x401e10, CvtMonoAdpcm);

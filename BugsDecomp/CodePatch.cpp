@@ -1,6 +1,16 @@
 
 #include "stdafx.h"
+// code patches will be registered here
+#define REGISTER_PATCHES
 #include "CodePatch.h"
+
+// include all decompiled headers to gather and register all the patches
+#include "cfg.h"
+#include "crt.h"
+#include "fs.h"
+#include "gte.h"
+#include "misc.h"
+#include "track.h"
 
 
 // represents a registered code patch

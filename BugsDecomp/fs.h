@@ -15,6 +15,7 @@
 /// <param name="oflag">Open flags</param>
 /// <returns>File descriptor, or -1</returns>
 extern "C" int FsOpen(const char *path, int oflag, ...);
+PATCH_CODE(0x4056c0, 0x4056c0, FsOpen);
 
 /// <summary>
 /// Opens a file object for the given path. If it fails, retries with the path
@@ -27,18 +28,23 @@ extern "C" int FsOpen(const char *path, int oflag, ...);
 /// <param name="mode">Open mode</param>
 /// <returns>File object, or null</returns>
 extern "C" FILE *FsFOpen(const char *path, const char *mode);
+PATCH_CODE(0x405760, 0x405760, FsFOpen);
 
 // wrapper around _lseek
 extern "C" long FsSeek(int fd, long offset, int whence);
+PATCH_CODE(0x405800, 0x405800, FsSeek);
 
 // wrapper around _read
 extern "C" int FsRead(int fd, void *buf, unsigned n);
+PATCH_CODE(0x405820, 0x405820, FsRead);
 
 // wrapper around _close
 extern "C" int FsClose(int fd);
+PATCH_CODE(0x405840, 0x405840, FsClose);
 
 /// <summary>
 /// Searches system drives for the datas root directory.
 /// </summary>
 /// <returns>Whether the datas root was found</returns>
 extern "C" BOOL FsFindRoot(void);
+PATCH_CODE(0x405850, 0x405850, FsFindRoot);

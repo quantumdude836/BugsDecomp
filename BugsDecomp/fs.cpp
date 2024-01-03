@@ -8,7 +8,6 @@
 #define datasRootDir (reinterpret_cast<char *>(0x4b1928))
 
 
-PATCH_CODE(0x4056c0, 0x4056c0, FsOpen);
 extern "C" int FsOpen(const char *path, int oflag, ...)
 {
     char fullPath[MAX_PATH];
@@ -30,7 +29,6 @@ extern "C" int FsOpen(const char *path, int oflag, ...)
     return fd;
 }
 
-PATCH_CODE(0x405760, 0x405760, FsFOpen);
 extern "C" FILE *FsFOpen(const char *path, const char *mode)
 {
     char fullPath[MAX_PATH];
@@ -49,25 +47,21 @@ extern "C" FILE *FsFOpen(const char *path, const char *mode)
     return fp;
 }
 
-PATCH_CODE(0x405800, 0x405800, FsSeek);
 extern "C" long FsSeek(int fd, long offset, int whence)
 {
     return _lseek_bugs(fd, offset, whence);
 }
 
-PATCH_CODE(0x405820, 0x405820, FsRead);
 extern "C" int FsRead(int fd, void *buf, unsigned n)
 {
     return _read_bugs(fd, buf, n);
 }
 
-PATCH_CODE(0x405840, 0x405840, FsClose);
 extern "C" int FsClose(int fd)
 {
     return _close_bugs(fd);
 }
 
-PATCH_CODE(0x405850, 0x405850, FsFindRoot);
 extern "C" BOOL FsFindRoot(void)
 {
     char rootName[MAX_PATH];

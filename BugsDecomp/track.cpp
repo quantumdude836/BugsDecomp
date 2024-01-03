@@ -6,7 +6,6 @@
 #include "misc.h"
 
 
-PATCH_CODE(0x401000, 0x401000, InitTrack);
 extern "C" int InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
@@ -121,7 +120,6 @@ extern "C" int InitTrack(
     return 0;
 }
 
-PATCH_CODE(0x401330, 0x401330, FiniTrack);
 extern "C" void FiniTrack(TRACK *track)
 {
     ResetTrack(track);
@@ -136,7 +134,6 @@ extern "C" void FiniTrack(TRACK *track)
     *track = trackDefault;
 }
 
-PATCH_CODE(0x401490, 0x401490, ResetTrack);
 extern "C" void ResetTrack(TRACK *track)
 {
     if (!track->dsBuffer)
@@ -158,7 +155,6 @@ extern "C" void ResetTrack(TRACK *track)
     track->field_78 = 0;
 }
 
-PATCH_CODE(0x4018d0, 0x4018d0, PlayTrack);
 extern "C" void PlayTrack(TRACK *track)
 {
     // do nothing if already playing, or if nothing to play
@@ -173,7 +169,6 @@ extern "C" void PlayTrack(TRACK *track)
     track->playing = TRUE;
 }
 
-PATCH_CODE(0x401910, 0x401910, StopTrack);
 extern "C" void StopTrack(TRACK *track)
 {
     // do nothing if not playing
@@ -184,7 +179,6 @@ extern "C" void StopTrack(TRACK *track)
     track->playing = FALSE;
 }
 
-PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
 extern "C" BOOL CheckTrackDone(TRACK *track)
 {
     DWORD curPlayPos, curWritePos;
@@ -210,7 +204,6 @@ extern "C" BOOL CheckTrackDone(TRACK *track)
     return trackDone;
 }
 
-PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
 extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
 {
     DWORD curPlayPos, curWritePos;
@@ -270,7 +263,6 @@ extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
     return samples;
 }
 
-PATCH_CODE(0x401af0, 0x401af0, ConvertTrackAudio);
 extern "C" void ConvertTrackAudio(
     TRACK *track,
     const void *src,
@@ -329,7 +321,6 @@ extern "C" void ConvertTrackAudio(
     }
 }
 
-PATCH_CODE(0x401be0, 0x401be0, CvtStereoAdpcm);
 extern "C" void CvtStereoAdpcm(
     TRACK *track,
     const void *src,
@@ -439,7 +430,6 @@ extern "C" void CvtStereoAdpcm(
     }
 }
 
-PATCH_CODE(0x401e10, 0x401e10, CvtMonoAdpcm);
 extern "C" void CvtMonoAdpcm(
     TRACK *track,
     const void *src,

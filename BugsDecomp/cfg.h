@@ -105,6 +105,7 @@ struct CONFIG_PC
 /// Writes the current configuration to file.
 /// </summary>
 extern "C" void WriteConfig();
+PATCH_CODE(0x409a40, 0x409a10, WriteConfig);
 
 /// <summary>
 /// Applies configuration defaults to a given config.
@@ -112,18 +113,22 @@ extern "C" void WriteConfig();
 /// <param name="flags">Which defaults to apply</param>
 /// <param name="cfg">Config to modify</param>
 extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg);
+PATCH_CODE(0x409ac0, 0x409a90, SetConfigDefaults);
 
 /// <summary>
 /// Saves the current config to the alt config.
 /// </summary>
 extern "C" void SaveAltConfig();
+PATCH_CODE(0x409ce0, 0x409c80, SaveAltConfig);
 
 /// <summary>
 /// Loads the alt config to the current config.
 /// </summary>
 extern "C" void LoadAltConfig();
+PATCH_CODE(0x409d00, 0x409ca0, LoadAltConfig);
 
 /// <summary>
 /// Reads the current configuration from file, or loads defaults.
 /// </summary>
 extern "C" void ReadConfig();
+PATCH_CODE(0x409d20, 0x409cc0, ReadConfig);
