@@ -3,6 +3,7 @@
 #include "common.h"
 #include "track.h"
 #include "crt.h"
+#include "misc.h"
 
 
 PATCH_CODE(0x401000, 0x401000, InitTrack);
@@ -24,7 +25,8 @@ extern "C" int InitTrack(
     // validate formats
     // output must be PCM
     bool valid = wfxOut->wFormatTag == WAVE_FORMAT_PCM;
-    // channel counds must match
+    // channel counts must match (should `wfxOut` be `wfxIn`? otherwise mono
+    // ADPCM won't be allowed, despite supporting decoding)
     if (wfxOut->wFormatTag == WAVE_FORMAT_PCM)
         valid = wfxOut->nChannels == wfxIn->nChannels;
     if (!valid)
@@ -341,6 +343,7 @@ extern "C" void CvtStereoAdpcm(
     fn(track, src, dst, count);
 }
 
+PATCH_CODE(0x401e10, 0x401e10, CvtMonoAdpcm);
 extern "C" void CvtMonoAdpcm(
     TRACK *track,
     const void *src,
@@ -348,9 +351,13 @@ extern "C" void CvtMonoAdpcm(
     size_t count
 )
 {
-    // use old function for now
-    auto fn = reinterpret_cast<
-        void (*)(TRACK *, const void *, void *, size_t)
-    >(0x401e10);
-    fn(track, src, dst, count);
+    // the current format validation in InitTrack should prevent this from ever
+    // being called
+    MessageBoxA(
+        hWndGame,
+        "This shouldn't be possible",
+        "BugsDecomp",
+        MB_OK | MB_ICONERROR
+    );
+    DebugBreak();
 }
