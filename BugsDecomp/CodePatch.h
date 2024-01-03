@@ -7,6 +7,8 @@
 #include "GameVersion.h"
 
 
+#ifdef __cplusplus
+
 struct CodePatchEntry;
 
 
@@ -45,6 +47,8 @@ public:
     /// <param name="ver">Version of the game to apply the patch for</param>
     CodePatch(DWORD patchAddr, DWORD tgtAddr, GameVersion ver);
 };
+
+#endif
 
 
 #ifdef REGISTER_PATCHES
