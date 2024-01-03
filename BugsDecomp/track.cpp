@@ -150,8 +150,7 @@ extern "C" void ResetTrack(TRACK *track)
     track->prevPlayPos = 0;
     track->loopCount = 0;
     track->trackOutSize = 0;
-    track->field_4C = 0;
-    track->field_50 = 0;
+    memset(&track->field_4C, 0, sizeof track->field_4C);
     track->flag_54 = FALSE;
     track->trackDone = FALSE;
     track->field_78 = 0;

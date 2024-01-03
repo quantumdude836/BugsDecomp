@@ -18,10 +18,12 @@ struct TRACK
     DWORD prevPlayPos;
     DWORD loopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
-    WORD field_4C;
-    WORD field_4E;
-    WORD field_50;
-    WORD field_52;
+    struct {
+        WORD field_0;
+        WORD field_2;
+        WORD field_4;
+        WORD field_6;
+    } field_4C;
     BOOL flag_54;
     BOOL convBufOwned; // whether `convBuf` should be freed on finalization
     size_t soundBufSize; // size, in bytes, of the DS buffer
