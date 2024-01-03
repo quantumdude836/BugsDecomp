@@ -302,7 +302,7 @@ extern "C" void ConvertTrackAudio(
         // don't support sample rate conversion
         if (track->wfxIn.nSamplesPerSec != track->wfxOut.nSamplesPerSec)
             return;
-        // input must be 4bps, output 16bs
+        // input must be 4bps, output 16bps
         if (track->wfxIn.wBitsPerSample != 4 ||
             track->wfxOut.wBitsPerSample != 16)
         {
@@ -313,12 +313,12 @@ extern "C" void ConvertTrackAudio(
     }
     else if (track->wfxIn.nChannels == 1 && track->wfxOut.nChannels == 2)
     {
-        // input mono, output stero
+        // input mono, output stereo
 
         // don't support sample rate conversion
         if (track->wfxIn.nSamplesPerSec != track->wfxOut.nSamplesPerSec)
             return;
-        // input must be 4bps, output 16bs
+        // input must be 4bps, output 16bps
         if (track->wfxIn.wBitsPerSample != 4 ||
             track->wfxOut.wBitsPerSample != 16)
         {
