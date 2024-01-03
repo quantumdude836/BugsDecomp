@@ -82,3 +82,14 @@ CodePatch::CodePatch(DWORD patchAddr, DWORD tgtAddr, GameVersion ver)
 {
     codePatches().emplace_back(patchAddr, tgtAddr, ver);
 }
+
+
+extern "C" bool is_1_0()
+{
+    return *detectVersion() == GameVersion::Version1_0;
+}
+
+extern "C" bool is_1_6()
+{
+    return *detectVersion() == GameVersion::Version1_6;
+}
