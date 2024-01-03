@@ -18,14 +18,19 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif
 
 // POSIX headers
 #include <io.h>
 #include <fcntl.h>
 
 // C++ headers
+#ifdef __cplusplus
 #include <optional>
 #include <vector>
+#endif
 
 
 // pi and tau (aka 2*pi)

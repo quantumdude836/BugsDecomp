@@ -24,7 +24,7 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="stdafx_cpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameVersion.cpp">
@@ -47,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="track.cpp">
       <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx_c.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
