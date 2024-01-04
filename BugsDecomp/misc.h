@@ -4,6 +4,17 @@
 #pragma once
 
 
+// string tables; each is an array of 5 string IDs
+#define enStrTbl ((const int *)0x45f2b8)
+#define frStrTbl ((const int *)0x45f2d0)
+#define deStrTbl ((const int *)0x45f2e8)
+#define esStrTbl ((const int *)0x45f300)
+#define itStrTbl ((const int *)0x45f318)
+#define nlStrTbl ((const int *)0x45f330)
+
+// active string table
+#define strTable (*(const int **)0x45f344)
+
 // game window handle
 #define hWndGame (*(HWND *)0x4b1cec)
 
