@@ -24,7 +24,7 @@ typedef struct TRACK
         short leftState;
         short rightState;
     } adpcmState;
-    BOOL flag_54;
+    BOOL loop; // whether the track should loop
     BOOL convBufOwned; // whether `convBuf` should be freed on finalization
     size_t soundBufSize; // size, in bytes, of the DS buffer
     size_t convBufSize; // size, in bytes, of the audio conversion buffer
@@ -99,13 +99,13 @@ PATCH_CODE(0x401330, 0x401330, FiniTrack);
 /// <param name="track">Track to setup</param>
 /// <param name="trackInSize">Number of bytes to play</param>
 /// <param name="fd">File descriptor to read audio from</param>
-/// <param name="flag_C">Unknown</param>
+/// <param name="loop">Whether the track should loop</param>
 /// <returns>TRACK_ERROR</returns>
 EXTERN_C TRACK_ERROR SetTrackSource(
     TRACK *track,
     size_t trackInSize,
     int fd,
-    BOOL flag_C
+    BOOL loop
 );
 PATCH_CODE(0x4013c0, 0x4013c0, SetTrackSource);
 

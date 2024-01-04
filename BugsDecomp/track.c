@@ -159,7 +159,7 @@ TRACK_ERROR SetTrackSource(
     TRACK *track,
     size_t trackInSize,
     int fd,
-    BOOL flag_C
+    BOOL loop
 )
 {
     if (!track->dsBuffer)
@@ -171,7 +171,7 @@ TRACK_ERROR SetTrackSource(
 
     track->fd = fd;
     track->trackInSize = trackInSize;
-    track->flag_54 = flag_C;
+    track->loop = loop;
     // compute size of converted audio
     track->trackOutSize = (size_t)(
         (float)track->wfxOut.nAvgBytesPerSec *
@@ -203,7 +203,7 @@ void ResetTrack(TRACK *track)
     track->bufLoopCount = 0;
     track->trackOutSize = 0;
     memset(&track->adpcmState, 0, sizeof track->adpcmState);
-    track->flag_54 = FALSE;
+    track->loop = FALSE;
     track->trackDone = FALSE;
     track->field_78 = 0;
 }
@@ -248,7 +248,7 @@ BOOL CheckTrackDone(TRACK *track)
         &curPlayPos,
         &curWritePos
     );
-    if (!track->flag_54)
+    if (!track->loop)
         trackDone = FALSE;
     else
     {
