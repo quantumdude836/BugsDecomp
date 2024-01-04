@@ -36,7 +36,6 @@ typedef struct TRACK
     DWORD field_78;
 } TRACK;
 
-
 // params for audio tracks
 typedef struct TRACK_PARAMS
 {

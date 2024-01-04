@@ -14,7 +14,6 @@ typedef struct SVECTOR
     short pad;
 } SVECTOR;
 
-
 // (long) vector with explicit padding
 typedef struct VECTOR
 {
@@ -22,13 +21,13 @@ typedef struct VECTOR
     long pad;
 } VECTOR;
 
-
 // 3x3 (rotation) matrix plus long translation vector
 typedef struct MATRIX
 {
     short m[3][3];
     long t[3];
 } MATRIX;
+
 
 // integer square root
 EXTERN_C long SquareRoot0(long a);

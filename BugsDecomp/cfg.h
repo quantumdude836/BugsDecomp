@@ -12,7 +12,6 @@ typedef enum RENDERER
     R_OPENGL, // hardware renderer (OpenGL)
 } RENDERER;
 
-
 // language options
 typedef enum LANG
 {
@@ -24,7 +23,6 @@ typedef enum LANG
     LANG_NL, // Dutch
 } LANG;
 
-
 // fog distance options
 typedef enum FOG_DIST
 {
@@ -33,7 +31,6 @@ typedef enum FOG_DIST
     FOG_FAR,
 } FOG_DIST;
 
-
 // display type options
 typedef enum DISP_TYPE
 {
@@ -41,7 +38,6 @@ typedef enum DISP_TYPE
     DISP_TYPE_UNK1,
     DISP_TYPE_UNK2,
 } DISP_TYPE;
-
 
 // config.pc structure
 typedef struct CONFIG_PC
