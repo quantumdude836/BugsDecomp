@@ -6,6 +6,26 @@
 #include "misc.h"
 
 
+// "default" state for an uninitialized track
+#define trackDefault (*(const TRACK *)0x45c000)
+
+// LUT for "state" adjustment based on input sample
+#define adpcmStateAdj ((const int *)0x45c080)
+
+// LUT for base value based on current "state"
+#define adpcmStateDecode ((const int *)0x45c0c0)
+
+// byte size of audio segments in the speech files; indexed by language, then by
+// segment number (index 0 = segment 2?)
+#define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
+
+// currently playing speech track
+#define speechTrack (*(TRACK *)0x5532a0)
+
+// currently playing music track
+#define musicTrack (*(TRACK *)0x553320)
+
+
 int InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
