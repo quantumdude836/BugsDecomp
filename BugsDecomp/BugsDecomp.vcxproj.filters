@@ -33,19 +33,19 @@
     <ClCompile Include="CodePatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="misc.cpp">
+    <ClCompile Include="misc.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
-    <ClCompile Include="fs.cpp">
+    <ClCompile Include="fs.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
-    <ClCompile Include="gte.cpp">
+    <ClCompile Include="gte.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
-    <ClCompile Include="cfg.cpp">
+    <ClCompile Include="cfg.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
-    <ClCompile Include="track.cpp">
+    <ClCompile Include="track.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
     <ClCompile Include="stdafx_c.c">
