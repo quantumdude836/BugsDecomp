@@ -10,10 +10,10 @@
 #define trackDefault (*(const TRACK *)0x45c000)
 
 // LUT for "state" adjustment based on input sample
-#define adpcmStateAdj ((const int *)0x45c080)
+#define adpcmStateAdj (*(const int (*)[16])0x45c080)
 
 // LUT for base value based on current "state"
-#define adpcmStateDecode ((const int *)0x45c0c0)
+#define adpcmStateDecode (*(const int (*)[89])0x45c0c0)
 
 // byte size of audio segments in the speech files; indexed by language, then by
 // segment number (index 0 = segment 2?)

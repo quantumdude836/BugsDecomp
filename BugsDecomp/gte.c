@@ -4,8 +4,8 @@
 #include "gte.h"
 
 
-#define rsin_tbl ((const int *)0x45f3f0)
-#define rcos_tbl ((const int *)0x4633f0)
+#define rsin_tbl (*(const int (*)[4096])0x45f3f0)
+#define rcos_tbl (*(const int (*)[4096])0x4633f0)
 
 
 long SquareRoot0(long a)

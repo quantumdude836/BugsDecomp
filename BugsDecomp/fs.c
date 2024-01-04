@@ -5,7 +5,7 @@
 #include "crt.h"
 
 
-#define datasRootDir ((char *)0x4b1928)
+#define datasRootDir (*(char (*)[10])0x4b1928)
 
 
 int FsOpen(const char *path, int oflag, ...)
