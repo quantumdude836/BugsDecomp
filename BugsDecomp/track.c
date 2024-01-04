@@ -248,7 +248,8 @@ BOOL CheckTrackDone(TRACK *track)
         &curPlayPos,
         &curWritePos
     );
-    if (!track->loop)
+    // if track is looped, it will never be done
+    if (track->loop)
         trackDone = FALSE;
     else
     {
