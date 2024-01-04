@@ -26,7 +26,7 @@
 #define musicTrack (*(TRACK *)0x553320)
 
 
-int InitTrack(
+TRACK_ERROR InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
     LPCWAVEFORMATEX wfxIn,
@@ -39,7 +39,7 @@ int InitTrack(
 
     // track should not have a DS buffer already allocated
     if (track->dsBuffer)
-        return 2;
+        return TRACK_ERR_ALREADY_INIT;
 
     // validate formats
     // output must be PCM
@@ -49,34 +49,34 @@ int InitTrack(
     if (wfxOut->wFormatTag == WAVE_FORMAT_PCM)
         valid = wfxOut->nChannels == wfxIn->nChannels;
     if (!valid)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     // if input is PCM, sample sizes must mach
     if (wfxIn->wFormatTag == WAVE_FORMAT_PCM)
         valid = wfxOut->wBitsPerSample == wfxIn->wBitsPerSample;
     if (!valid)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     // sample rates must match
     valid = wfxOut->nSamplesPerSec == wfxIn->nSamplesPerSec;
     if (!valid)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     // if input is ADPCM, input/output must have 4/16 bits per sample, resp.
     if (wfxIn->wFormatTag == WAVE_FORMAT_ADPCM)
         valid = wfxIn->wBitsPerSample == 4 && wfxOut->wBitsPerSample == 16;
     if (!valid)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     // also validate block align and bytes per sec
     if (wfxIn->nBlockAlign != wfxIn->nChannels * wfxIn->wBitsPerSample / 8)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     if (wfxOut->nBlockAlign != wfxOut->nChannels * wfxOut->wBitsPerSample / 8)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     if (wfxIn->nAvgBytesPerSec != wfxIn->nBlockAlign * wfxIn->nSamplesPerSec)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
     if (wfxOut->nAvgBytesPerSec != wfxOut->nBlockAlign * wfxOut->nSamplesPerSec)
-        return 4;
+        return TRACK_ERR_AUDIO_FORMAT;
 
     // validate timing params
     if (params->field_8 + params->msConvBufLen >= params->msSoundBufLen)
-        return 5;
+        return TRACK_ERR_TIMING_PARAMS;
 
     // start track out with default state
     *track = trackDefault;
@@ -107,7 +107,7 @@ int InitTrack(
         dsBuffer = NULL;
     track->dsBuffer = dsBuffer;
     if (!dsBuffer)
-        return 3;
+        return TRACK_ERR_DSBUFFER_CREATE;
 
     // precompute number of bytes per millisecond (for timing param conversion)
     double msBytes = wfxOut->nAvgBytesPerSec * BFLT(0x45c224, 1.0 / 1000.0);
@@ -138,7 +138,7 @@ int InitTrack(
     track->field_64 = (size_t)(params->field_8 * msBytes + 0.5);
     track->field_68 = (size_t)(params->field_C * msBytes + 0.5);
 
-    return 0;
+    return TRACK_OK;
 }
 
 void FiniTrack(TRACK *track)
@@ -155,10 +155,15 @@ void FiniTrack(TRACK *track)
     *track = trackDefault;
 }
 
-int SetTrackSource(TRACK *track, size_t trackInSize, int fd, BOOL flag_C)
+TRACK_ERROR SetTrackSource(
+    TRACK *track,
+    size_t trackInSize,
+    int fd,
+    BOOL flag_C
+)
 {
     if (!track->dsBuffer)
-        return 1;
+        return TRACK_ERR_NOT_INIT;
 
     // if track already has a source, reset the track to clear it
     if (track->trackInSize)
@@ -179,7 +184,7 @@ int SetTrackSource(TRACK *track, size_t trackInSize, int fd, BOOL flag_C)
     // fill the DS buffer with initial audio
     RefillTrackBuffer(track, -1, -1);
 
-    return 0;
+    return TRACK_OK;
 }
 
 void ResetTrack(TRACK *track)

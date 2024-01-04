@@ -45,6 +45,23 @@ typedef struct TRACK_PARAMS
     DWORD field_C; // in milliseconds
 } TRACK_PARAMS;
 
+// return codes for some track functions
+typedef enum TRACK_ERROR
+{
+    // no error
+    TRACK_OK,
+    // track not initialized (does not have a DirectSound buffer)
+    TRACK_ERR_NOT_INIT,
+    // track already initialized (already has a DirectSound buffer)
+    TRACK_ERR_ALREADY_INIT,
+    // unable to create DirectSound buffer
+    TRACK_ERR_DSBUFFER_CREATE,
+    // invalid/unsupported audio format
+    TRACK_ERR_AUDIO_FORMAT,
+    // invalid timing params
+    TRACK_ERR_TIMING_PARAMS,
+} TRACK_ERROR;
+
 
 /// <summary>
 /// Initializes an audio track.
@@ -57,14 +74,8 @@ typedef struct TRACK_PARAMS
 /// <param name="convBuf">
 /// Conversion buffer to use, or null to allocate one
 /// </param>
-/// <returns>
-/// 0 for success, or non-zero for error:
-/// - 2 - track already has a DirectSound buffer allocated
-/// - 3 - unable to create DirectSound buffer
-/// - 4 - invalid audio format
-/// - 5 - invalid timing params
-/// </returns>
-EXTERN_C int InitTrack(
+/// <returns>TRACK_ERROR</returns>
+EXTERN_C TRACK_ERROR InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
     LPCWAVEFORMATEX wfxIn,
@@ -89,11 +100,8 @@ PATCH_CODE(0x401330, 0x401330, FiniTrack);
 /// <param name="trackInSize">Number of bytes to play</param>
 /// <param name="fd">File descriptor to read audio from</param>
 /// <param name="flag_C">Unknown</param>
-/// <returns>
-/// 0 for success, or non-zero for error:
-/// - 1 - track does not have a DirectSound buffer allocated
-/// </returns>
-EXTERN_C int SetTrackSource(
+/// <returns>TRACK_ERROR</returns>
+EXTERN_C TRACK_ERROR SetTrackSource(
     TRACK *track,
     size_t trackInSize,
     int fd,
