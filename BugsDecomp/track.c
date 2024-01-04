@@ -200,7 +200,7 @@ void ResetTrack(TRACK *track)
     track->field_38 = 0;
     track->field_3C = 0;
     track->prevPlayPos = 0;
-    track->loopCount = 0;
+    track->bufLoopCount = 0;
     track->trackOutSize = 0;
     memset(&track->adpcmState, 0, sizeof track->adpcmState);
     track->flag_54 = FALSE;
@@ -254,7 +254,7 @@ BOOL CheckTrackDone(TRACK *track)
     {
         // compute total number of bytes played
         DWORD trackPlayedBytes =
-            track->loopCount * track->soundBufSize + curPlayPos;
+            track->bufLoopCount * track->soundBufSize + curPlayPos;
         // check if it's past the requested size to play
         trackDone = trackPlayedBytes >= track->trackOutSize;
     }
@@ -282,7 +282,7 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         // play position has wrapped since last call; unwrap position and
         // increment loop count
         actualPlayPos += track->soundBufSize;
-        track->loopCount++;
+        track->bufLoopCount++;
     }
 
     if (track->field_78)
@@ -314,7 +314,7 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
             if (curPlayPos < track->prevPlayPos &&
                 curPlayPos < track->field_38)
             {
-                track->loopCount--;
+                track->bufLoopCount--;
             }
         }
     }

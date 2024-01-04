@@ -16,7 +16,7 @@ typedef struct TRACK
     DWORD field_38;
     DWORD field_3C;
     DWORD prevPlayPos;
-    DWORD loopCount; // how many times the DS buffer has looped
+    DWORD bufLoopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
     struct {
         short leftSamp;
