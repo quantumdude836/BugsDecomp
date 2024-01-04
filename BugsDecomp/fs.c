@@ -8,7 +8,7 @@
 #define datasRootDir ((char *)0x4b1928)
 
 
-EXTERN_C int FsOpen(const char *path, int oflag, ...)
+int FsOpen(const char *path, int oflag, ...)
 {
     char fullPath[MAX_PATH];
 
@@ -29,7 +29,7 @@ EXTERN_C int FsOpen(const char *path, int oflag, ...)
     return fd;
 }
 
-EXTERN_C FILE *FsFOpen(const char *path, const char *mode)
+FILE *FsFOpen(const char *path, const char *mode)
 {
     char fullPath[MAX_PATH];
 
@@ -47,22 +47,22 @@ EXTERN_C FILE *FsFOpen(const char *path, const char *mode)
     return fp;
 }
 
-EXTERN_C long FsSeek(int fd, long offset, int whence)
+long FsSeek(int fd, long offset, int whence)
 {
     return _lseek_bugs(fd, offset, whence);
 }
 
-EXTERN_C int FsRead(int fd, void *buf, unsigned n)
+int FsRead(int fd, void *buf, unsigned n)
 {
     return _read_bugs(fd, buf, n);
 }
 
-EXTERN_C int FsClose(int fd)
+int FsClose(int fd)
 {
     return _close_bugs(fd);
 }
 
-EXTERN_C BOOL FsFindRoot(void)
+BOOL FsFindRoot(void)
 {
     char rootName[MAX_PATH];
     char volName[MAX_PATH];

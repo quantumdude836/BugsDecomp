@@ -8,27 +8,27 @@
 #define rcos_tbl ((const int *)0x4633f0)
 
 
-EXTERN_C long SquareRoot0(long a)
+long SquareRoot0(long a)
 {
     return (long)sqrt((double)a);
 }
 
-EXTERN_C long ratan2(long y, long x)
+long ratan2(long y, long x)
 {
     return (long)(atan2((double)y, (double)x) * BDBL(0x45c270, 4096.0 / TAU));
 }
 
-EXTERN_C int rcos(int a)
+int rcos(int a)
 {
     return rcos_tbl[abs(a) & 0xfff];
 }
 
-EXTERN_C int rsin(int a)
+int rsin(int a)
 {
     return rsin_tbl[(a + 0x1000) & 0xfff];
 }
 
-EXTERN_C MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m)
+MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m)
 {
     // initialize m to Z-rotation matrix
     int c = rcos(r->vz), s = rsin(r->vz);
@@ -43,7 +43,7 @@ EXTERN_C MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m)
+MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m)
 {
     // initialize m to Z-rotation matrix
     int c = rcos(r->vz), s = rsin(r->vz);
@@ -58,7 +58,7 @@ EXTERN_C MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m)
+MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m)
 {
     // initialize m to X-rotation matrix
     int c = rcos(r->vx), s = rsin(r->vx);
@@ -73,7 +73,7 @@ EXTERN_C MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *RotMatrixX(int r, MATRIX *m)
+MATRIX *RotMatrixX(int r, MATRIX *m)
 {
     // precompute cos/sin of angle
     int c = rcos(r), s = rsin(r);
@@ -99,7 +99,7 @@ EXTERN_C MATRIX *RotMatrixX(int r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *RotMatrixY(int r, MATRIX *m)
+MATRIX *RotMatrixY(int r, MATRIX *m)
 {
     // NOTE: Psy-Q documentation shows the wrong Y rotation matrix (it shows the
     // inverse/transpose of the correct matrix)
@@ -127,7 +127,7 @@ EXTERN_C MATRIX *RotMatrixY(int r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *RotMatrixZ(int r, MATRIX *m)
+MATRIX *RotMatrixZ(int r, MATRIX *m)
 {
     // see RotMatrixX above for more notes
 
@@ -152,7 +152,7 @@ EXTERN_C MATRIX *RotMatrixZ(int r, MATRIX *m)
     return m;
 }
 
-EXTERN_C MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v)
+MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v)
 {
     m->m[0][0] = (short)((m->m[0][0] * v->vx) >> 12);
     m->m[0][1] = (short)((m->m[0][1] * v->vy) >> 12);
@@ -167,7 +167,7 @@ EXTERN_C MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v)
     return m;
 }
 
-EXTERN_C MATRIX *TransMatrix(MATRIX *m, const VECTOR *v)
+MATRIX *TransMatrix(MATRIX *m, const VECTOR *v)
 {
     m->t[0] = v->vx;
     m->t[1] = v->vy;
@@ -175,7 +175,7 @@ EXTERN_C MATRIX *TransMatrix(MATRIX *m, const VECTOR *v)
     return m;
 }
 
-EXTERN_C VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
+VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
 {
     // despite Psy-Q documentation, translation is NOT applied
     v1->vx =
@@ -187,7 +187,7 @@ EXTERN_C VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
     return v1;
 }
 
-EXTERN_C SVECTOR *ApplyMatrixSV(
+SVECTOR *ApplyMatrixSV(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
@@ -206,7 +206,7 @@ EXTERN_C SVECTOR *ApplyMatrixSV(
     return v1;
 }
 
-EXTERN_C VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1)
+VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1)
 {
     VECTOR tmp;
 
@@ -221,7 +221,7 @@ EXTERN_C VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1)
     return v1;
 }
 
-EXTERN_C MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
+MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
 {
     for (unsigned r = 0; r < 3; r++)
     {
@@ -237,7 +237,7 @@ EXTERN_C MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
     return m2;
 }
 
-EXTERN_C MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1)
+MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1)
 {
     MATRIX tmp;
 
@@ -249,7 +249,7 @@ EXTERN_C MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1)
     return m1;
 }
 
-EXTERN_C MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1)
+MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1)
 {
     MATRIX tmp;
 
@@ -265,7 +265,7 @@ EXTERN_C MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1)
     return m1;
 }
 
-EXTERN_C MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
+MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
 {
     // multiply 3x3 parts
     MulMatrix0(m0, m1, m2);
@@ -290,7 +290,7 @@ EXTERN_C MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2)
     return m2;
 }
 
-EXTERN_C MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1)
+MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1)
 {
     MATRIX tmp;
 
@@ -300,7 +300,7 @@ EXTERN_C MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1)
     return m1;
 }
 
-EXTERN_C MATRIX *IdentMatrix(MATRIX *m)
+MATRIX *IdentMatrix(MATRIX *m)
 {
     m->m[0][0] = 0x1000; m->m[0][1] = 0x0000; m->m[0][2] = 0x0000;
     m->m[1][0] = 0x0000; m->m[1][1] = 0x1000; m->m[1][2] = 0x0000;
@@ -308,12 +308,12 @@ EXTERN_C MATRIX *IdentMatrix(MATRIX *m)
     return m;
 }
 
-EXTERN_C VECTOR *ApplyMatrix_0(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
+VECTOR *ApplyMatrix_0(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
 {
     return ApplyMatrix(m, v0, v1);
 }
 
-EXTERN_C SVECTOR *ApplyMatrixSV_0(
+SVECTOR *ApplyMatrixSV_0(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
@@ -322,7 +322,7 @@ EXTERN_C SVECTOR *ApplyMatrixSV_0(
     return ApplyMatrixSV(m, v0, v1);
 }
 
-EXTERN_C void Square0(const VECTOR *v0, VECTOR *v1)
+void Square0(const VECTOR *v0, VECTOR *v1)
 {
     v1->vx = v0->vx * v0->vx;
     v1->vy = v0->vy * v0->vy;

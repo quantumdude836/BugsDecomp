@@ -7,7 +7,7 @@
 #include "misc.h"
 
 
-EXTERN_C void WriteConfig()
+void WriteConfig()
 {
     char path[MAX_PATH];
 
@@ -23,7 +23,7 @@ EXTERN_C void WriteConfig()
     fclose_bugs(fp);
 }
 
-EXTERN_C void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
+void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
 {
     // FIXME: temp
     BOOL (*LoadGL)() = (BOOL (*)())VER(0x40e0b0, 0x40e050);
@@ -145,17 +145,17 @@ EXTERN_C void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
     }
 }
 
-EXTERN_C void SaveAltConfig()
+void SaveAltConfig()
 {
     altConfig = config;
 }
 
-EXTERN_C void LoadAltConfig()
+void LoadAltConfig()
 {
     config = altConfig;
 }
 
-EXTERN_C void ReadConfig()
+void ReadConfig()
 {
     char path[MAX_PATH];
 

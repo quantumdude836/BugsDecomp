@@ -6,7 +6,7 @@
 #include "misc.h"
 
 
-EXTERN_C int InitTrack(
+int InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
     LPCWAVEFORMATEX wfxIn,
@@ -121,7 +121,7 @@ EXTERN_C int InitTrack(
     return 0;
 }
 
-EXTERN_C void FiniTrack(TRACK *track)
+void FiniTrack(TRACK *track)
 {
     ResetTrack(track);
 
@@ -135,7 +135,7 @@ EXTERN_C void FiniTrack(TRACK *track)
     *track = trackDefault;
 }
 
-EXTERN_C void ResetTrack(TRACK *track)
+void ResetTrack(TRACK *track)
 {
     if (!track->dsBuffer)
         return;
@@ -156,7 +156,7 @@ EXTERN_C void ResetTrack(TRACK *track)
     track->field_78 = 0;
 }
 
-EXTERN_C void PlayTrack(TRACK *track)
+void PlayTrack(TRACK *track)
 {
     // do nothing if already playing, or if nothing to play
     if (track->playing || !track->trackInSize)
@@ -170,7 +170,7 @@ EXTERN_C void PlayTrack(TRACK *track)
     track->playing = TRUE;
 }
 
-EXTERN_C void StopTrack(TRACK *track)
+void StopTrack(TRACK *track)
 {
     // do nothing if not playing
     if (!track->playing)
@@ -180,7 +180,7 @@ EXTERN_C void StopTrack(TRACK *track)
     track->playing = FALSE;
 }
 
-EXTERN_C BOOL CheckTrackDone(TRACK *track)
+BOOL CheckTrackDone(TRACK *track)
 {
     DWORD curPlayPos, curWritePos;
     BOOL trackDone;
@@ -209,7 +209,7 @@ EXTERN_C BOOL CheckTrackDone(TRACK *track)
     return trackDone;
 }
 
-EXTERN_C DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
+DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
 {
     DWORD curPlayPos, curWritePos;
 
@@ -275,7 +275,7 @@ EXTERN_C DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
     return samples;
 }
 
-EXTERN_C void ConvertTrackAudio(
+void ConvertTrackAudio(
     TRACK *track,
     const void *src,
     void *dst,
@@ -333,7 +333,7 @@ EXTERN_C void ConvertTrackAudio(
     }
 }
 
-EXTERN_C void CvtStereoAdpcm(
+void CvtStereoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,
@@ -442,7 +442,7 @@ EXTERN_C void CvtStereoAdpcm(
     }
 }
 
-EXTERN_C void CvtMonoAdpcm(
+void CvtMonoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,

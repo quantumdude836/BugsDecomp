@@ -8,7 +8,7 @@
 #define hConsoleOutput (*(HANDLE *)0x4b1cf4)
 
 
-EXTERN_C void ConPrintf(const char *fmt, ...)
+void ConPrintf(const char *fmt, ...)
 {
     DWORD nWritten;
     char buf[1024];
@@ -21,7 +21,7 @@ EXTERN_C void ConPrintf(const char *fmt, ...)
     WriteConsoleA(hConsoleOutput, buf, strlen(buf), &nWritten, NULL);
 }
 
-EXTERN_C int ShowRetryDialog(const char *fmt, ...)
+int ShowRetryDialog(const char *fmt, ...)
 {
     char buf[1024];
     va_list ap;
