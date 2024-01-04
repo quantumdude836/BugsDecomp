@@ -260,3 +260,7 @@ renderer options)
 # Level Format
 
 The BZE file format is detailed [here](bze.md).
+
+# Function Addresses
+
+More details about (known) functions can be found [here](functions.md).

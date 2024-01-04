@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F128BD5B-3232-4594-A190-FAA82DA3EA98}"
 	ProjectSection(SolutionItems) = preProject
 		doc\bze.md = doc\bze.md
+		doc\functions.md = doc\functions.md
 		doc\internals.md = doc\internals.md
 	EndProjectSection
 EndProject
