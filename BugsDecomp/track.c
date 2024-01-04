@@ -155,6 +155,33 @@ void FiniTrack(TRACK *track)
     *track = trackDefault;
 }
 
+int SetTrackSource(TRACK *track, size_t trackInSize, int fd, BOOL flag_C)
+{
+    if (!track->dsBuffer)
+        return 1;
+
+    // if track already has a source, reset the track to clear it
+    if (track->trackInSize)
+        ResetTrack(track);
+
+    track->fd = fd;
+    track->trackInSize = trackInSize;
+    track->flag_54 = flag_C;
+    // compute size of converted audio
+    track->trackOutSize = (size_t)(
+        (float)track->wfxOut.nAvgBytesPerSec *
+        trackInSize /
+        track->wfxIn.nAvgBytesPerSec
+    );
+
+    IDirectSoundBuffer_SetCurrentPosition(track->dsBuffer, 0);
+
+    // fill the DS buffer with initial audio
+    RefillTrackBuffer(track, -1, -1);
+
+    return 0;
+}
+
 void ResetTrack(TRACK *track)
 {
     if (!track->dsBuffer)
@@ -174,6 +201,12 @@ void ResetTrack(TRACK *track)
     track->flag_54 = FALSE;
     track->trackDone = FALSE;
     track->field_78 = 0;
+}
+
+BOOL RefillTrackBuffer(TRACK *track, int arg_4, int arg_8)
+{
+    // use old function for now
+    return ((BOOL (*)(TRACK *, int, int))0x4014f0)(track, arg_4, arg_8);
 }
 
 void PlayTrack(TRACK *track)

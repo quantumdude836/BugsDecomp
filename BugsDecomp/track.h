@@ -83,12 +83,42 @@ EXTERN_C void FiniTrack(TRACK *track);
 PATCH_CODE(0x401330, 0x401330, FiniTrack);
 
 /// <summary>
+/// Sets the source for an audio track. The given fd's file position should
+/// already be set (via _lseek or equivalent).
+/// </summary>
+/// <param name="track">Track to setup</param>
+/// <param name="trackInSize">Number of bytes to play</param>
+/// <param name="fd">File descriptor to read audio from</param>
+/// <param name="flag_C">Unknown</param>
+/// <returns>
+/// 0 for success, or non-zero for error:
+/// - 1 - track does not have a DirectSound buffer allocated
+/// </returns>
+EXTERN_C int SetTrackSource(
+    TRACK *track,
+    size_t trackInSize,
+    int fd,
+    BOOL flag_C
+);
+PATCH_CODE(0x4013c0, 0x4013c0, SetTrackSource);
+
+/// <summary>
 /// Resets a track to a default state. If the track is currently playing, it is
 /// stopped.
 /// </summary>
 /// <param name="track">Track to reset</param>
 EXTERN_C void ResetTrack(TRACK *track);
 PATCH_CODE(0x401490, 0x401490, ResetTrack);
+
+/// <summary>
+/// Refills the DS buffer for an audio track.
+/// </summary>
+/// <param name="track">Track to refill</param>
+/// <param name="arg_4">Unknown</param>
+/// <param name="arg_8">Unknown</param>
+/// <returns>Unknown</returns>
+EXTERN_C BOOL RefillTrackBuffer(TRACK *track, int arg_4, int arg_8);
+//PATCH_CODE(0x4014f0, 0x4014f0, RefillTrackBuffer);
 
 /// <summary>
 /// Starts playing a music track.
