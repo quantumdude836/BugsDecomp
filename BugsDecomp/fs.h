@@ -14,7 +14,7 @@
 /// <param name="path">Path to open</param>
 /// <param name="oflag">Open flags</param>
 /// <returns>File descriptor, or -1</returns>
-extern "C" int FsOpen(const char *path, int oflag, ...);
+EXTERN_C int FsOpen(const char *path, int oflag, ...);
 PATCH_CODE(0x4056c0, 0x4056c0, FsOpen);
 
 /// <summary>
@@ -27,24 +27,24 @@ PATCH_CODE(0x4056c0, 0x4056c0, FsOpen);
 /// <param name="path">Path to open</param>
 /// <param name="mode">Open mode</param>
 /// <returns>File object, or null</returns>
-extern "C" FILE *FsFOpen(const char *path, const char *mode);
+EXTERN_C FILE *FsFOpen(const char *path, const char *mode);
 PATCH_CODE(0x405760, 0x405760, FsFOpen);
 
 // wrapper around _lseek
-extern "C" long FsSeek(int fd, long offset, int whence);
+EXTERN_C long FsSeek(int fd, long offset, int whence);
 PATCH_CODE(0x405800, 0x405800, FsSeek);
 
 // wrapper around _read
-extern "C" int FsRead(int fd, void *buf, unsigned n);
+EXTERN_C int FsRead(int fd, void *buf, unsigned n);
 PATCH_CODE(0x405820, 0x405820, FsRead);
 
 // wrapper around _close
-extern "C" int FsClose(int fd);
+EXTERN_C int FsClose(int fd);
 PATCH_CODE(0x405840, 0x405840, FsClose);
 
 /// <summary>
 /// Searches system drives for the datas root directory.
 /// </summary>
 /// <returns>Whether the datas root was found</returns>
-extern "C" BOOL FsFindRoot(void);
+EXTERN_C BOOL FsFindRoot(void);
 PATCH_CODE(0x405850, 0x405850, FsFindRoot);

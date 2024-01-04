@@ -5,16 +5,16 @@
 
 
 // renderer options
-enum RENDERER
+typedef enum RENDERER
 {
     R_SOFT8, // software renderer, 8-bit color
     R_SOFT24, // software renderer, 24-bit color
     R_OPENGL, // hardware renderer (OpenGL)
-};
+} RENDERER;
 
 
 // language options
-enum LANG
+typedef enum LANG
 {
     LANG_EN, // English
     LANG_FR, // French
@@ -22,29 +22,29 @@ enum LANG
     LANG_ES, // Spanish
     LANG_IT, // Italian
     LANG_NL, // Dutch
-};
+} LANG;
 
 
 // fog distance options
-enum FOG_DIST
+typedef enum FOG_DIST
 {
     FOG_NEAR,
     FOG_NORMAL,
     FOG_FAR,
-};
+} FOG_DIST;
 
 
 // display type options
-enum DISP_TYPE
+typedef enum DISP_TYPE
 {
     DISP_TYPE_UNK0,
     DISP_TYPE_UNK1,
     DISP_TYPE_UNK2,
-};
+} DISP_TYPE;
 
 
 // config.pc structure
-struct CONFIG_PC
+typedef struct CONFIG_PC
 {
     int version;
     RENDERER renderer;
@@ -68,7 +68,7 @@ struct CONFIG_PC
     double field_68;
     double field_70;
     BYTE field_78;
-};
+} CONFIG_PC;
 
 #define CONFIG_VERSION 0x10
 
@@ -83,28 +83,28 @@ struct CONFIG_PC
 
 
 // string tables; each is an array of 5 string IDs
-#define enStrTbl (reinterpret_cast<const int *>(0x45f2b8))
-#define frStrTbl (reinterpret_cast<const int *>(0x45f2d0))
-#define deStrTbl (reinterpret_cast<const int *>(0x45f2e8))
-#define esStrTbl (reinterpret_cast<const int *>(0x45f300))
-#define itStrTbl (reinterpret_cast<const int *>(0x45f318))
-#define nlStrTbl (reinterpret_cast<const int *>(0x45f330))
+#define enStrTbl ((const int *)0x45f2b8)
+#define frStrTbl ((const int *)0x45f2d0)
+#define deStrTbl ((const int *)0x45f2e8)
+#define esStrTbl ((const int *)0x45f300)
+#define itStrTbl ((const int *)0x45f318)
+#define nlStrTbl ((const int *)0x45f330)
 
 // active string table
-#define strTable (*reinterpret_cast<const int **>(0x45f344))
+#define strTable (*(const int **)0x45f344)
 
 
 // alternate? configuration
-#define altConfig (*reinterpret_cast<CONFIG_PC *>(0x9ca7a0))
+#define altConfig (*(CONFIG_PC *)0x9ca7a0)
 
 // main, active configuration
-#define config (*reinterpret_cast<CONFIG_PC *>(0x9ca820))
+#define config (*(CONFIG_PC *)0x9ca820)
 
 
 /// <summary>
 /// Writes the current configuration to file.
 /// </summary>
-extern "C" void WriteConfig();
+EXTERN_C void WriteConfig();
 PATCH_CODE(0x409a40, 0x409a10, WriteConfig);
 
 /// <summary>
@@ -112,23 +112,23 @@ PATCH_CODE(0x409a40, 0x409a10, WriteConfig);
 /// </summary>
 /// <param name="flags">Which defaults to apply</param>
 /// <param name="cfg">Config to modify</param>
-extern "C" void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg);
+EXTERN_C void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg);
 PATCH_CODE(0x409ac0, 0x409a90, SetConfigDefaults);
 
 /// <summary>
 /// Saves the current config to the alt config.
 /// </summary>
-extern "C" void SaveAltConfig();
+EXTERN_C void SaveAltConfig();
 PATCH_CODE(0x409ce0, 0x409c80, SaveAltConfig);
 
 /// <summary>
 /// Loads the alt config to the current config.
 /// </summary>
-extern "C" void LoadAltConfig();
+EXTERN_C void LoadAltConfig();
 PATCH_CODE(0x409d00, 0x409ca0, LoadAltConfig);
 
 /// <summary>
 /// Reads the current configuration from file, or loads defaults.
 /// </summary>
-extern "C" void ReadConfig();
+EXTERN_C void ReadConfig();
 PATCH_CODE(0x409d20, 0x409cc0, ReadConfig);

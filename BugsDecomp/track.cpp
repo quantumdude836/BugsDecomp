@@ -6,7 +6,7 @@
 #include "misc.h"
 
 
-extern "C" int InitTrack(
+EXTERN_C int InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
     LPCWAVEFORMATEX wfxIn,
@@ -64,12 +64,12 @@ extern "C" int InitTrack(
     // build up DS buffer desc
     DSBUFFERDESC1 dsBufDesc = { 0 };
     dsBufDesc.dwSize = sizeof dsBufDesc;
-    dsBufDesc.dwBufferBytes = DWORD(
-        double(params->msSoundBufLen) *
+    dsBufDesc.dwBufferBytes = (DWORD)(
+        (double)(params->msSoundBufLen) *
         wfxOut->nAvgBytesPerSec *
         BFLT(0x45c224, 1.0 / 1000.0)
     );
-    dsBufDesc.lpwfxFormat = const_cast<LPWAVEFORMATEX>(wfxOut);
+    dsBufDesc.lpwfxFormat = (LPWAVEFORMATEX)wfxOut;
     dsBufDesc.dwFlags =
         DSBCAPS_GETCURRENTPOSITION2 |
         DSBCAPS_CTRLVOLUME |
@@ -77,13 +77,14 @@ extern "C" int InitTrack(
         DSBCAPS_CTRLFREQUENCY;
 
     // create DS buffer
-    HRESULT hr = dsound->CreateSoundBuffer(
-        reinterpret_cast<const DSBUFFERDESC *>(&dsBufDesc),
+    HRESULT hr = IDirectSound_CreateSoundBuffer(
+        dsound,
+        (const DSBUFFERDESC *)&dsBufDesc,
         &dsBuffer,
-        nullptr
+        NULL
     );
     if (hr != S_OK)
-        dsBuffer = nullptr;
+        dsBuffer = NULL;
     track->dsBuffer = dsBuffer;
     if (!dsBuffer)
         return 3;
@@ -102,7 +103,7 @@ extern "C" int InitTrack(
     {
         // need to allocate a buffer
         track->convBuf = malloc_bugs(
-            size_t(params->msConvBufLen * msBytes + 0.5)
+            (size_t)(params->msConvBufLen * msBytes + 0.5)
         );
         track->convBufOwned = TRUE;
     }
@@ -112,19 +113,19 @@ extern "C" int InitTrack(
     track->wfxOut = *wfxOut;
 
     // convert timing params
-    track->soundBufSize = size_t(params->msSoundBufLen * msBytes + 0.5);
-    track->convBufSize = size_t(params->msConvBufLen * msBytes + 0.5);
-    track->field_64 = size_t(params->field_8 * msBytes + 0.5);
-    track->field_68 = size_t(params->field_C * msBytes + 0.5);
+    track->soundBufSize = (size_t)(params->msSoundBufLen * msBytes + 0.5);
+    track->convBufSize = (size_t)(params->msConvBufLen * msBytes + 0.5);
+    track->field_64 = (size_t)(params->field_8 * msBytes + 0.5);
+    track->field_68 = (size_t)(params->field_C * msBytes + 0.5);
 
     return 0;
 }
 
-extern "C" void FiniTrack(TRACK *track)
+EXTERN_C void FiniTrack(TRACK *track)
 {
     ResetTrack(track);
 
-    track->dsBuffer->Release();
+    IDirectSoundBuffer_Release(track->dsBuffer);
 
     // if the track owns the conversion buffer, free it now
     if (track->convBufOwned)
@@ -134,13 +135,13 @@ extern "C" void FiniTrack(TRACK *track)
     *track = trackDefault;
 }
 
-extern "C" void ResetTrack(TRACK *track)
+EXTERN_C void ResetTrack(TRACK *track)
 {
     if (!track->dsBuffer)
         return;
 
     StopTrack(track);
-    track->dsBuffer->SetCurrentPosition(0);
+    IDirectSoundBuffer_SetCurrentPosition(track->dsBuffer, 0);
     track->trackInSize = 0;
     track->fd = 0; // should be set to -1 since 0 is technically a valid fd
     track->readBytes = 0;
@@ -155,7 +156,7 @@ extern "C" void ResetTrack(TRACK *track)
     track->field_78 = 0;
 }
 
-extern "C" void PlayTrack(TRACK *track)
+EXTERN_C void PlayTrack(TRACK *track)
 {
     // do nothing if already playing, or if nothing to play
     if (track->playing || !track->trackInSize)
@@ -165,26 +166,30 @@ extern "C" void PlayTrack(TRACK *track)
     if (track->trackDone)
         return;
 
-    track->dsBuffer->Play(0, 0, DSBPLAY_LOOPING);
+    IDirectSoundBuffer_Play(track->dsBuffer, 0, 0, DSBPLAY_LOOPING);
     track->playing = TRUE;
 }
 
-extern "C" void StopTrack(TRACK *track)
+EXTERN_C void StopTrack(TRACK *track)
 {
     // do nothing if not playing
     if (!track->playing)
         return;
 
-    track->dsBuffer->Stop();
+    IDirectSoundBuffer_Stop(track->dsBuffer);
     track->playing = FALSE;
 }
 
-extern "C" BOOL CheckTrackDone(TRACK *track)
+EXTERN_C BOOL CheckTrackDone(TRACK *track)
 {
     DWORD curPlayPos, curWritePos;
     BOOL trackDone;
 
-    track->dsBuffer->GetCurrentPosition(&curPlayPos, &curWritePos);
+    IDirectSoundBuffer_GetCurrentPosition(
+        track->dsBuffer,
+        &curPlayPos,
+        &curWritePos
+    );
     if (!track->flag_54)
         trackDone = FALSE;
     else
@@ -204,11 +209,15 @@ extern "C" BOOL CheckTrackDone(TRACK *track)
     return trackDone;
 }
 
-extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
+EXTERN_C DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
 {
     DWORD curPlayPos, curWritePos;
 
-    track->dsBuffer->GetCurrentPosition(&curPlayPos, &curWritePos);
+    IDirectSoundBuffer_GetCurrentPosition(
+        track->dsBuffer,
+        &curPlayPos,
+        &curWritePos
+    );
     DWORD actualPlayPos = curPlayPos;
     if (actualPlayPos < track->prevPlayPos)
     {
@@ -240,7 +249,10 @@ extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         if (!CheckTrackDone(track))
         {
             samples = track->convBufSize / track->wfxOut.nBlockAlign;
-            track->dsBuffer->SetCurrentPosition(track->field_38);
+            IDirectSoundBuffer_SetCurrentPosition(
+                track->dsBuffer,
+                track->field_38
+            );
             if (curPlayPos < track->prevPlayPos &&
                 curPlayPos < track->field_38)
             {
@@ -263,7 +275,7 @@ extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
     return samples;
 }
 
-extern "C" void ConvertTrackAudio(
+EXTERN_C void ConvertTrackAudio(
     TRACK *track,
     const void *src,
     void *dst,
@@ -321,7 +333,7 @@ extern "C" void ConvertTrackAudio(
     }
 }
 
-extern "C" void CvtStereoAdpcm(
+EXTERN_C void CvtStereoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,
@@ -335,8 +347,8 @@ extern "C" void CvtStereoAdpcm(
     BOOL sign;
     int sampDelta;
 
-    const BYTE *srcPtr = reinterpret_cast<const BYTE *>(src);
-    short *dstPtr = reinterpret_cast<short *>(dst);
+    const BYTE *srcPtr = (const BYTE *)src;
+    short *dstPtr = (short *)dst;
 
     if (track)
     {
@@ -430,7 +442,7 @@ extern "C" void CvtStereoAdpcm(
     }
 }
 
-extern "C" void CvtMonoAdpcm(
+EXTERN_C void CvtMonoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,

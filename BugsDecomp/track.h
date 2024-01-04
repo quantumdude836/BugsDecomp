@@ -5,7 +5,7 @@
 
 
 // represents an audio track
-struct TRACK
+typedef struct TRACK
 {
     WAVEFORMATEX wfxIn; // format of audio from file
     size_t trackInSize; // size, in bytes, of the audio to play from file
@@ -34,37 +34,37 @@ struct TRACK
     BOOL trackDone;
     BOOL playing;
     DWORD field_78;
-};
+} TRACK;
 
 
 // params for audio tracks
-struct TRACK_PARAMS
+typedef struct TRACK_PARAMS
 {
     DWORD msSoundBufLen; // length of DS buffer, in milliseconds
     DWORD msConvBufLen; // length of conversion buffer, in milliseconds
     DWORD field_8; // in milliseconds
     DWORD field_C; // in milliseconds
-};
+} TRACK_PARAMS;
 
 
 // "default" state for an uninitialized track
-#define trackDefault (*reinterpret_cast<const TRACK *>(0x45c000))
+#define trackDefault (*(const TRACK *)0x45c000)
 
 // LUT for "state" adjustment based on input sample
-#define adpcmStateAdj (reinterpret_cast<const int *>(0x45c080))
+#define adpcmStateAdj ((const int *)0x45c080)
 
 // LUT for base value based on current "state"
-#define adpcmStateDecode (reinterpret_cast<const int *>(0x45c0c0))
+#define adpcmStateDecode ((const int *)0x45c0c0)
 
 // byte size of audio segments in the speech files; indexed by language, then by
 // segment number (index 0 = segment 2?)
-#define speechPartSizes (*reinterpret_cast<const size_t (*)[6][64]>(0x45c340))
+#define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
 
 // currently playing speech track
-#define speechTrack (*reinterpret_cast<TRACK *>(0x5532a0))
+#define speechTrack (*(TRACK *)0x5532a0)
 
 // currently playing music track
-#define musicTrack (*reinterpret_cast<TRACK *>(0x553320))
+#define musicTrack (*(TRACK *)0x553320)
 
 
 /// <summary>
@@ -85,7 +85,7 @@ struct TRACK_PARAMS
 /// - 4 - invalid audio format
 /// - 5 - invalid timing params
 /// </returns>
-extern "C" int InitTrack(
+EXTERN_C int InitTrack(
     TRACK *track,
     LPDIRECTSOUND dsound,
     LPCWAVEFORMATEX wfxIn,
@@ -99,7 +99,7 @@ PATCH_CODE(0x401000, 0x401000, InitTrack);
 /// Finalizes a track, releasing all owned resources.
 /// </summary>
 /// <param name="track">Track to finalize</param>
-extern "C" void FiniTrack(TRACK *track);
+EXTERN_C void FiniTrack(TRACK *track);
 PATCH_CODE(0x401330, 0x401330, FiniTrack);
 
 /// <summary>
@@ -107,21 +107,21 @@ PATCH_CODE(0x401330, 0x401330, FiniTrack);
 /// stopped.
 /// </summary>
 /// <param name="track">Track to reset</param>
-extern "C" void ResetTrack(TRACK *track);
+EXTERN_C void ResetTrack(TRACK *track);
 PATCH_CODE(0x401490, 0x401490, ResetTrack);
 
 /// <summary>
 /// Starts playing a music track.
 /// </summary>
 /// <param name="track">Track to play</param>
-extern "C" void PlayTrack(TRACK *track);
+EXTERN_C void PlayTrack(TRACK *track);
 PATCH_CODE(0x4018d0, 0x4018d0, PlayTrack);
 
 /// <summary>
 /// Stops playing a music track.
 /// </summary>
 /// <param name="track">Track to stop</param>
-extern "C" void StopTrack(TRACK *track);
+EXTERN_C void StopTrack(TRACK *track);
 PATCH_CODE(0x401910, 0x401910, StopTrack);
 
 /// <summary>
@@ -129,7 +129,7 @@ PATCH_CODE(0x401910, 0x401910, StopTrack);
 /// </summary>
 /// <param name="track">Track to check</param>
 /// <returns>Whether the track is done playing</returns>
-extern "C" BOOL CheckTrackDone(TRACK *track);
+EXTERN_C BOOL CheckTrackDone(TRACK *track);
 PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
 
 /// <summary>
@@ -138,7 +138,7 @@ PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
 /// <param name="track">Audio track to update</param>
 /// <param name="wasStopped">Whether the track was playing, then stopped</param>
 /// <returns>Sample position</returns>
-extern "C" DWORD UpdateTrack(TRACK *track, BOOL *wasStopped);
+EXTERN_C DWORD UpdateTrack(TRACK *track, BOOL *wasStopped);
 PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
 
 /// <summary>
@@ -148,7 +148,7 @@ PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
 /// <param name="src">Source audio data</param>
 /// <param name="dst">Conversion destination</param>
 /// <param name="count">Number of elements to convert</param>
-extern "C" void ConvertTrackAudio(
+EXTERN_C void ConvertTrackAudio(
     TRACK *track,
     const void *src,
     void *dst,
@@ -163,7 +163,7 @@ PATCH_CODE(0x401af0, 0x401af0, ConvertTrackAudio);
 /// <param name="src">Source audio data</param>
 /// <param name="dst">Conversion destination</param>
 /// <param name="count">Number of elements to convert</param>
-extern "C" void CvtStereoAdpcm(
+EXTERN_C void CvtStereoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,
@@ -178,7 +178,7 @@ PATCH_CODE(0x401be0, 0x401be0, CvtStereoAdpcm);
 /// <param name="src">Source audio data</param>
 /// <param name="dst">Conversion destination</param>
 /// <param name="count">Number of elements to convert</param>
-extern "C" void CvtMonoAdpcm(
+EXTERN_C void CvtMonoAdpcm(
     TRACK *track,
     const void *src,
     void *dst,

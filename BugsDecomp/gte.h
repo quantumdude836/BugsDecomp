@@ -8,42 +8,42 @@
 
 
 // short vector with explicit padding
-struct SVECTOR
+typedef struct SVECTOR
 {
     short vx, vy, vz;
     short pad;
-};
+} SVECTOR;
 
 
 // (long) vector with explicit padding
-struct VECTOR
+typedef struct VECTOR
 {
     long vx, vy, vz;
     long pad;
-};
+} VECTOR;
 
 
 // 3x3 (rotation) matrix plus long translation vector
-struct MATRIX
+typedef struct MATRIX
 {
     short m[3][3];
     long t[3];
-};
+} MATRIX;
 
 // integer square root
-extern "C" long SquareRoot0(long a);
+EXTERN_C long SquareRoot0(long a);
 PATCH_CODE(0x4079e0, 0x4079c0, SquareRoot0);
 
 // Q12 atan2
-extern "C" long ratan2(long y, long x);
+EXTERN_C long ratan2(long y, long x);
 PATCH_CODE(0x407a00, 0x4079e0, ratan2);
 
 // Q12 cos
-extern "C" int rcos(int a);
+EXTERN_C int rcos(int a);
 PATCH_CODE(0x407a30, 0x407a10, rcos);
 
 // Q12 sin
-extern "C" int rsin(int a);
+EXTERN_C int rsin(int a);
 PATCH_CODE(0x407a50, 0x407a30, rsin);
 
 /// <summary>
@@ -52,7 +52,7 @@ PATCH_CODE(0x407a50, 0x407a30, rsin);
 /// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrix(const SVECTOR *r, MATRIX *m);
 PATCH_CODE(0x407a70, 0x407a50, RotMatrix);
 
 /// <summary>
@@ -61,7 +61,7 @@ PATCH_CODE(0x407a70, 0x407a50, RotMatrix);
 /// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrixYXZ(const SVECTOR *r, MATRIX *m);
 PATCH_CODE(0x407b10, 0x407af0, RotMatrixYXZ);
 
 /// <summary>
@@ -70,7 +70,7 @@ PATCH_CODE(0x407b10, 0x407af0, RotMatrixYXZ);
 /// <param name="r">In Q12 vector of angles</param>
 /// <param name="m">Out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrixZYX(const SVECTOR *r, MATRIX *m);
 PATCH_CODE(0x407bb0, 0x407b90, RotMatrixZYX);
 
 /// <summary>
@@ -79,7 +79,7 @@ PATCH_CODE(0x407bb0, 0x407b90, RotMatrixZYX);
 /// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrixX(int r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrixX(int r, MATRIX *m);
 PATCH_CODE(0x407c50, 0x407c30, RotMatrixX);
 
 /// <summary>
@@ -88,7 +88,7 @@ PATCH_CODE(0x407c50, 0x407c30, RotMatrixX);
 /// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrixY(int r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrixY(int r, MATRIX *m);
 PATCH_CODE(0x407dc0, 0x407da0, RotMatrixY);
 
 /// <summary>
@@ -97,7 +97,7 @@ PATCH_CODE(0x407dc0, 0x407da0, RotMatrixY);
 /// <param name="r">Q12 angle</param>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *RotMatrixZ(int r, MATRIX *m);
+EXTERN_C MATRIX *RotMatrixZ(int r, MATRIX *m);
 PATCH_CODE(0x407f20, 0x407f00, RotMatrixZ);
 
 /// <summary>
@@ -106,7 +106,7 @@ PATCH_CODE(0x407f20, 0x407f00, RotMatrixZ);
 /// <param name="m">In/out matrix</param>
 /// <param name="v">In Q12 vector</param>
 /// <returns>m</returns>
-extern "C" MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v);
+EXTERN_C MATRIX *ScaleMatrix(MATRIX *m, const VECTOR *v);
 PATCH_CODE(0x408080, 0x408060, ScaleMatrix);
 
 /// <summary>
@@ -115,7 +115,7 @@ PATCH_CODE(0x408080, 0x408060, ScaleMatrix);
 /// <param name="m">In/out matrix</param>
 /// <param name="v">In Q12 vector</param>
 /// <returns>m</returns>
-extern "C" MATRIX *TransMatrix(MATRIX *m, const VECTOR *v);
+EXTERN_C MATRIX *TransMatrix(MATRIX *m, const VECTOR *v);
 PATCH_CODE(0x408120, 0x408100, TransMatrix);
 
 /// <summary>
@@ -125,7 +125,7 @@ PATCH_CODE(0x408120, 0x408100, TransMatrix);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-extern "C" VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1);
+EXTERN_C VECTOR *ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1);
 PATCH_CODE(0x408140, 0x408120, ApplyMatrix);
 
 /// <summary>
@@ -135,7 +135,7 @@ PATCH_CODE(0x408140, 0x408120, ApplyMatrix);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-extern "C" SVECTOR *ApplyMatrixSV(
+EXTERN_C SVECTOR *ApplyMatrixSV(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
@@ -149,7 +149,7 @@ PATCH_CODE(0x4081e0, 0x4081c0, ApplyMatrixSV);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-extern "C" VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1);
+EXTERN_C VECTOR *ApplyMatrixLV(const MATRIX *m, const VECTOR *v0, VECTOR *v1);
 PATCH_CODE(0x408280, 0x408260, ApplyMatrixLV);
 
 /// <summary>
@@ -159,7 +159,7 @@ PATCH_CODE(0x408280, 0x408260, ApplyMatrixLV);
 /// <param name="m1">In RHS matrix</param>
 /// <param name="m2">Out matrix</param>
 /// <returns>m2</returns>
-extern "C" MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
+EXTERN_C MATRIX *MulMatrix0(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
 PATCH_CODE(0x408310, 0x4082f0, MulMatrix0);
 
 /// <summary>
@@ -168,7 +168,7 @@ PATCH_CODE(0x408310, 0x4082f0, MulMatrix0);
 /// <param name="m0">In LHS matrix</param>
 /// <param name="m1">In RHS/out matrix</param>
 /// <returns>m1</returns>
-extern "C" MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1);
+EXTERN_C MATRIX *MulMatrix2(const MATRIX *m0, MATRIX *m1);
 PATCH_CODE(0x4084b0, 0x408490, MulMatrix2);
 
 /// <summary>
@@ -177,7 +177,7 @@ PATCH_CODE(0x4084b0, 0x408490, MulMatrix2);
 /// <param name="m0">In LHS matrix</param>
 /// <param name="m1">In RHS/out matrix</param>
 /// <returns>m1</returns>
-extern "C" MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1);
+EXTERN_C MATRIX *MulMatrix2_0(const MATRIX *m0, MATRIX *m1);
 PATCH_CODE(0x408660, 0x408640, MulMatrix2_0);
 
 /// <summary>
@@ -187,7 +187,7 @@ PATCH_CODE(0x408660, 0x408640, MulMatrix2_0);
 /// <param name="m1">In RHS matrix</param>
 /// <param name="m2">Out matrix</param>
 /// <returns>m2</returns>
-extern "C" MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
+EXTERN_C MATRIX *CompMatrixLV(const MATRIX *m0, const MATRIX *m1, MATRIX *m2);
 PATCH_CODE(0x4086b0, 0x408690, CompMatrixLV);
 
 /// <summary>
@@ -196,7 +196,7 @@ PATCH_CODE(0x4086b0, 0x408690, CompMatrixLV);
 /// <param name="m0">In LHS matrix</param>
 /// <param name="m1">In LHS/out matrix</param>
 /// <returns>m1</returns>
-extern "C" MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1);
+EXTERN_C MATRIX *CompMatrix2LV(const MATRIX *m0, MATRIX *m1);
 PATCH_CODE(0x4088d0, 0x4088b0, CompMatrix2LV);
 
 /// <summary>
@@ -204,7 +204,7 @@ PATCH_CODE(0x4088d0, 0x4088b0, CompMatrix2LV);
 /// </summary>
 /// <param name="m">In/out matrix</param>
 /// <returns>m</returns>
-extern "C" MATRIX *IdentMatrix(MATRIX *m);
+EXTERN_C MATRIX *IdentMatrix(MATRIX *m);
 PATCH_CODE(0x408a40, 0x408a20, IdentMatrix);
 
 /// <summary>
@@ -214,7 +214,7 @@ PATCH_CODE(0x408a40, 0x408a20, IdentMatrix);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-extern "C" VECTOR *ApplyMatrix_0(
+EXTERN_C VECTOR *ApplyMatrix_0(
     const MATRIX *m,
     const SVECTOR *v0,
     VECTOR *v1
@@ -228,7 +228,7 @@ PATCH_CODE(0x408a80, 0x408a60, ApplyMatrix_0);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-extern "C" SVECTOR *ApplyMatrixSV_0(
+EXTERN_C SVECTOR *ApplyMatrixSV_0(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
@@ -240,5 +240,5 @@ PATCH_CODE(0x408b20, 0x408b00, ApplyMatrixSV_0);
 /// </summary>
 /// <param name="v0">In integer vector</param>
 /// <param name="v1">Out integer vector</param>
-extern "C" void Square0(const VECTOR *v0, VECTOR *v1);
+EXTERN_C void Square0(const VECTOR *v0, VECTOR *v1);
 PATCH_CODE(0x408bc0, 0x408ba0, Square0);

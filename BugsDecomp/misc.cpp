@@ -5,10 +5,10 @@
 
 
 // console output handle; does not appear to be initialized by the game
-#define hConsoleOutput (*reinterpret_cast<HANDLE *>(0x4b1cf4))
+#define hConsoleOutput (*(HANDLE *)0x4b1cf4)
 
 
-extern "C" void ConPrintf(const char *fmt, ...)
+EXTERN_C void ConPrintf(const char *fmt, ...)
 {
     DWORD nWritten;
     char buf[1024];
@@ -18,10 +18,10 @@ extern "C" void ConPrintf(const char *fmt, ...)
     vsprintf(buf, fmt, ap);
     va_end(ap);
 
-    WriteConsoleA(hConsoleOutput, buf, strlen(buf), &nWritten, nullptr);
+    WriteConsoleA(hConsoleOutput, buf, strlen(buf), &nWritten, NULL);
 }
 
-extern "C" int ShowRetryDialog(const char *fmt, ...)
+EXTERN_C int ShowRetryDialog(const char *fmt, ...)
 {
     char buf[1024];
     va_list ap;

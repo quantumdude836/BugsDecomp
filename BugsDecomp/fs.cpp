@@ -5,10 +5,10 @@
 #include "crt.h"
 
 
-#define datasRootDir (reinterpret_cast<char *>(0x4b1928))
+#define datasRootDir ((char *)0x4b1928)
 
 
-extern "C" int FsOpen(const char *path, int oflag, ...)
+EXTERN_C int FsOpen(const char *path, int oflag, ...)
 {
     char fullPath[MAX_PATH];
 
@@ -29,7 +29,7 @@ extern "C" int FsOpen(const char *path, int oflag, ...)
     return fd;
 }
 
-extern "C" FILE *FsFOpen(const char *path, const char *mode)
+EXTERN_C FILE *FsFOpen(const char *path, const char *mode)
 {
     char fullPath[MAX_PATH];
 
@@ -47,22 +47,22 @@ extern "C" FILE *FsFOpen(const char *path, const char *mode)
     return fp;
 }
 
-extern "C" long FsSeek(int fd, long offset, int whence)
+EXTERN_C long FsSeek(int fd, long offset, int whence)
 {
     return _lseek_bugs(fd, offset, whence);
 }
 
-extern "C" int FsRead(int fd, void *buf, unsigned n)
+EXTERN_C int FsRead(int fd, void *buf, unsigned n)
 {
     return _read_bugs(fd, buf, n);
 }
 
-extern "C" int FsClose(int fd)
+EXTERN_C int FsClose(int fd)
 {
     return _close_bugs(fd);
 }
 
-extern "C" BOOL FsFindRoot(void)
+EXTERN_C BOOL FsFindRoot(void)
 {
     char rootName[MAX_PATH];
     char volName[MAX_PATH];
@@ -88,7 +88,7 @@ extern "C" BOOL FsFindRoot(void)
             &serNum,
             &maxCompLen,
             &fsFlags,
-            nullptr,
+            NULL,
             0
         );
         if (!res)

@@ -5,10 +5,10 @@
 
 
 // game window handle
-#define hWndGame (*reinterpret_cast<HWND *>(0x4b1cec))
+#define hWndGame (*(HWND *)0x4b1cec)
 
 // CPU speed, in MHz (FIXME: relocate)
-#define cpuSpeed (*reinterpret_cast<int *>(0x4b1de4))
+#define cpuSpeed (*(int *)0x4b1de4)
 
 
 /// <summary>
@@ -18,7 +18,7 @@
 /// properly initialized.
 /// </summary>
 /// <param name="fmt">Format string</param>
-extern "C" void ConPrintf(const char *fmt, ...);
+EXTERN_C void ConPrintf(const char *fmt, ...);
 PATCH_CODE(0x4055d0, 0x4055d0, ConPrintf);
 
 /// <summary>
@@ -26,5 +26,5 @@ PATCH_CODE(0x4055d0, 0x4055d0, ConPrintf);
 /// </summary>
 /// <param name="fmt">Format string</param>
 /// <returns>Selected dialog option</returns>
-extern "C" int ShowRetryDialog(const char *fmt, ...);
+EXTERN_C int ShowRetryDialog(const char *fmt, ...);
 PATCH_CODE(0x405640, 0x405640, ShowRetryDialog);
