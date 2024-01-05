@@ -6,7 +6,7 @@
 
 // needed for vsprintf
 #define _CRT_SECURE_NO_WARNINGS
-#define DIRECTINPUT_VERSION 0x0700
+#define DIRECTINPUT_VERSION 0x0500
 #define DIRECTSOUND_VERSION 0x0700
 
 // Windows headers

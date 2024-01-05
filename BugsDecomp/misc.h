@@ -15,6 +15,9 @@
 // active string table
 #define strTable (*(const int **)0x45f344)
 
+// process instance handle
+#define hInstance (*(HINSTANCE *)0x4b1ce8)
+
 // game window handle
 #define hWndGame (*(HWND *)0x4b1cec)
 
