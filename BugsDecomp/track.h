@@ -13,8 +13,8 @@ typedef struct TRACK
     size_t readBytes; // number of bytes read so far
     void *convBuf; // conversion buffer
     WAVEFORMATEX wfxOut; // format of audio to DirectSound buffer
-    DWORD field_38;
-    DWORD field_3C;
+    DWORD curWritePos; // 
+    DWORD nextWritePos;
     DWORD prevPlayPos;
     DWORD bufLoopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
@@ -28,8 +28,8 @@ typedef struct TRACK
     BOOL convBufOwned; // whether `convBuf` should be freed on finalization
     size_t soundBufSize; // size, in bytes, of the DS buffer
     size_t convBufSize; // size, in bytes, of the audio conversion buffer
-    size_t field_64; // byte-size equivalent of TRACK_PARAMS.field_8
-    size_t field_68; // byte-size equivalent of TRACK_PARAMS.field_C
+    size_t refillPeriodSize; // refill period, in bytes
+    size_t minRefillSize; // minimum buffer refill size, in bytes
     LPDIRECTSOUNDBUFFER dsBuffer;
     BOOL trackDone;
     BOOL playing;
@@ -41,8 +41,8 @@ typedef struct TRACK_PARAMS
 {
     DWORD msSoundBufLen; // length of DS buffer, in milliseconds
     DWORD msConvBufLen; // length of conversion buffer, in milliseconds
-    DWORD field_8; // in milliseconds
-    DWORD field_C; // in milliseconds
+    DWORD msRefillPeriod; // refill period, in milliseconds
+    DWORD msMinRefill; // minimum refill length, in milliseconds
 } TRACK_PARAMS;
 
 // return codes for some track functions
@@ -124,9 +124,11 @@ PATCH_CODE(0x401490, 0x401490, ResetTrack);
 /// <param name="samples">
 /// Number of samples to convert, or -1 to auto-calculate
 /// </param>
-/// <param name="arg_8">Unknown</param>
+/// <param name="periodSize">
+/// Size, in bytes, of the refill period, or -1 to use default
+/// </param>
 /// <returns>Whether the buffer was refilled</returns>
-EXTERN_C BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8);
+EXTERN_C BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize);
 PATCH_CODE(0x4014f0, 0x4014f0, RefillTrackBuffer);
 
 /// <summary>

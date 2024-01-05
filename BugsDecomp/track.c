@@ -69,7 +69,7 @@ TRACK_ERROR InitTrack(
         return TRACK_ERR_AUDIO_FORMAT;
 
     // validate timing params
-    if (params->field_8 + params->msConvBufLen >= params->msSoundBufLen)
+    if (params->msRefillPeriod + params->msConvBufLen >= params->msSoundBufLen)
         return TRACK_ERR_TIMING_PARAMS;
 
     // start track out with default state
@@ -129,8 +129,8 @@ TRACK_ERROR InitTrack(
     // convert timing params
     track->soundBufSize = (size_t)(params->msSoundBufLen * msBytes + 0.5);
     track->convBufSize = (size_t)(params->msConvBufLen * msBytes + 0.5);
-    track->field_64 = (size_t)(params->field_8 * msBytes + 0.5);
-    track->field_68 = (size_t)(params->field_C * msBytes + 0.5);
+    track->refillPeriodSize = (size_t)(params->msRefillPeriod * msBytes + 0.5);
+    track->minRefillSize = (size_t)(params->msMinRefill * msBytes + 0.5);
 
     return TRACK_OK;
 }
@@ -191,8 +191,8 @@ void ResetTrack(TRACK *track)
     track->trackInSize = 0;
     track->fd = 0; // should be set to -1 since 0 is technically a valid fd
     track->readBytes = 0;
-    track->field_38 = 0;
-    track->field_3C = 0;
+    track->curWritePos = 0;
+    track->nextWritePos = 0;
     track->prevPlayPos = 0;
     track->bufLoopCount = 0;
     track->trackOutSize = 0;
@@ -202,13 +202,14 @@ void ResetTrack(TRACK *track)
     track->readDone = FALSE;
 }
 
-BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
+BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
 {
     void *ptr1, *ptr2;
     DWORD bytes1, bytes2;
     BOOL wasStopped; // XXX: not initialized
     HRESULT hr;
-    size_t t0, t1;
+    size_t actPeriodSize;
+    size_t periodRem;
 
     // XXX: This function technically has a bug where it confuses "number of
     // bytes" with "number of samples", but only in contexts where bytes per
@@ -220,10 +221,13 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
     if (CheckTrackDone(track))
         return FALSE;
 
-    if (arg_8 == -1)
-        t0 = track->field_64;
+    if (periodSize == -1)
+        actPeriodSize = track->refillPeriodSize;
     else
-        t0 = (LONGLONG)arg_8 * track->wfxOut.nAvgBytesPerSec / 1000;
+    {
+        actPeriodSize =
+            (LONGLONG)periodSize * track->wfxOut.nAvgBytesPerSec / 1000;
+    }
 
     // auto-calculate number of samples, if needed
     if (samples == (DWORD)-1)
@@ -244,7 +248,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
             track->readBytes = 0;
             // refill rest of buffer
             samples -= remSamples;
-            return RefillTrackBuffer(track, samples, arg_8);
+            return RefillTrackBuffer(track, samples, periodSize);
         }
     }
     else
@@ -267,7 +271,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
         {
             hr = IDirectSoundBuffer_Lock(
                 track->dsBuffer,
-                track->field_38,
+                track->curWritePos,
                 outBytes,
                 &ptr1,
                 &bytes1,
@@ -305,7 +309,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
             fails++;
             IDirectSoundBuffer_SetCurrentPosition(
                 track->dsBuffer,
-                track->field_38
+                track->curWritePos
             );
         }
 
@@ -338,24 +342,27 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
         IDirectSoundBuffer_Unlock(track->dsBuffer, ptr1, bytes1, ptr2, bytes2);
     }
 
-    track->field_38 += outBytes;
-    if (track->field_38 > track->field_3C)
+    track->curWritePos += outBytes;
+
+    // check if the next refill period has been hit
+    if (track->curWritePos > track->nextWritePos)
     {
-        t1 = 0;
-        track->field_3C = track->field_38 % track->soundBufSize;
+        periodRem = 0;
+        track->nextWritePos = track->curWritePos % track->soundBufSize;
     }
     else
-        t1 = track->field_3C - track->field_38;
+        periodRem = track->nextWritePos - track->curWritePos;
 
-    if (track->field_38 >= track->soundBufSize)
-        track->field_38 -= track->soundBufSize;
+    // wrap write position around, if needed
+    if (track->curWritePos >= track->soundBufSize)
+        track->curWritePos -= track->soundBufSize;
 
-    DWORD silenceBytes = t0 - t1;
+    DWORD silenceBytes = actPeriodSize - periodRem;
     if (silenceBytes)
     {
         hr = IDirectSoundBuffer_Lock(
             track->dsBuffer,
-            track->field_3C,
+            track->nextWritePos,
             silenceBytes,
             &ptr1,
             &bytes1,
@@ -372,7 +379,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
             if (bytes2)
                 memset(ptr2, silence, bytes2);
 
-            track->field_3C = (track->field_3C + bytes1 + bytes2) %
+            track->nextWritePos = (track->nextWritePos + bytes1 + bytes2) %
                 track->soundBufSize;
         }
 
@@ -460,14 +467,16 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
 
     DWORD samples = 0;
     *wasStopped = FALSE;
-    DWORD t2 = track->field_3C;
-    if (t2 < track->field_38)
-        t2 += track->soundBufSize;
 
-    if (actualPlayPos >= track->field_38 && actualPlayPos <= t2)
+    // compute adjusted next write position, accounting for wraparound
+    DWORD adjNextWritePos = track->nextWritePos;
+    if (adjNextWritePos < track->curWritePos)
+        adjNextWritePos += track->soundBufSize;
+
+    if (actualPlayPos >= track->curWritePos && actualPlayPos <= adjNextWritePos)
     {
-        // stop playing the track; either it's done playing, or the DS buffer's
-        // position will be changed
+        // buffer has played beyond last written data, so stop the track; either
+        // it's done playing, or it will be repositioned to the write position
         if (track->playing)
         {
             StopTrack(track);
@@ -476,13 +485,16 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
 
         if (!CheckTrackDone(track))
         {
+            // track is still playing; rewind play position and request a full
+            // refill of the buffer
             samples = track->convBufSize / track->wfxOut.nBlockAlign;
             IDirectSoundBuffer_SetCurrentPosition(
                 track->dsBuffer,
-                track->field_38
+                track->curWritePos
             );
+            // check if rewinding past buffer loop point
             if (curPlayPos < track->prevPlayPos &&
-                curPlayPos < track->field_38)
+                curPlayPos < track->curWritePos)
             {
                 track->bufLoopCount--;
             }
@@ -490,8 +502,10 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
     }
     else
     {
+        // any audio that has been played becomes free space for refill...
         DWORD deltaPos = actualPlayPos - track->prevPlayPos;
-        if (deltaPos < track->field_68)
+        // ... unless below the refill threshold
+        if (deltaPos < track->minRefillSize)
             deltaPos = 0;
 
         samples = deltaPos / track->wfxOut.nBlockAlign;
