@@ -21,6 +21,12 @@
 // CPU speed, in MHz (FIXME: relocate)
 #define cpuSpeed (*(int *)0x4b1de4)
 
+// currently playing speech track (FIXME: relocate)
+#define speechTrack (*(struct TRACK *)0x5532a0)
+
+// currently playing music track (FIXME: relocate)
+#define musicTrack (*(struct TRACK *)0x553320)
+
 
 /// <summary>
 /// Writes formatted output to the console, if attached.

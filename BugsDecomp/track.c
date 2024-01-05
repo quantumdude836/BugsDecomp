@@ -19,12 +19,6 @@
 // segment number (index 0 = segment 2?)
 #define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
 
-// currently playing speech track
-#define speechTrack (*(TRACK *)0x5532a0)
-
-// currently playing music track
-#define musicTrack (*(TRACK *)0x553320)
-
 
 TRACK_ERROR InitTrack(
     TRACK *track,
