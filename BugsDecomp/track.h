@@ -33,7 +33,7 @@ typedef struct TRACK
     LPDIRECTSOUNDBUFFER dsBuffer;
     BOOL trackDone;
     BOOL playing;
-    DWORD field_78;
+    BOOL readDone;
 } TRACK;
 
 // params for audio tracks
@@ -121,10 +121,12 @@ PATCH_CODE(0x401490, 0x401490, ResetTrack);
 /// Refills the DS buffer for an audio track.
 /// </summary>
 /// <param name="track">Track to refill</param>
-/// <param name="arg_4">Unknown</param>
+/// <param name="samples">
+/// Number of samples to convert, or -1 to auto-calculate
+/// </param>
 /// <param name="arg_8">Unknown</param>
-/// <returns>Unknown</returns>
-EXTERN_C BOOL RefillTrackBuffer(TRACK *track, int arg_4, int arg_8);
+/// <returns>Whether the buffer was refilled</returns>
+EXTERN_C BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8);
 //PATCH_CODE(0x4014f0, 0x4014f0, RefillTrackBuffer);
 
 /// <summary>
@@ -154,7 +156,7 @@ PATCH_CODE(0x401930, 0x401930, CheckTrackDone);
 /// </summary>
 /// <param name="track">Audio track to update</param>
 /// <param name="wasStopped">Whether the track was playing, then stopped</param>
-/// <returns>Sample position</returns>
+/// <returns>Number of samples that should be converted</returns>
 EXTERN_C DWORD UpdateTrack(TRACK *track, BOOL *wasStopped);
 PATCH_CODE(0x4019a0, 0x4019a0, UpdateTrack);
 

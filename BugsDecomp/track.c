@@ -199,13 +199,13 @@ void ResetTrack(TRACK *track)
     memset(&track->adpcmState, 0, sizeof track->adpcmState);
     track->loop = FALSE;
     track->trackDone = FALSE;
-    track->field_78 = 0;
+    track->readDone = FALSE;
 }
 
-BOOL RefillTrackBuffer(TRACK *track, int arg_4, int arg_8)
+BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
 {
     // use old function for now
-    return ((BOOL (*)(TRACK *, int, int))0x4014f0)(track, arg_4, arg_8);
+    return ((BOOL (*)(TRACK *, DWORD, int))0x4014f0)(track, samples, arg_8);
 }
 
 void PlayTrack(TRACK *track)
@@ -276,7 +276,8 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         track->bufLoopCount++;
     }
 
-    if (track->field_78)
+    // if all audio has been read, no more samples need to be transferred
+    if (track->readDone)
         return 0;
 
     DWORD samples = 0;
@@ -311,11 +312,11 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
     }
     else
     {
-        actualPlayPos -= track->prevPlayPos;
-        if (actualPlayPos < track->field_68)
-            actualPlayPos = 0;
+        DWORD deltaPos = actualPlayPos - track->prevPlayPos;
+        if (deltaPos < track->field_68)
+            deltaPos = 0;
 
-        samples = actualPlayPos / track->wfxOut.nBlockAlign;
+        samples = deltaPos / track->wfxOut.nBlockAlign;
     }
 
     if (samples)
