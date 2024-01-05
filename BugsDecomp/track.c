@@ -216,12 +216,8 @@ BOOL RefillTrackBuffer(TRACK *track, int arg_4, int arg_8)
 
 void PlayTrack(TRACK *track)
 {
-    // do nothing if already playing, or if nothing to play
-    if (track->playing || !track->trackInSize)
-        return;
-
-    // unknown additional condition check
-    if (track->trackDone)
+    // do nothing if already playing, or if nothing to play, or if done
+    if (track->playing || !track->trackInSize || track->trackDone)
         return;
 
     IDirectSoundBuffer_Play(track->dsBuffer, 0, 0, DSBPLAY_LOOPING);
