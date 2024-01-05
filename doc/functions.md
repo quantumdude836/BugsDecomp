@@ -7,7 +7,7 @@ The following table provides details about known functions:
 | 0x401330            | 0x401330            | FiniTrack         | yes         |
 | 0x4013c0            | 0x4013c0            | SetTrackSource    | yes         |
 | 0x401490            | 0x401490            | ResetTrack        | yes         |
-| 0x4014f0            | 0x4014f0            | RefillTrackBuffer | no          |
+| 0x4014f0            | 0x4014f0            | RefillTrackBuffer | yes         |
 | 0x4018d0            | 0x4018d0            | PlayTrack         | yes         |
 | 0x401910            | 0x401910            | StopTrack         | yes         |
 | 0x401930            | 0x401930            | CheckTrackDone    | yes         |

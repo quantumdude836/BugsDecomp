@@ -204,8 +204,186 @@ void ResetTrack(TRACK *track)
 
 BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8)
 {
-    // use old function for now
-    return ((BOOL (*)(TRACK *, DWORD, int))0x4014f0)(track, samples, arg_8);
+    void *ptr1, *ptr2;
+    DWORD bytes1, bytes2;
+    BOOL wasStopped; // XXX: not initialized
+    HRESULT hr;
+    size_t t0, t1;
+
+    // XXX: This function technically has a bug where it confuses "number of
+    // bytes" with "number of samples", but only in contexts where bytes per
+    // sample is 1, so there are no visible effects.
+
+    // if no DS buffer, or track is (now) done, nothing to do
+    if (!track->dsBuffer)
+        return FALSE;
+    if (CheckTrackDone(track))
+        return FALSE;
+
+    if (arg_8 == -1)
+        t0 = track->field_64;
+    else
+        t0 = (LONGLONG)arg_8 * track->wfxOut.nAvgBytesPerSec / 1000;
+
+    // auto-calculate number of samples, if needed
+    if (samples == (DWORD)-1)
+        samples = UpdateTrack(track, &wasStopped);
+
+    // if track should loop, check if refill crosses loop boundary
+    if (track->loop)
+    {
+        DWORD remSamples = track->trackInSize - track->readBytes; // XXX
+        if (samples > remSamples)
+        {
+            // refill up to the end of the audio input
+            RefillTrackBuffer(track, remSamples, 0);
+            // reset ADPCM state
+            memset(&track->adpcmState, 0, sizeof track->adpcmState);
+            // rewind back to beginning of audio input
+            _lseek_bugs(track->fd, -(long)track->trackInSize, SEEK_CUR);
+            track->readBytes = 0;
+            // refill rest of buffer
+            samples -= remSamples;
+            return RefillTrackBuffer(track, samples, arg_8);
+        }
+    }
+    else
+    {
+        // clamp sample count to end of input
+        DWORD remSamples = track->trackInSize - track->readBytes; // XXX
+        if (samples >= remSamples)
+            samples = remSamples;
+    }
+
+    size_t inBytes = samples * track->wfxIn.nBlockAlign;
+    size_t outBytes = samples * track->wfxOut.nBlockAlign;
+
+    if (samples)
+    {
+        // make up to two attempts to lock the DS buffer
+        int fails = 0;
+
+        while (fails < 2)
+        {
+            hr = IDirectSoundBuffer_Lock(
+                track->dsBuffer,
+                track->field_38,
+                outBytes,
+                &ptr1,
+                &bytes1,
+                &ptr2,
+                &bytes2,
+                0
+            );
+            if (hr == S_OK && bytes1 + bytes2 == outBytes)
+            {
+                // success - read from input and store in conversion buffer
+                DWORD nRead = _read_bugs(track->fd, track->convBuf, inBytes);
+                if (nRead != inBytes)
+                {
+                    IDirectSoundBuffer_Unlock(
+                        track->dsBuffer,
+                        ptr1,
+                        bytes1,
+                        ptr2,
+                        bytes2
+                    );
+                    return FALSE;
+                }
+                track->readBytes += nRead;
+
+                // check if all input has been read (and track does not loop)
+                if (track->readBytes >= track->trackInSize && !track->loop)
+                    track->readDone = TRUE;
+
+                break;
+            }
+
+            // track might still be playing; stop it and try again
+            StopTrack(track);
+            wasStopped = TRUE;
+            fails++;
+            IDirectSoundBuffer_SetCurrentPosition(
+                track->dsBuffer,
+                track->field_38
+            );
+        }
+
+        if (fails == 2)
+        {
+            // buffer might actually be locked, but not for the requested
+            // amount; unlock just in case
+            IDirectSoundBuffer_Unlock(
+                track->dsBuffer,
+                ptr1,
+                bytes1,
+                ptr2,
+                bytes2
+            );
+            return FALSE;
+        }
+
+        // compute number of samples to convert for first buffer part
+        samples = bytes1 / track->wfxOut.nBlockAlign;
+        ConvertTrackAudio(track, track->convBuf, ptr1, samples);
+        // if there's a second buffer part, convert for it too
+        if (bytes2)
+        {
+            const void *src = (const char *)track->convBuf +
+                samples * track->wfxIn.nBlockAlign;
+            samples = bytes2 / track->wfxOut.nBlockAlign;
+            ConvertTrackAudio(track, src, ptr2, samples);
+        }
+
+        IDirectSoundBuffer_Unlock(track->dsBuffer, ptr1, bytes1, ptr2, bytes2);
+    }
+
+    track->field_38 += outBytes;
+    if (track->field_38 > track->field_3C)
+    {
+        t1 = 0;
+        track->field_3C = track->field_38 % track->soundBufSize;
+    }
+    else
+        t1 = track->field_3C - track->field_38;
+
+    if (track->field_38 >= track->soundBufSize)
+        track->field_38 -= track->soundBufSize;
+
+    DWORD silenceBytes = t0 - t1;
+    if (silenceBytes)
+    {
+        hr = IDirectSoundBuffer_Lock(
+            track->dsBuffer,
+            track->field_3C,
+            silenceBytes,
+            &ptr1,
+            &bytes1,
+            &ptr2,
+            &bytes2,
+            0
+        );
+        if (hr == S_OK)
+        {
+            // 8 bits per sample is unsigned, so zero amplitude is 0x80; 16 bits
+            // per sample is signed, so zero amplitude is 0
+            int silence = (track->wfxOut.wBitsPerSample == 8) ? 0x80 : 0;
+            memset(ptr1, silence, bytes1);
+            if (bytes2)
+                memset(ptr2, silence, bytes2);
+
+            track->field_3C = (track->field_3C + bytes1 + bytes2) %
+                track->soundBufSize;
+        }
+
+        IDirectSoundBuffer_Unlock(track->dsBuffer, ptr1, bytes1, ptr2, bytes2);
+    }
+
+    // if track was stopped while playing, start it playing again
+    if (wasStopped)
+        PlayTrack(track);
+
+    return TRUE;
 }
 
 void PlayTrack(TRACK *track)

@@ -127,7 +127,7 @@ PATCH_CODE(0x401490, 0x401490, ResetTrack);
 /// <param name="arg_8">Unknown</param>
 /// <returns>Whether the buffer was refilled</returns>
 EXTERN_C BOOL RefillTrackBuffer(TRACK *track, DWORD samples, int arg_8);
-//PATCH_CODE(0x4014f0, 0x4014f0, RefillTrackBuffer);
+PATCH_CODE(0x4014f0, 0x4014f0, RefillTrackBuffer);
 
 /// <summary>
 /// Starts playing a music track.
