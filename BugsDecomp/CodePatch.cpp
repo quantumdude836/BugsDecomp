@@ -9,6 +9,7 @@
 #include "crt.h"
 #include "fs.h"
 #include "gte.h"
+#include "input.h"
 #include "misc.h"
 #include "track.h"
 
