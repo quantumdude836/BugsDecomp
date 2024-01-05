@@ -9,13 +9,13 @@ typedef struct TRACK
 {
     WAVEFORMATEX wfxIn; // format of audio from file
     size_t trackInSize; // size, in bytes, of the audio to play from file
-    int fd;
+    int fd; // file to read audio from
     size_t readBytes; // number of bytes read so far
     void *convBuf; // conversion buffer
     WAVEFORMATEX wfxOut; // format of audio to DirectSound buffer
-    DWORD curWritePos; // 
-    DWORD nextWritePos;
-    DWORD prevPlayPos;
+    DWORD curWritePos; // position of last written audio
+    DWORD nextWritePos; // write position for next write period
+    DWORD prevPlayPos; // playback position as of most recent update
     DWORD bufLoopCount; // how many times the DS buffer has looped
     size_t trackOutSize; // size, in bytes, of the audio to play to DS buffer
     struct {
@@ -31,9 +31,9 @@ typedef struct TRACK
     size_t refillPeriodSize; // refill period, in bytes
     size_t minRefillSize; // minimum buffer refill size, in bytes
     LPDIRECTSOUNDBUFFER dsBuffer;
-    BOOL trackDone;
+    BOOL trackDone; // whether track is done playing
     BOOL playing;
-    BOOL readDone;
+    BOOL readDone; // whether all audio has been read from file
 } TRACK;
 
 // params for audio tracks
