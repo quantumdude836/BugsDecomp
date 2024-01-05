@@ -121,3 +121,51 @@ BOOL CALLBACK EnumDInputDevs(LPCDIDEVICEINSTANCEA lpddi, LPVOID pvRef)
 
     return DIENUM_STOP;
 }
+
+BOOL ReadJoystick(long *xAxis, long *yAxis, int *buttons)
+{
+    HRESULT hr;
+    DIJOYSTATE joyState;
+
+    *xAxis = 0;
+    *yAxis = 0;
+    *buttons = 0;
+
+    // no joystick -> no input
+    if (!joystickDev)
+        return FALSE;
+
+    // poll the device, (re)acquiring if needed
+    hr = IDirectInputDevice2_Poll(joystickDev);
+    if (hr == DIERR_INPUTLOST || hr == DIERR_NOTACQUIRED)
+    {
+        IDirectInputDevice2_Acquire(joystickDev);
+        hr = IDirectInputDevice2_Poll(joystickDev);
+    }
+    // if poll still failed, give up
+    if (FAILED(hr))
+        return FALSE;
+
+    // read state
+    hr = IDirectInputDevice2_GetDeviceState(
+        joystickDev,
+        sizeof joyState,
+        &joyState
+    );
+    if (FAILED(hr))
+        return FALSE;
+
+    // copy (main) X/Y values
+    *xAxis = joyState.lX;
+    *yAxis = joyState.lY;
+
+    // collect buttons into bitmask
+    *buttons = 0;
+    for (int button = 0; button < 32; button++)
+    {
+        if (joyState.rgbButtons[button])
+            *buttons |= 1 << button;
+    }
+
+    return TRUE;
+}

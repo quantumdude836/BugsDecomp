@@ -16,6 +16,7 @@ The following table provides details about known functions:
 | 0x401be0            | 0x401be0            | CvtStereoAdpcm    | yes         |
 | 0x401e10            | 0x401e10            | CvtMonoAdpcm      | yes         |
 | 0x402000            | 0x402000            | EnumDInputDevs    | yes         |
+| 0x402180            | 0x402180            | ReadJoystick      | yes         |
 | 0x4055d0            | 0x4055d0            | ConPrintf         | yes         |
 | 0x405640            | 0x405640            | ShowRetryDialog   | yes         |
 | 0x4056c0            | 0x4056c0            | FsOpen            | yes         |
