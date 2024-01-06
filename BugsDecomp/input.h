@@ -64,6 +64,15 @@ EXTERN_C void InitInput(void);
 PATCH_CODE(0x402fd0, 0x402fd0, InitInput);
 
 /// <summary>
+/// Reads joystick input and checks if a button is being pressed.
+/// </summary>
+/// <returns>
+/// The index of a pressed button, 0xFE if nothing pressed, or 0xFF on failure
+/// </returns>
+EXTERN_C int GetPressedButton(void);
+PATCH_CODE(0x403210, 0x403210, GetPressedButton);
+
+/// <summary>
 /// Gets the name of a joystick button. Returned pointer points to a shared
 /// buffer, so the contents are invalidated after subsequent calls.
 /// </summary>

@@ -27,6 +27,11 @@ typedef struct KEY_INFO
 // key name array
 #define keyInfo (*(KEY_INFO (*)[128])0x45e030)
 
+// last read joystick state
+#define inXAxis (*(long *)0x4b1860)
+#define inYAxis (*(long *)0x4b1864)
+#define inButtons (*(int *)0x4b1878)
+
 // DirectInput instance
 #define dinput (*(LPDIRECTINPUTA *)0x4b18c0)
 
@@ -478,6 +483,21 @@ void InitInput(void)
 {
     // only DirectInput really needs explicit init
     InitDInput();
+}
+
+int GetPressedButton(void)
+{
+    BOOL res = ReadJoystick(&inXAxis, &inYAxis, &inButtons);
+    if (!res)
+        return 0xff;
+
+    for (int button = 0; button < 16; button++)
+    {
+        if (inButtons & (1 << button))
+            return button;
+    }
+
+    return 0xfe;
 }
 
 const char *GetButtonName(int button)

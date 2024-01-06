@@ -23,6 +23,7 @@ The following table provides details about known functions:
 | 0x402810            | 0x402810            | ReadKbdDInput     | yes         |
 | 0x4028a0            | 0x4028a0            | ReadKbdWinMsg     | yes         |
 | 0x402fd0            | 0x402fd0            | InitInput         | yes         |
+| 0x403210            | 0x403210            | GetPressedButton  | yes         |
 | 0x403260            | 0x403260            | GetButtonName     | yes         |
 | 0x4055d0            | 0x4055d0            | ConPrintf         | yes         |
 | 0x405640            | 0x405640            | ShowRetryDialog   | yes         |
