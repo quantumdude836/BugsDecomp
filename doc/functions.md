@@ -17,9 +17,11 @@ The following table provides details about known functions:
 | 0x401e10            | 0x401e10            | CvtMonoAdpcm      | yes         |
 | 0x402000            | 0x402000            | EnumDInputDevs    | yes         |
 | 0x402180            | 0x402180            | ReadJoystick      | yes         |
+| 0x402250            | 0x402250            | GetKeyName        | yes         |
 | 0x402610            | 0x402610            | InitDInput        | yes         |
 | 0x402790            | 0x402790            | FiniDInput        | yes         |
 | 0x402fd0            | 0x402fd0            | InitInput         | yes         |
+| 0x403260            | 0x403260            | GetButtonName     | yes         |
 | 0x4055d0            | 0x4055d0            | ConPrintf         | yes         |
 | 0x405640            | 0x405640            | ShowRetryDialog   | yes         |
 | 0x4056c0            | 0x4056c0            | FsOpen            | yes         |

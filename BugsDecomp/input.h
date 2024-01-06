@@ -24,6 +24,14 @@ EXTERN_C BOOL ReadJoystick(long *xAxis, long *yAxis, int *buttons);
 PATCH_CODE(0x402180, 0x402180, ReadJoystick);
 
 /// <summary>
+/// Gets the name of a keyboard key.
+/// </summary>
+/// <param name="scancode">Keyboard key scancode</param>
+/// <returns>Pointer to button name, or NULL if invalid</returns>
+EXTERN_C const char *GetKeyName(int scancode);
+PATCH_CODE(0x402250, 0x402250, GetKeyName);
+
+/// <summary>
 /// Initializes DirectInput resources for the game.
 /// </summary>
 /// <returns>Whether DirectInput was initialized successfully</returns>
@@ -41,3 +49,12 @@ PATCH_CODE(0x402790, 0x402790, FiniDInput);
 /// </summary>
 EXTERN_C void InitInput(void);
 PATCH_CODE(0x402fd0, 0x402fd0, InitInput);
+
+/// <summary>
+/// Gets the name of a joystick button. Returned pointer points to a shared
+/// buffer, so the contents are invalidated after subsequent calls.
+/// </summary>
+/// <param name="button">Button code</param>
+/// <returns>Pointer to button name, or NULL if invalid</returns>
+EXTERN_C const char *GetButtonName(int button);
+PATCH_CODE(0x403260, 0x403260, GetButtonName);

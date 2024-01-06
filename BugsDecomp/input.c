@@ -6,6 +6,14 @@
 #include "misc.h"
 
 
+// used for GetKeyName
+typedef struct KEY_INFO
+{
+    char name[32];
+    int scancode;
+} KEY_INFO;
+
+
 // DirectInput data formats
 #define c_dfDIJoystick_bugs (*(const DIDATAFORMAT *)VER(0x44ed80, 0x44ebe0))
 #define c_dfDIKeyboard_bugs (*(const DIDATAFORMAT *)VER(0x44fda0, 0x44fc00))
@@ -16,6 +24,9 @@
 #define CLSID_DirectInput_bugs (*(const CLSID *)0x45ccb8)
 #define IID_IDirectInputA_bugs (*(const IID *)0x45ccc8)
 
+// key name array
+#define keyInfo (*(KEY_INFO (*)[128])0x45e030)
+
 // DirectInput instance
 #define dinput (*(LPDIRECTINPUTA *)0x4b18c0)
 
@@ -24,6 +35,9 @@
 
 // DI device for keyboard
 #define keyboardDev (*(LPDIRECTINPUTDEVICEA *)0x4b18c8)
+
+// buffer used for GetButtonName
+#define btnNameBuf (*(char (*)[96])0x9ca740)
 
 // whether keyboard DI device is currently acquired
 #define kbdAcquired (*(BOOL *)0x9ca8a0)
@@ -185,6 +199,20 @@ BOOL ReadJoystick(long *xAxis, long *yAxis, int *buttons)
     return TRUE;
 }
 
+const char *GetKeyName(int scancode)
+{
+    if (scancode == -1)
+        return NULL;
+
+    for (int i = 0; keyInfo[i].scancode != -1; i++)
+    {
+        if (keyInfo[i].scancode == scancode)
+            return keyInfo[i].name;
+    }
+
+    return NULL;
+}
+
 BOOL InitDInput(void)
 {
     HRESULT hr;
@@ -287,4 +315,26 @@ void InitInput(void)
 {
     // only DirectInput really needs explicit init
     InitDInput();
+}
+
+const char *GetButtonName(int button)
+{
+    BOOL valid = FALSE;
+
+    if (button <= 16)
+    {
+        sprintf(btnNameBuf, BSTR(0x45f26c, "BUTTON%i"), button);
+        valid = TRUE;
+    }
+    if (button == 0xff)
+    {
+        strcpy(btnNameBuf, BSTR(0x45f264, "NULL"));
+        valid = TRUE;
+    }
+    if (button == 0xfe)
+    {
+        strcpy(btnNameBuf, BSTR(0x45f260, " "));
+        valid = TRUE;
+    }
+    return valid ? btnNameBuf : NULL;
 }
