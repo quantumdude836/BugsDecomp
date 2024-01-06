@@ -4,6 +4,8 @@
 #pragma once
 
 
+#define dword_45F2B0 (*(DWORD *)0x45f2b0)
+
 // string tables; each is an array of 5 string IDs
 #define enStrTbl (*(const int (*)[5])0x45f2b8)
 #define frStrTbl (*(const int (*)[5])0x45f2d0)

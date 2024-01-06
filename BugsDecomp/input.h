@@ -45,6 +45,19 @@ EXTERN_C void FiniDInput(void);
 PATCH_CODE(0x402790, 0x402790, FiniDInput);
 
 /// <summary>
+/// Reads input from the keyboard via DirectInput. Uses ReadKbdWinMsg as a
+/// fallback.
+/// </summary>
+EXTERN_C void ReadKbdDInput(void);
+PATCH_CODE(0x402810, 0x402810, ReadKbdDInput);
+
+/// <summary>
+/// Reads input from the keyboard via Windows messages.
+/// </summary>
+EXTERN_C void ReadKbdWinMsg(void);
+PATCH_CODE(0x4028a0, 0x4028a0, ReadKbdWinMsg);
+
+/// <summary>
 /// Initializes game input.
 /// </summary>
 EXTERN_C void InitInput(void);
