@@ -104,7 +104,20 @@ loaded into memory, so the in-memory structure matches the file layout.
 - 1 - normal
 - 2 - far
 
-joystick map TBD
+joystick map (entries are joystick buttons):
+
+| index | usage        |
+|-------|--------------|
+| 0     | look         |
+| 1     | crouch       |
+| 2     | jump         |
+| 3     | kick         |
+| 4     | roll         |
+| 5     | action       |
+| 6     | camera left  |
+| 7     | camera right |
+| 8     | unknown      |
+| 9     | unknown      |
 
 keyboard map (entries are scancodes):
 
