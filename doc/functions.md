@@ -62,6 +62,9 @@ The following table provides details about known functions:
 | 0x409ce0            | 0x409c80            | SaveAltConfig     | yes         |
 | 0x409d00            | 0x409ca0            | LoadAltConfig     | yes         |
 | 0x409d20            | 0x409cc0            | ReadConfig        | yes         |
+| 0x40df80            | 0x40df20            | SetGLPixelFormat  | yes         |
+| 0x40e0b0            | 0x40e050            | TestGL            | yes         |
+| 0x40e210            | 0x40e1b0            | UnloadGL          | yes         |
 | 0x44fdd0            | 0x44fc30            | malloc            | no[^1]      |
 | 0x44ff10            | 0x44fd70            | free              | no[^1]      |
 | 0x44ff60            | 0x44fd60            | _lseek            | no[^1]      |

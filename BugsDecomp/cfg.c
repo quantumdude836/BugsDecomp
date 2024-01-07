@@ -5,6 +5,7 @@
 #include "crt.h"
 #include "fs.h"
 #include "misc.h"
+#include "rogl.h"
 
 
 void WriteConfig()
@@ -25,9 +26,6 @@ void WriteConfig()
 
 void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
 {
-    // FIXME: temp
-    BOOL (*LoadGL)() = (BOOL (*)())VER(0x40e0b0, 0x40e050);
-
     // always set version
     cfg->version = CONFIG_VERSION;
 
@@ -74,7 +72,7 @@ void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
         cfg->height = 384;
 
         // try to initialize GL; use success to set renderer
-        if (LoadGL())
+        if (TestGL())
             cfg->renderer = R_OPENGL;
         else
         {
@@ -86,7 +84,7 @@ void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
         }
 
         cfg->fogDist = FOG_FAR;
-        cfg->displayType = LoadGL() ? DISP_TYPE_UNK1 : DISP_TYPE_UNK0;
+        cfg->displayType = TestGL() ? DISP_TYPE_UNK1 : DISP_TYPE_UNK0;
         cfg->fullscreen = TRUE;
         cfg->field_20 = 1.0;
     }

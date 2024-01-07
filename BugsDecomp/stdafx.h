@@ -14,6 +14,7 @@
 #include <mmreg.h>
 #include <dinput.h>
 #include <dsound.h>
+#include <gl/GL.h>
 
 // C headers
 #include <math.h>
