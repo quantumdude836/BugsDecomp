@@ -11,6 +11,7 @@
 #include "gte.h"
 #include "input.h"
 #include "misc.h"
+#include "list.h"
 #include "rogl.h"
 #include "track.h"
 

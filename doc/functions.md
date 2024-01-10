@@ -65,6 +65,9 @@ The following table provides details about known functions:
 | 0x40df80            | 0x40df20            | SetGLPixelFormat  | yes         |
 | 0x40e0b0            | 0x40e050            | TestGL            | yes         |
 | 0x40e210            | 0x40e1b0            | UnloadGL          | yes         |
+| 0x4489c0            | 0x448850            | AllocListNode     | yes         |
+| 0x448a00            | 0x448890            | InitListPool      | yes         |
+| 0x448a40            | 0x4488d0            | RemoveListNode    | yes         |
 | 0x44fdd0            | 0x44fc30            | malloc            | no[^1]      |
 | 0x44ff10            | 0x44fd70            | free              | no[^1]      |
 | 0x44ff60            | 0x44fd60            | _lseek            | no[^1]      |

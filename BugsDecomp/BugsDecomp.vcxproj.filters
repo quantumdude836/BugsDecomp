@@ -57,6 +57,9 @@
     <ClCompile Include="rogl.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
+    <ClCompile Include="list.c">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
     <ClInclude Include="rogl.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="list.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
   </ItemGroup>
