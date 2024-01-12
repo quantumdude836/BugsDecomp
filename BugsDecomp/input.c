@@ -323,9 +323,6 @@ void ReadKbdDInput(void)
 {
     HRESULT hr;
 
-    ReadKbdWinMsg();
-    return;
-
     // read state
     hr = IDirectInputDevice_GetDeviceState(
         keyboardDev,
