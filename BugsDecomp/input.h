@@ -4,6 +4,11 @@
 #pragma once
 
 
+// mask of extra input keys that aren't mapped to PSX buttons; bit 0 = return,
+// bit 1 = escape, bit 2 = space
+#define extraInputKeys (*(WORD *)0x4b18d0)
+
+
 /// <summary>
 /// Callback for DirectInput device enumeration. Used to find a joystick device.
 /// </summary>
@@ -30,6 +35,20 @@ PATCH_CODE(0x402180, 0x402180, ReadJoystick);
 /// <returns>Pointer to button name, or NULL if invalid</returns>
 EXTERN_C const char *GetKeyName(int scancode);
 PATCH_CODE(0x402250, 0x402250, GetKeyName);
+
+/// <summary>
+/// Reads keyboard input and updates the pad 1 input report using an alternative
+/// key mapping. Changes the input report report type to 16-button.
+/// </summary>
+EXTERN_C void MapAltKeyboardInput(void);
+PATCH_CODE(0x402290, 0x402290, MapAltKeyboardInput);
+
+/// <summary>
+/// Reads keyboard input and updates the pad 1 input report. May change the
+/// input report type to 16-button. Also sets extra input keys.
+/// </summary>
+EXTERN_C void MapKeyboardInput(void);
+PATCH_CODE(0x4023e0, 0x4023e0, MapKeyboardInput);
 
 /// <summary>
 /// Initializes DirectInput resources for the game.
@@ -62,6 +81,22 @@ PATCH_CODE(0x4028a0, 0x4028a0, ReadKbdWinMsg);
 /// </summary>
 EXTERN_C void InitInput(void);
 PATCH_CODE(0x402fd0, 0x402fd0, InitInput);
+
+/// <summary>
+/// Sets buffers to be used for emulated PSX pad reports.
+/// </summary>
+/// <param name="pad1">Destination for pad 1</param>
+/// <param name="pad2">Destination for pad 2; unused by PC</param>
+EXTERN_C void PadInitDirect(BYTE *pad1, BYTE *pad2);
+PATCH_CODE(0x402ff0, 0x402ff0, PadInitDirect);
+
+/// <summary>
+/// Reads joystick input and maps it to an analog joystick PSX input report for
+/// pad 1. If no joystick is attached, sets the pad 1 input report to a default
+/// 16-button state.
+/// </summary>
+EXTERN_C void MapJoystickInput(void);
+PATCH_CODE(0x403010, 0x403010, MapJoystickInput);
 
 /// <summary>
 /// Reads joystick input and checks if a button is being pressed.

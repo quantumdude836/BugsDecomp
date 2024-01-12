@@ -137,8 +137,8 @@ keyboard map (entries are scancodes):
 | 11    | kick          |
 | 12    | unknown       |
 | 13    | unknown       |
-| 14    | unknown       |
-| 15    | unknown       |
+| 14    | PSX select    |
+| 15    | PSX start     |
 
 # bugs.ini
 
@@ -277,3 +277,65 @@ The BZE file format is detailed [here](bze.md).
 # Function Addresses
 
 More details about (known) functions can be found [here](functions.md).
+
+# PlayStation Input Emulation
+
+Internally, the game reads input from keyboard and/or joystick and maps it to a
+standard PSX gamepad report format, thus emulating a PSX controller.
+
+The rest of the information in this section can be found in the official Psy-Q
+SDK documentation, but is replicated here for convenience.
+
+The first byte of the report is always 0 to indicate success, and the second
+byte is split into two 4-bit fields; the upper 4 bits indicate the "terminal
+type" (aka the type of "controller"), and the lower 4 bits indicate the number
+of 2-byte words of input data (not counting the two-byte "header"). All digital
+button inputs are inverted, i.e. 0 = pressed, 1 = released. All axis inputs are
+0-255, with 128 representing the neutral position.
+
+Keyboard input is mapped to a 16-button controller (terminal type 4) with 2
+additional bytes of input:
+
+| offset | meaning      |
+|--------|--------------|
+| 2      | buttons 8-15 |
+| 3      | buttons 0-7  |
+
+Joystick input is mapped to an analog controller (terminal type 7) with 6
+additional bytes of input:
+
+| offset | meaning      |
+|--------|--------------|
+| 2      | buttons 8-15 |
+| 3      | buttons 0-7  |
+| 4      | right axis X |
+| 5      | right axis Y |
+| 6      | left axis X  |
+| 7      | left axis Y  |
+
+Unfortunately, the PC port only supports a single X/Y joystick input; the values
+read are copied to both axes in the report.
+
+Buttons are mapped in increasing index from right to left; for example, button
+11 (the start button) is offset 2, bit 3.
+
+Button map:
+
+| index | button   |
+|-------|----------|
+| 0     | L2       |
+| 1     | R2       |
+| 2     | L1       |
+| 3     | R1       |
+| 4     | triangle |
+| 5     | circle   |
+| 6     | cross/X  |
+| 7     | square   |
+| 8     | select   |
+| 9     | L3       |
+| 10    | R3       |
+| 11    | start    |
+| 12    | up       |
+| 13    | right    |
+| 14    | down     |
+| 15    | left     |

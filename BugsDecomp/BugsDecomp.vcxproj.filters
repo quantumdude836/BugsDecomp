@@ -101,5 +101,8 @@
     <ClInclude Include="list.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
+    <ClInclude Include="scancodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -159,6 +159,7 @@
     <ClInclude Include="misc.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="rogl.h" />
+    <ClInclude Include="scancodes.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="track.h" />
   </ItemGroup>

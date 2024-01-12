@@ -4,6 +4,7 @@
 #include "input.h"
 #include "cfg.h"
 #include "misc.h"
+#include "scancodes.h"
 
 
 // used for GetKeyName
@@ -12,6 +13,10 @@ typedef struct KEY_INFO
     char name[32];
     int scancode;
 } KEY_INFO;
+
+
+// keyboard reader function pointer
+typedef void (*KBD_READ_FN)(void);
 
 
 // DirectInput data formats
@@ -41,6 +46,10 @@ typedef struct KEY_INFO
 // DI device for keyboard
 #define keyboardDev (*(LPDIRECTINPUTDEVICEA *)0x4b18c8)
 
+// destination pointers for emulated PSX gamepads
+#define pad1Dst (*(BYTE **)0x4b18d8)
+#define pad2Dst (*(BYTE **)0x4b18dc)
+
 // buffer used for GetButtonName
 #define btnNameBuf (*(char (*)[96])0x9ca740)
 
@@ -49,6 +58,9 @@ typedef struct KEY_INFO
 
 // current keyboard state
 #define kbdState (*(BYTE (*)[256])0x9ca8c0)
+
+// current keyboard read function
+#define kbdReadFn (*(KBD_READ_FN *)0x9ca9c0)
 
 // whether keyboard input uses DirectInput (or Windows messages)
 #define kbdUsesDInput (*(BOOL *)0x9ca9c4)
@@ -219,6 +231,125 @@ const char *GetKeyName(int scancode)
     }
 
     return NULL;
+}
+
+void MapAltKeyboardInput(void)
+{
+    // read keyboard input
+    kbdReadFn();
+
+    // if no destination, early out now
+    if (!pad1Dst)
+        return;
+
+    // un-invert button masks
+    pad1Dst[2] = ~pad1Dst[2];
+    pad1Dst[3] = ~pad1Dst[3];
+
+    // map keys to buttons
+    // only modify button masks if the corresponding key is pressed (don't
+    // "release" any currently-pressed buttons)
+    if (kbdState[SK_UP])
+        pad1Dst[2] |= 1 << 4; // up
+    if (kbdState[SK_RIGHT])
+        pad1Dst[2] |= 1 << 5; // right
+    if (kbdState[SK_DOWN])
+        pad1Dst[2] |= 1 << 6; // down
+    if (kbdState[SK_LEFT])
+        pad1Dst[2] |= 1 << 7; // left
+    if (kbdState[SK_TAB])
+        pad1Dst[2] |= 1 << 0; // select
+    if (kbdState[SK_RETURN])
+        pad1Dst[2] |= 1 << 3; // start
+    if (kbdState[config.kbdMap[4]]) // camera right
+        pad1Dst[3] |= 1 << 0; // L2
+    if (kbdState[config.kbdMap[5]]) // camera left
+        pad1Dst[3] |= 1 << 1; // R2
+    if (kbdState[config.kbdMap[6]]) // roll
+        pad1Dst[3] |= 1 << 2; // L1
+    if (kbdState[config.kbdMap[7]]) // action
+        pad1Dst[3] |= 1 << 3; // R1
+    if (kbdState[config.kbdMap[8]]) // look
+        pad1Dst[3] |= 1 << 4; // triangle
+    if (kbdState[config.kbdMap[9]]) // crouch
+        pad1Dst[3] |= 1 << 5; // circle
+    if (kbdState[config.kbdMap[10]]) // jump
+        pad1Dst[3] |= 1 << 6; // cross/X
+    if (kbdState[config.kbdMap[11]]) // kick
+        pad1Dst[3] |= 1 << 7; // square
+
+    // set terminal type to 4 (16-button) and data size to 1 (2 bytes)
+    pad1Dst[1] = (4 << 4) | (2 >> 1);
+
+    // re-invert button masks
+    pad1Dst[2] = ~pad1Dst[2];
+    pad1Dst[3] = ~pad1Dst[3];
+}
+
+void MapKeyboardInput(void)
+{
+    extraInputKeys = 0;
+
+    // read keyboard input
+    kbdReadFn();
+
+    // if no destination, early out now
+    if (!pad1Dst)
+        return;
+
+    // un-invert button masks
+    pad1Dst[2] = ~pad1Dst[2];
+    pad1Dst[3] = ~pad1Dst[3];
+    BYTE oldButtonsHi = pad1Dst[2];
+
+    // map keys to buttons
+    // only modify button masks if the corresponding key is pressed (don't
+    // "release" any currently-pressed buttons)
+    if (kbdState[config.kbdMap[0]]) // up/forward
+        pad1Dst[2] |= 1 << 4; // up
+    if (kbdState[config.kbdMap[2]]) // right
+        pad1Dst[2] |= 1 << 5; // right
+    if (kbdState[config.kbdMap[1]]) // down/backward
+        pad1Dst[2] |= 1 << 6; // down
+    if (kbdState[config.kbdMap[3]]) // left
+        pad1Dst[2] |= 1 << 7; // left
+    if (kbdState[config.kbdMap[14]])
+        pad1Dst[2] |= 1 << 0; // select
+    if (kbdState[config.kbdMap[15]])
+        pad1Dst[2] |= 1 << 3; // start
+    if (kbdState[config.kbdMap[4]]) // camera right
+        pad1Dst[3] |= 1 << 0; // L2
+    if (kbdState[config.kbdMap[5]]) // camera left
+        pad1Dst[3] |= 1 << 1; // R2
+    if (kbdState[config.kbdMap[6]]) // roll
+        pad1Dst[3] |= 1 << 2; // L1
+    if (kbdState[config.kbdMap[7]]) // action
+        pad1Dst[3] |= 1 << 3; // R1
+    if (kbdState[config.kbdMap[8]]) // look
+        pad1Dst[3] |= 1 << 4; // triangle
+    if (kbdState[config.kbdMap[9]]) // crouch
+        pad1Dst[3] |= 1 << 5; // circle
+    if (kbdState[config.kbdMap[10]]) // jump
+        pad1Dst[3] |= 1 << 6; // cross/X
+    if (kbdState[config.kbdMap[11]]) // kick
+        pad1Dst[3] |= 1 << 7; // square
+
+    // also read extra input keys
+    if (kbdState[SK_RETURN])
+        extraInputKeys |= 1 << 0;
+    if (kbdState[SK_ESCAPE])
+        extraInputKeys |= 1 << 1;
+    if (kbdState[SK_SPACE])
+        extraInputKeys |= 1 << 2;
+
+    // set terminal type to 4 (16-button) and data size to 1 (2 bytes), but only
+    // if buttons 8-15 have changed
+    if (pad1Dst[2] != oldButtonsHi)
+        pad1Dst[1] = (4 << 4) | (2 >> 1);
+
+    // re-invert button masks
+    pad1Dst[2] = ~pad1Dst[2];
+    pad1Dst[3] = ~pad1Dst[3];
 }
 
 BOOL InitDInput(void)
@@ -480,6 +611,95 @@ void InitInput(void)
 {
     // only DirectInput really needs explicit init
     InitDInput();
+}
+
+void PadInitDirect(BYTE *pad1, BYTE *pad2)
+{
+    pad1Dst = pad1;
+    pad2Dst = pad2;
+}
+
+void MapJoystickInput(void)
+{
+    // if no destination, early out now
+    if (!pad1Dst)
+        return;
+
+    // initialize report to defaults
+    pad1Dst[0] = 0; // no error
+    // default to terminal type 4 (16-button), 2-byte input
+    pad1Dst[1] = (4 << 4) | (2 >> 1);
+    // all buttons released
+    pad1Dst[2] = 0xff;
+    pad1Dst[3] = 0xff;
+    // go ahead and set axes to neutral
+    pad1Dst[4] = 128;
+    pad1Dst[5] = 128;
+    pad1Dst[6] = 128;
+    pad1Dst[7] = 128;
+
+    // try to read joystick input; bail out if unable to
+    if (!ReadJoystick(&inXAxis, &inYAxis, &inButtons))
+        return;
+
+    // re-map axis bounds
+    inXAxis += 128;
+    if ((unsigned)inXAxis > 255)
+        inXAxis = 255;
+    inYAxis += 128;
+    if ((unsigned)inYAxis > 255)
+        inYAxis = 255;
+
+    // change to terminal type 7 (analog controller), 6-byte input
+    pad1Dst[1] = (7 << 4) | (6 >> 1);
+
+    // map buttons, reusing original input variable for extra buttons
+    int buttons = inButtons;
+    inButtons = 0;
+    pad1Dst[3] = 0;
+    if (buttons & (1 << config.joyMap[0])) // look
+        pad1Dst[3] |= 1 << 4; // triangle
+    if (buttons & (1 << config.joyMap[1])) // crouch
+        pad1Dst[3] |= 1 << 5; // circle
+    if (buttons & (1 << config.joyMap[2])) // jump
+        pad1Dst[3] |= 1 << 6; // cross/X
+    if (buttons & (1 << config.joyMap[3])) // kick
+        pad1Dst[3] |= 1 << 7; // square
+    if (buttons & (1 << config.joyMap[4])) // roll
+        pad1Dst[3] |= 1 << 2; // L1
+    if (buttons & (1 << config.joyMap[5])) // action
+        pad1Dst[3] |= 1 << 3; // R1
+    if (buttons & (1 << config.joyMap[6])) // camera left
+        pad1Dst[3] |= 1 << 0; // L2
+    if (buttons & (1 << config.joyMap[7])) // camera right
+        pad1Dst[3] |= 1 << 1; // R2
+    if (buttons & (1 << config.joyMap[8]))
+        inButtons |= 1 << 8;
+    if (buttons & (1 << config.joyMap[9]))
+        inButtons |= 1 << 9;
+
+    // the left shift by 2 is odd
+    pad1Dst[2] = ((inButtons >> 8) & 0x0f) << 2;
+
+    // map axes to arrow buttons
+    if ((BYTE)inYAxis < 16)
+        pad1Dst[2] |= 1 << 4; // up
+    if ((BYTE)inXAxis > (256 - 16))
+        pad1Dst[2] |= 1 << 5; // right
+    if ((BYTE)inYAxis > (256 - 16))
+        pad1Dst[2] |= 1 << 6; // down
+    if ((BYTE)inXAxis < 16)
+        pad1Dst[2] |= 1 << 7; // left
+
+    // (re-)invert buttons
+    pad1Dst[2] = ~pad1Dst[2];
+    pad1Dst[3] = ~pad1Dst[3];
+
+    // copy axes; since only one X/Y pair is read, write them to both PSX pairs
+    pad1Dst[4] = (BYTE)inXAxis;
+    pad1Dst[5] = (BYTE)inYAxis;
+    pad1Dst[6] = (BYTE)inXAxis;
+    pad1Dst[7] = (BYTE)inYAxis;
 }
 
 int GetPressedButton(void)
