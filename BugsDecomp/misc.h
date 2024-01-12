@@ -4,6 +4,11 @@
 #pragma once
 
 
+// unknown; seems to take on one of four values:
+//  0x00 - game exits
+//  0x01 - game running normally
+//  0x13 - recreates game window
+//  0x14 - shows quit confirmation dialog
 #define dword_45F2B0 (*(DWORD *)0x45f2b0)
 
 // string tables; each is an array of 5 string IDs
