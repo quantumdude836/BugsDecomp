@@ -206,7 +206,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
 {
     void *ptr1, *ptr2;
     DWORD bytes1, bytes2;
-    BOOL wasStopped; // XXX: not initialized
+    BOOL wasStopped = FALSE; // XXX: game does not initialize this
     HRESULT hr;
     size_t actPeriodSize;
     size_t periodRem;
