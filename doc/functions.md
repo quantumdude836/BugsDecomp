@@ -71,6 +71,9 @@ The following table provides details about known functions:
 | 0x409ce0            | 0x409c80            | SaveAltConfig       | yes         |
 | 0x409d00            | 0x409ca0            | LoadAltConfig       | yes         |
 | 0x409d20            | 0x409cc0            | ReadConfig          | yes         |
+| 0x40cd80            | 0x40cd20            | GsSetProjection     | no          |
+| 0x40ce90            | 0x40ce30            | GsInitCoordinate2   | no          |
+| 0x40cf10            | 0x40ceb0            | GsSetRefView2L      | no          |
 | 0x40df80            | 0x40df20            | SetGLPixelFormat    | yes         |
 | 0x40e0b0            | 0x40e050            | TestGL              | yes         |
 | 0x40e210            | 0x40e1b0            | UnloadGL            | yes         |
