@@ -213,12 +213,12 @@ PATCH_CODE(0x408a40, 0x408a20, IdentMatrix);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-EXTERN_C VECTOR *ApplyMatrix_0(
+EXTERN_C VECTOR *gte_ApplyMatrix(
     const MATRIX *m,
     const SVECTOR *v0,
     VECTOR *v1
 );
-PATCH_CODE(0x408a80, 0x408a60, ApplyMatrix_0);
+PATCH_CODE(0x408a80, 0x408a60, gte_ApplyMatrix);
 
 /// <summary>
 /// Applies the 3x3 part of a matrix to a vector. Same as ApplyMatrixSV.
@@ -227,12 +227,12 @@ PATCH_CODE(0x408a80, 0x408a60, ApplyMatrix_0);
 /// <param name="v0">In Q12 vector</param>
 /// <param name="v1">Out Q12 vector</param>
 /// <returns>v1</returns>
-EXTERN_C SVECTOR *ApplyMatrixSV_0(
+EXTERN_C SVECTOR *gte_ApplyMatrixSV(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
 );
-PATCH_CODE(0x408b20, 0x408b00, ApplyMatrixSV_0);
+PATCH_CODE(0x408b20, 0x408b00, gte_ApplyMatrixSV);
 
 /// <summary>
 /// Computes the integer square of vector components.

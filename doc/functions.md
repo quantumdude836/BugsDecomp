@@ -63,8 +63,8 @@ The following table provides details about known functions:
 | 0x4086b0            | 0x408690            | CompMatrixLV        | yes         |
 | 0x4088d0            | 0x4088b0            | CompMatrix2LV       | yes         |
 | 0x408a40            | 0x408a20            | IdentMatrix         | yes         |
-| 0x408a80            | 0x408a60            | ApplyMatrix_0       | yes         |
-| 0x408b20            | 0x408b00            | ApplyMatrixSV_0     | yes         |
+| 0x408a80            | 0x408a60            | gte_ApplyMatrix     | yes         |
+| 0x408b20            | 0x408b00            | gte_ApplyMatrixSV   | yes         |
 | 0x408bc0            | 0x408ba0            | Square0             | yes         |
 | 0x409a40            | 0x409a10            | WriteConfig         | yes         |
 | 0x409ac0            | 0x409a90            | SetConfigDefaults   | yes         |

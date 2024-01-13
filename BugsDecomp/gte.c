@@ -308,12 +308,12 @@ MATRIX *IdentMatrix(MATRIX *m)
     return m;
 }
 
-VECTOR *ApplyMatrix_0(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
+VECTOR *gte_ApplyMatrix(const MATRIX *m, const SVECTOR *v0, VECTOR *v1)
 {
     return ApplyMatrix(m, v0, v1);
 }
 
-SVECTOR *ApplyMatrixSV_0(
+SVECTOR *gte_ApplyMatrixSV(
     const MATRIX *m,
     const SVECTOR *v0,
     SVECTOR *v1
