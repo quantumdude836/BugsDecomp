@@ -24,7 +24,12 @@ The following table provides details about known functions:
 | 0x402790            | 0x402790            | FiniDInput          | yes         |
 | 0x402810            | 0x402810            | ReadKbdDInput       | yes         |
 | 0x4028a0            | 0x4028a0            | ReadKbdWinMsg       | yes         |
-| 0x402fd0            | 0x402fd0            | InitInput           | yes         |
+| 0x402fd0            | 0x402fd0            | PadStartCom         | yes         |
+| 0x402fe0            | 0x402fe0            | PadGetState         | yes         |
+| [^3]                | [^3]                | PadInfoMode         | yes         |
+| [^3]                | [^3]                | PadSetActAlign      | yes         |
+| [^3]                | [^3]                | PadSetMainMode      | yes         |
+| [^2]                | [^2]                | PadSetAct           | yes         |
 | 0x402ff0            | 0x402ff0            | PadInitDirect       | yes         |
 | 0x403010            | 0x403010            | MapJoystickInput    | yes         |
 | 0x403210            | 0x403210            | GetPressedButton    | yes         |
@@ -86,3 +91,5 @@ The following table provides details about known functions:
 | 0x458620            | 0x458480            | _open               | no[^1]      |
 
 [^1]: C runtime function; will not be decompiled
+[^2]: all functions that do nothing have the same address
+[^3]: all functions that just return 0 have the same address

@@ -607,10 +607,35 @@ void ReadKbdWinMsg(void)
 
 }
 
-void InitInput(void)
+void PadStartCom(void)
 {
-    // only DirectInput really needs explicit init
+    // emulated controller input uses DirectInput
     InitDInput();
+}
+
+int PadGetState(int port)
+{
+    // don't emulate any state other than stable
+    return PadStateStable;
+}
+
+int PadInfoMode(int port, int term, int offs)
+{
+    return 0;
+}
+
+int PadSetActAlign(int port, BYTE *data)
+{
+    return 0;
+}
+
+int PadSetMainMode(int port, int offs, int lock)
+{
+    return 0;
+}
+
+void PadSetAct(int port, BYTE *data, int len)
+{
 }
 
 void PadInitDirect(BYTE *pad1, BYTE *pad2)

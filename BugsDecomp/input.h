@@ -1,7 +1,10 @@
 
-// Code for player input, including both DirectInput and Windows messages.
+// Code for PSX gamepad input emulation via DirectInput and Windows messages.
 
 #pragma once
+
+
+#define PadStateStable 6
 
 
 // mask of extra input keys that aren't mapped to PSX buttons; bit 0 = return,
@@ -77,10 +80,72 @@ EXTERN_C void ReadKbdWinMsg(void);
 PATCH_CODE(0x4028a0, 0x4028a0, ReadKbdWinMsg);
 
 /// <summary>
-/// Initializes game input.
+/// Starts reading input from emulated PSX gamepad.
 /// </summary>
-EXTERN_C void InitInput(void);
-PATCH_CODE(0x402fd0, 0x402fd0, InitInput);
+EXTERN_C void PadStartCom(void);
+PATCH_CODE(0x402fd0, 0x402fd0, PadStartCom);
+
+/// <summary>
+/// Gets emulated PSX gamepad state.
+/// </summary>
+/// <param name="port">Port number to check</param>
+/// <returns>Pad state; always returns PadStateStable</returns>
+EXTERN_C int PadGetState(int port);
+PATCH_CODE(0x402fe0, 0x402fe0, PadGetState);
+
+/// <summary>
+/// Gets controller mode information.
+/// 
+/// Emulated gamepad does not support vibration, so this always returns 0.
+/// 
+/// This function does not separately exist in the game, but is merged with
+/// other functions which just return 0.
+/// </summary>
+/// <param name="port">Controller port number</param>
+/// <param name="term">Item to check</param>
+/// <param name="offs">Controller mode ID table offset</param>
+/// <returns>Always returns 0 for no vibration support</returns>
+EXTERN_C int PadInfoMode(int port, int term, int offs);
+
+/// <summary>
+/// Sets controller actuator parameters.
+/// 
+/// Requests are always rejected for PC.
+/// 
+/// This function does not separately exist in the game, but is merged with
+/// other functions which just return 0.
+/// </summary>
+/// <param name="port">Controller port number</param>
+/// <param name="data">Pointer to actuator data</param>
+/// <returns>Always returns 0 for failure</returns>
+EXTERN_C int PadSetActAlign(int port, BYTE *data);
+
+/// <summary>
+/// Sets controller mode selector.
+/// 
+/// Requests are always rejected for PC.
+/// 
+/// This function does not separately exist in the game, but is merged with
+/// other functions which just return 0.
+/// </summary>
+/// <param name="port">Controller port number</param>
+/// <param name="offs">Controller mode ID table offset</param>
+/// <param name="lock">Lock bits</param>
+/// <returns>Always returns 0 for failure</returns>
+EXTERN_C int PadSetMainMode(int port, int offs, int lock);
+
+/// <summary>
+/// Sets transmit buffer for controller.
+/// 
+/// This does nothing for PC.
+/// 
+/// This function does not separately exist in the game, but is merged with
+/// all other functions which do nothing.
+/// </summary>
+/// <param name="port">Controller port number</param>
+/// <param name="data">Pointer to transmit buffer</param>
+/// <param name="len">Length, in bytes, of transmit buffer</param>
+EXTERN_C void PadSetAct(int port, BYTE *data, int len);
 
 /// <summary>
 /// Sets buffers to be used for emulated PSX pad reports.
