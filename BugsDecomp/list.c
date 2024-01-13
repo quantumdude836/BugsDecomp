@@ -73,3 +73,35 @@ LIST_NODE_HDR *RemoveListNode(LIST_NODE_HDR *list, LIST_NODE_HDR *elem)
     // list head is still intact
     return list;
 }
+
+LIST_NODE_HDR *ClearList(LIST_NODE_HDR *list)
+{
+    // walk through list and clear each node
+    while (list)
+    {
+        LIST_NODE_HDR *next = list->next;
+        list->free = TRUE;
+        list->next = NULL;
+        list = next;
+    }
+
+    return NULL;
+}
+
+LIST_NODE_HDR *AppendListNode(LIST_NODE_HDR *list, LIST_NODE_HDR *elem)
+{
+    // if list is empty, new node becomes the list
+    if (!list)
+        return elem;
+
+    // find last node
+    LIST_NODE_HDR *last = list;
+    while (last->next)
+        last = last->next;
+
+    // link in new node
+    last->next = elem;
+    elem->next = NULL;
+
+    return list;
+}

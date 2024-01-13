@@ -80,6 +80,8 @@ The following table provides details about known functions:
 | 0x4489c0            | 0x448850            | AllocListNode       | yes         |
 | 0x448a00            | 0x448890            | InitListPool        | yes         |
 | 0x448a40            | 0x4488d0            | RemoveListNode      | yes         |
+| 0x448a90            | 0x448920            | ClearList           | yes         |
+| 0x448ac0            | 0x448950            | AppendListNode      | yes         |
 | 0x44fdd0            | 0x44fc30            | malloc              | no[^1]      |
 | 0x44ff10            | 0x44fd70            | free                | no[^1]      |
 | 0x44ff60            | 0x44fd60            | _lseek              | no[^1]      |

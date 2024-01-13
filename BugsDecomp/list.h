@@ -48,3 +48,23 @@ EXTERN_C LIST_NODE_HDR *RemoveListNode(
     LIST_NODE_HDR *elem
 );
 PATCH_CODE(0x448a40, 0x4488d0, RemoveListNode);
+
+/// <summary>
+/// Removes and frees all nodes from a list.
+/// </summary>
+/// <param name="list">List to clear</param>
+/// <returns>New list head, which is always null</returns>
+EXTERN_C LIST_NODE_HDR *ClearList(LIST_NODE_HDR *list);
+PATCH_CODE(0x448a90, 0x448920, ClearList);
+
+/// <summary>
+/// Appends a node to the end of a list.
+/// </summary>
+/// <param name="list">List to append to</param>
+/// <param name="elem">Element to append</param>
+/// <returns>New list head</returns>
+EXTERN_C LIST_NODE_HDR *AppendListNode(
+    LIST_NODE_HDR *list,
+    LIST_NODE_HDR *elem
+);
+PATCH_CODE(0x448ac0, 0x448950, AppendListNode);
