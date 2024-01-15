@@ -104,5 +104,8 @@
     <ClInclude Include="pad.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
+    <ClInclude Include="track_prv.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

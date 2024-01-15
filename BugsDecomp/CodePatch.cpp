@@ -14,6 +14,7 @@
 #include "pad.h"
 #include "rogl.h"
 #include "track.h"
+#include "track_prv.h"
 
 
 // represents a registered code patch

@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "common.h"
 #include "track.h"
+#include "track_prv.h"
 #include "crt.h"
 #include "misc.h"
 
@@ -14,10 +15,6 @@
 
 // LUT for base value based on current "state"
 #define adpcmStateDecode (*(const int (*)[89])0x45c0c0)
-
-// byte size of audio segments in the speech files; indexed by language, then by
-// segment number (index 0 = segment 2?)
-#define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
 
 
 TRACK_ERROR InitTrack(
@@ -202,7 +199,7 @@ void ResetTrack(TRACK *track)
     track->readDone = FALSE;
 }
 
-BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
+BOOL RefillTrackBuffer(TRACK *track, size_t frames, size_t periodSize)
 {
     void *ptr1, *ptr2;
     DWORD bytes1, bytes2;
@@ -212,8 +209,8 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
     size_t periodRem;
 
     // XXX: This function technically has a bug where it confuses "number of
-    // bytes" with "number of samples", but only in contexts where bytes per
-    // sample is 1, so there are no visible effects.
+    // bytes" with "number of frames", but only in contexts where bytes per
+    // frame is 1, so there are no visible effects.
 
     // if no DS buffer, or track is (now) done, nothing to do
     if (!track->dsBuffer)
@@ -229,40 +226,40 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
             (LONGLONG)periodSize * track->wfxOut.nAvgBytesPerSec / 1000;
     }
 
-    // auto-calculate number of samples, if needed
-    if (samples == (DWORD)-1)
-        samples = UpdateTrack(track, &wasStopped);
+    // auto-calculate number of frames, if needed
+    if (frames == (size_t)-1)
+        frames = UpdateTrack(track, &wasStopped);
 
     // if track should loop, check if refill crosses loop boundary
     if (track->loop)
     {
-        DWORD remSamples = track->trackInSize - track->readBytes; // XXX
-        if (samples > remSamples)
+        size_t remFrames = track->trackInSize - track->readBytes; // XXX
+        if (frames > remFrames)
         {
             // refill up to the end of the audio input
-            RefillTrackBuffer(track, remSamples, 0);
+            RefillTrackBuffer(track, remFrames, 0);
             // reset ADPCM state
             memset(&track->adpcmState, 0, sizeof track->adpcmState);
             // rewind back to beginning of audio input
             _lseek_bugs(track->fd, -(long)track->trackInSize, SEEK_CUR);
             track->readBytes = 0;
             // refill rest of buffer
-            samples -= remSamples;
-            return RefillTrackBuffer(track, samples, periodSize);
+            frames -= remFrames;
+            return RefillTrackBuffer(track, frames, periodSize);
         }
     }
     else
     {
-        // clamp sample count to end of input
-        DWORD remSamples = track->trackInSize - track->readBytes; // XXX
-        if (samples >= remSamples)
-            samples = remSamples;
+        // clamp frame count to end of input
+        size_t remFrames = track->trackInSize - track->readBytes; // XXX
+        if (frames >= remFrames)
+            frames = remFrames;
     }
 
-    size_t inBytes = samples * track->wfxIn.nBlockAlign;
-    size_t outBytes = samples * track->wfxOut.nBlockAlign;
+    size_t inBytes = frames * track->wfxIn.nBlockAlign;
+    size_t outBytes = frames * track->wfxOut.nBlockAlign;
 
-    if (samples)
+    if (frames)
     {
         // make up to two attempts to lock the DS buffer
         int fails = 0;
@@ -282,7 +279,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
             if (hr == S_OK && bytes1 + bytes2 == outBytes)
             {
                 // success - read from input and store in conversion buffer
-                DWORD nRead = _read_bugs(track->fd, track->convBuf, inBytes);
+                size_t nRead = _read_bugs(track->fd, track->convBuf, inBytes);
                 if (nRead != inBytes)
                 {
                     IDirectSoundBuffer_Unlock(
@@ -327,16 +324,16 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
             return FALSE;
         }
 
-        // compute number of samples to convert for first buffer part
-        samples = bytes1 / track->wfxOut.nBlockAlign;
-        ConvertTrackAudio(track, track->convBuf, ptr1, samples);
+        // compute number of frames to convert for first buffer part
+        frames = bytes1 / track->wfxOut.nBlockAlign;
+        ConvertTrackAudio(track, track->convBuf, ptr1, frames);
         // if there's a second buffer part, convert for it too
         if (bytes2)
         {
             const void *src = (const char *)track->convBuf +
-                samples * track->wfxIn.nBlockAlign;
-            samples = bytes2 / track->wfxOut.nBlockAlign;
-            ConvertTrackAudio(track, src, ptr2, samples);
+                frames * track->wfxIn.nBlockAlign;
+            frames = bytes2 / track->wfxOut.nBlockAlign;
+            ConvertTrackAudio(track, src, ptr2, frames);
         }
 
         IDirectSoundBuffer_Unlock(track->dsBuffer, ptr1, bytes1, ptr2, bytes2);
@@ -357,7 +354,7 @@ BOOL RefillTrackBuffer(TRACK *track, DWORD samples, size_t periodSize)
     if (track->curWritePos >= track->soundBufSize)
         track->curWritePos -= track->soundBufSize;
 
-    DWORD silenceBytes = actPeriodSize - periodRem;
+    size_t silenceBytes = actPeriodSize - periodRem;
     if (silenceBytes)
     {
         hr = IDirectSoundBuffer_Lock(
@@ -443,7 +440,7 @@ BOOL CheckTrackDone(TRACK *track)
     return trackDone;
 }
 
-DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
+size_t UpdateTrack(TRACK *track, BOOL *wasStopped)
 {
     DWORD curPlayPos, curWritePos;
 
@@ -461,11 +458,11 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         track->bufLoopCount++;
     }
 
-    // if all audio has been read, no more samples need to be transferred
+    // if all audio has been read, no more frames need to be transferred
     if (track->readDone)
         return 0;
 
-    DWORD samples = 0;
+    size_t frames = 0;
     *wasStopped = FALSE;
 
     // compute adjusted next write position, accounting for wraparound
@@ -487,7 +484,7 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         {
             // track is still playing; rewind play position and request a full
             // refill of the buffer
-            samples = track->convBufSize / track->wfxOut.nBlockAlign;
+            frames = track->convBufSize / track->wfxOut.nBlockAlign;
             IDirectSoundBuffer_SetCurrentPosition(
                 track->dsBuffer,
                 track->curWritePos
@@ -508,13 +505,13 @@ DWORD UpdateTrack(TRACK *track, BOOL *wasStopped)
         if (deltaPos < track->minRefillSize)
             deltaPos = 0;
 
-        samples = deltaPos / track->wfxOut.nBlockAlign;
+        frames = deltaPos / track->wfxOut.nBlockAlign;
     }
 
-    if (samples)
+    if (frames)
         track->prevPlayPos = curPlayPos;
 
-    return samples;
+    return frames;
 }
 
 void ConvertTrackAudio(

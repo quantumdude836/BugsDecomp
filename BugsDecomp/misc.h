@@ -4,6 +4,10 @@
 #pragma once
 
 
+// byte size of audio segments in the speech files; indexed by language, then by
+// segment number (index 0 = segment 2?)
+#define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
+
 // unknown; seems to take on one of four values:
 //  0x00 - game exits
 //  0x01 - game running normally
