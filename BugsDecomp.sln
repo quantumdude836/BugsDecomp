@@ -19,6 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F128BD5B-323
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BugsDecomp", "BugsDecomp\BugsDecomp.vcxproj", "{F8682F5E-67F6-4206-AA52-80374D236DC6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E28D42F5-740F-44D5-8956-8078315D64FD}"
+	ProjectSection(SolutionItems) = preProject
+		doc\src\funcgen.py = doc\src\funcgen.py
+		doc\src\funcs.csv = doc\src\funcs.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -39,6 +45,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F128BD5B-3232-4594-A190-FAA82DA3EA98} = {0644C986-8E0E-4B31-9B4E-17FE20813F16}
+		{E28D42F5-740F-44D5-8956-8078315D64FD} = {F128BD5B-3232-4594-A190-FAA82DA3EA98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE479D97-D84A-4557-8048-DB46F01F2C0D}

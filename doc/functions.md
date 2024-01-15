@@ -1,101 +1,103 @@
 
-The following table provides details about known functions:
+The following table provides details about known functions across all known
+game versions, including PSX (US):
 
-| version 1.0 address | version 1.6 address | name                | decompiled? |
-|---------------------|---------------------|---------------------|-------------|
-| 0x401000            | 0x401000            | InitTrack           | yes         |
-| 0x401330            | 0x401330            | FiniTrack           | yes         |
-| 0x4013c0            | 0x4013c0            | SetTrackSource      | yes         |
-| 0x401490            | 0x401490            | ResetTrack          | yes         |
-| 0x4014f0            | 0x4014f0            | RefillTrackBuffer   | yes         |
-| 0x4018d0            | 0x4018d0            | PlayTrack           | yes         |
-| 0x401910            | 0x401910            | StopTrack           | yes         |
-| 0x401930            | 0x401930            | CheckTrackDone      | yes         |
-| 0x4019a0            | 0x4019a0            | UpdateTrack         | yes         |
-| 0x401af0            | 0x401af0            | ConvertTrackAudio   | yes         |
-| 0x401be0            | 0x401be0            | CvtStereoAdpcm      | yes         |
-| 0x401e10            | 0x401e10            | CvtMonoAdpcm        | yes         |
-| 0x402000            | 0x402000            | EnumDInputDevs      | yes         |
-| 0x402180            | 0x402180            | ReadJoystick        | yes         |
-| 0x402250            | 0x402250            | GetKeyName          | yes         |
-| 0x402290            | 0x402290            | MapAltKeyboardInput | yes         |
-| 0x4023e0            | 0x4023e0            | MapKeyboardInput    | yes         |
-| 0x402610            | 0x402610            | InitDInput          | yes         |
-| 0x402790            | 0x402790            | FiniDInput          | yes         |
-| 0x402810            | 0x402810            | ReadKbdDInput       | yes         |
-| 0x4028a0            | 0x4028a0            | ReadKbdWinMsg       | yes         |
-| 0x402fd0            | 0x402fd0            | PadStartCom         | yes         |
-| 0x402fe0            | 0x402fe0            | PadGetState         | yes         |
-| [^3]                | [^3]                | PadInfoMode         | yes         |
-| [^3]                | [^3]                | PadSetActAlign      | yes         |
-| [^3]                | [^3]                | PadSetMainMode      | yes         |
-| [^2]                | [^2]                | PadSetAct           | yes         |
-| 0x402ff0            | 0x402ff0            | PadInitDirect       | yes         |
-| 0x403010            | 0x403010            | MapJoystickInput    | yes         |
-| 0x403210            | 0x403210            | GetPressedButton    | yes         |
-| 0x403260            | 0x403260            | GetButtonName       | yes         |
-| 0x4055d0            | 0x4055d0            | ConPrintf           | yes         |
-| 0x405640            | 0x405640            | ShowRetryDialog     | yes         |
-| 0x4056c0            | 0x4056c0            | FsOpen              | yes         |
-| 0x405760            | 0x405760            | FsFOpen             | yes         |
-| 0x405800            | 0x405800            | FsSeek              | yes         |
-| 0x405820            | 0x405820            | FsRead              | yes         |
-| 0x405840            | 0x405840            | FsClose             | yes         |
-| 0x405850            | 0x405850            | FsFindRoot          | yes         |
-| 0x4079e0            | 0x4079c0            | SquareRoot0         | yes         |
-| 0x407a00            | 0x4079e0            | ratan2              | yes         |
-| 0x407a30            | 0x407a10            | rcos                | yes         |
-| 0x407a50            | 0x407a30            | rsin                | yes         |
-| 0x407a70            | 0x407a50            | RotMatrix           | yes         |
-| 0x407b10            | 0x407af0            | RotMatrixYXZ        | yes         |
-| 0x407bb0            | 0x407b90            | RotMatrixZYX        | yes         |
-| 0x407c50            | 0x407c30            | RotMatrixX          | yes         |
-| 0x407dc0            | 0x407da0            | RotMatrixY          | yes         |
-| 0x407f20            | 0x407f00            | RotMatrixZ          | yes         |
-| 0x408080            | 0x408060            | ScaleMatrix         | yes         |
-| 0x408120            | 0x408100            | TransMatrix         | yes         |
-| 0x408140            | 0x408120            | ApplyMatrix         | yes         |
-| 0x4081e0            | 0x4081c0            | ApplyMatrixSV       | yes         |
-| 0x408280            | 0x408260            | ApplyMatrixLV       | yes         |
-| 0x408310            | 0x4082f0            | MulMatrix0          | yes         |
-| 0x4084b0            | 0x408490            | MulMatrix2          | yes         |
-| 0x408660            | 0x408640            | MulMatrix2_0        | yes         |
-| 0x4086b0            | 0x408690            | CompMatrixLV        | yes         |
-| 0x4088d0            | 0x4088b0            | CompMatrix2LV       | yes         |
-| 0x408a40            | 0x408a20            | IdentMatrix         | yes         |
-| 0x408a80            | 0x408a60            | gte_ApplyMatrix     | yes         |
-| 0x408b20            | 0x408b00            | gte_ApplyMatrixSV   | yes         |
-| 0x408bc0            | 0x408ba0            | Square0             | yes         |
-| 0x409a40            | 0x409a10            | WriteConfig         | yes         |
-| 0x409ac0            | 0x409a90            | SetConfigDefaults   | yes         |
-| 0x409ce0            | 0x409c80            | SaveAltConfig       | yes         |
-| 0x409d00            | 0x409ca0            | LoadAltConfig       | yes         |
-| 0x409d20            | 0x409cc0            | ReadConfig          | yes         |
-| 0x40cd80            | 0x40cd20            | GsSetProjection     | no          |
-| 0x40cdc0            | 0x40cd60            | GsMapModelingData   | no          |
-| 0x40ce90            | 0x40ce30            | GsInitCoordinate2   | no          |
-| 0x40cf10            | 0x40ceb0            | GsSetRefView2L      | no          |
-| 0x40df80            | 0x40df20            | SetGLPixelFormat    | yes         |
-| 0x40e0b0            | 0x40e050            | TestGL              | yes         |
-| 0x40e210            | 0x40e1b0            | UnloadGL            | yes         |
-| 0x4489c0            | 0x448850            | AllocListNode       | yes         |
-| 0x448a00            | 0x448890            | InitListPool        | yes         |
-| 0x448a40            | 0x4488d0            | RemoveListNode      | yes         |
-| 0x448a90            | 0x448920            | ClearList           | yes         |
-| 0x448ac0            | 0x448950            | AppendListNode      | yes         |
-| 0x44fdd0            | 0x44fc30            | malloc              | no[^1]      |
-| 0x44ff10            | 0x44fd70            | free                | no[^1]      |
-| 0x44ff60            | 0x44fd60            | _lseek              | no[^1]      |
-| 0x450020            | 0x44fe80            | _read               | no[^1]      |
-| 0x450370            | 0x4501d0            | fseek               | no[^1]      |
-| 0x450410            | 0x450270            | ftell               | no[^1]      |
-| 0x4506a0            | 0x450500            | fclose              | no[^1]      |
-| 0x450760            | 0x4505c0            | fwrite              | no[^1]      |
-| 0x4508e0            | 0x450740            | fopen               | no[^1]      |
-| 0x450a90            | 0x4508f0            | fread               | no[^1]      |
-| 0x4513d0            | 0x451230            | _close              | no[^1]      |
-| 0x458620            | 0x458480            | _open               | no[^1]      |
+| name                  | PC v1.0 addr | PC v1.6 addr | PSX US addr  | group | subgroup | decompiled? |
+|-----------------------|--------------|--------------|--------------|-------|----------|-------------|
+| `InitTrack`           | 0x401000     | 0x401000     | ?            | misc  | track    | yes         |
+| `FiniTrack`           | 0x401330     | 0x401330     | ?            | misc  | track    | yes         |
+| `SetTrackSource`      | 0x4013c0     | 0x4013c0     | ?            | misc  | track    | yes         |
+| `ResetTrack`          | 0x401490     | 0x401490     | ?            | misc  | track    | yes         |
+| `RefillTrackBuffer`   | 0x4014f0     | 0x4014f0     | ?            | misc  | track    | yes         |
+| `PlayTrack`           | 0x4018d0     | 0x4018d0     | ?            | misc  | track    | yes         |
+| `StopTrack`           | 0x401910     | 0x401910     | ?            | misc  | track    | yes         |
+| `CheckTrackDone`      | 0x401930     | 0x401930     | ?            | misc  | track    | yes         |
+| `UpdateTrack`         | 0x4019a0     | 0x4019a0     | ?            | misc  | track    | yes         |
+| `ConvertTrackAudio`   | 0x401af0     | 0x401af0     | ?            | misc  | track    | yes         |
+| `CvtStereoAdpcm`      | 0x401be0     | 0x401be0     | ?            | misc  | track    | yes         |
+| `CvtMonoAdpcm`        | 0x401e10     | 0x401e10     | ?            | misc  | track    | yes         |
+| `EnumDInputDevs`      | 0x402000     | 0x402000     |              | port  | pad      | yes         |
+| `ReadJoystick`        | 0x402180     | 0x402180     |              | port  | pad      | yes         |
+| `GetKeyName`          | 0x402250     | 0x402250     |              | port  | pad      | yes         |
+| `MapAltKeyboardInput` | 0x402290     | 0x402290     |              | port  | pad      | yes         |
+| `MapKeyboardInput`    | 0x4023e0     | 0x4023e0     |              | port  | pad      | yes         |
+| `InitDInput`          | 0x402610     | 0x402610     |              | port  | pad      | yes         |
+| `FiniDInput`          | 0x402790     | 0x402790     |              | port  | pad      | yes         |
+| `ReadKbdDInput`       | 0x402810     | 0x402810     |              | port  | pad      | yes         |
+| `ReadKbdWinMsg`       | 0x4028a0     | 0x4028a0     |              | port  | pad      | yes         |
+| `PadStartCom`         | 0x402fd0     | 0x402fd0     | 0x8005714c   | sdk   | pad      | yes         |
+| `PadGetState`         | 0x402fe0     | 0x402fe0     | 0x800571d8   | sdk   | pad      | yes         |
+| `PadInfoMode`         | none[^null]  | none[^null]  | 0x800572a4   | sdk   | pad      | yes         |
+| `PadSetActAlign`      | none[^null]  | none[^null]  | 0x80057518   | sdk   | pad      | yes         |
+| `PadSetMainMode`      | none[^null]  | none[^null]  | 0x80057550   | sdk   | pad      | yes         |
+| `PadSetAct`           | none[^ret0]  | none[^ret0]  | 0x80057598   | sdk   | pad      | yes         |
+| `PadInitDirect`       | 0x402ff0     | 0x402ff0     | 0x8005960c   | sdk   | pad      | yes         |
+| `MapJoystickInput`    | 0x403010     | 0x403010     |              | port  | pad      | yes         |
+| `GetPressedButton`    | 0x403210     | 0x403210     |              | port  | pad      | yes         |
+| `GetButtonName`       | 0x403260     | 0x403260     |              | port  | pad      | yes         |
+| `ConPrintf`           | 0x4055d0     | 0x4055d0     |              | port  | misc     | yes         |
+| `ShowRetryDialog`     | 0x405640     | 0x405640     |              | port  | misc     | yes         |
+| `FsOpen`              | 0x4056c0     | 0x4056c0     | ?            | misc  | fs       | yes         |
+| `FsFOpen`             | 0x405760     | 0x405760     | ?            | misc  | fs       | yes         |
+| `FsSeek`              | 0x405800     | 0x405800     | ?            | misc  | fs       | yes         |
+| `FsRead`              | 0x405820     | 0x405820     | ?            | misc  | fs       | yes         |
+| `FsClose`             | 0x405840     | 0x405840     | ?            | misc  | fs       | yes         |
+| `FsFindRoot`          | 0x405850     | 0x405850     | ?            | misc  | fs       | yes         |
+| `SquareRoot0`         | 0x4079e0     | 0x4079c0     | 0x8004f72c   | sdk   | gte      | yes         |
+| `ratan2`              | 0x407a00     | 0x4079e0     | 0x800508dc   | sdk   | gte      | yes         |
+| `rcos`                | 0x407a30     | 0x407a10     | 0x8004f5fc   | sdk   | gte      | yes         |
+| `rsin`                | 0x407a50     | 0x407a30     | 0x8004f52c   | sdk   | gte      | yes         |
+| `RotMatrix`           | 0x407a70     | 0x407a50     | 0x8004fc4c   | sdk   | gte      | yes         |
+| `RotMatrixYXZ`        | 0x407b10     | 0x407af0     | 0x8004fedc   | sdk   | gte      | yes         |
+| `RotMatrixZYX`        | 0x407bb0     | 0x407b90     | 0x8005016c   | sdk   | gte      | yes         |
+| `RotMatrixX`          | 0x407c50     | 0x407c30     | 0x800503fc   | sdk   | gte      | yes         |
+| `RotMatrixY`          | 0x407dc0     | 0x407da0     | 0x8005059c   | sdk   | gte      | yes         |
+| `RotMatrixZ`          | 0x407f20     | 0x407f00     | 0x8005073c   | sdk   | gte      | yes         |
+| `ScaleMatrix`         | 0x408080     | 0x408060     | 0x8004fb0c   | sdk   | gte      | yes         |
+| `TransMatrix`         | 0x408120     | 0x408100     | 0x8004fadc   | sdk   | gte      | yes         |
+| `ApplyMatrix`         | 0x408140     | 0x408120     | 0x8004fa2c   | sdk   | gte      | yes         |
+| `ApplyMatrixSV`       | 0x4081e0     | 0x4081c0     | 0x8004fa7c   | sdk   | gte      | yes         |
+| `ApplyMatrixLV`       | 0x408280     | 0x408260     | 0x8004f7bc   | sdk   | gte      | yes         |
+| `MulMatrix0`          | 0x408310     | 0x4082f0     | 0x8005556c   | sdk   | gte      | yes         |
+| `MulMatrix2`          | 0x4084b0     | 0x408490     | 0x8004f91c   | sdk   | gte      | yes         |
+| `MulMatrix2_0`        | 0x408660     | 0x408640     |              | port  | gte      | yes         |
+| `CompMatrixLV`        | 0x4086b0     | 0x408690     | ?            | sdk   | gte      | yes         |
+| `CompMatrix2LV`       | 0x4088d0     | 0x4088b0     |              | port  | gte      | yes         |
+| `IdentMatrix`         | 0x408a40     | 0x408a20     |              | port  | gte      | yes         |
+| `gte_ApplyMatrix`     | 0x408a80     | 0x408a60     | none[^macro] | sdk   | gte      | yes         |
+| `gte_ApplyMatrixSV`   | 0x408b20     | 0x408b00     | none[^macro] | sdk   | gte      | yes         |
+| `Square0`             | 0x408bc0     | 0x408ba0     | 0x80056ef4   | sdk   | gte      | yes         |
+| `WriteConfig`         | 0x409a40     | 0x409a10     | ?            | misc  | cfg      | yes         |
+| `SetConfigDefaults`   | 0x409ac0     | 0x409a90     | ?            | misc  | cfg      | yes         |
+| `SaveAltConfig`       | 0x409ce0     | 0x409c80     | ?            | misc  | cfg      | yes         |
+| `LoadAltConfig`       | 0x409d00     | 0x409ca0     | ?            | misc  | cfg      | yes         |
+| `ReadConfig`          | 0x409d20     | 0x409cc0     | ?            | misc  | cfg      | yes         |
+| `GsSetProjection`     | 0x40cd80     | 0x40cd20     | 0x80055afc   | sdk   | gs       | no          |
+| `GsMapModelingData`   | 0x40cdc0     | 0x40cd60     | 0x80055a8c   | sdk   | gs       | no          |
+| `GsInitCoordinate2`   | 0x40ce90     | 0x40ce30     | 0x800551ac   | sdk   | gs       | no          |
+| `GsSetRefView2L`      | 0x40cf10     | 0x40ceb0     | 0x8005661c   | sdk   | gs       | no          |
+| `SetGLPixelFormat`    | 0x40df80     | 0x40df20     |              | port  | rogl     | yes         |
+| `TestGL`              | 0x40e0b0     | 0x40e050     |              | port  | rogl     | yes         |
+| `UnloadGL`            | 0x40e210     | 0x40e1b0     |              | port  | rogl     | yes         |
+| `AllocListNode`       | 0x4489c0     | 0x448850     | 0x80036204   | game  | list     | yes         |
+| `InitListPool`        | 0x448a00     | 0x448890     | 0x80036250   | game  | list     | yes         |
+| `RemoveListNode`      | 0x448a40     | 0x4488d0     | 0x800362d0   | game  | list     | yes         |
+| `ClearList`           | 0x448a90     | 0x448920     | 0x80036350   | game  | list     | yes         |
+| `AppendListNode`      | 0x448ac0     | 0x448950     | 0x8003638c   | game  | list     | yes         |
+| `malloc`              | 0x44fdd0     | 0x44fc30     |              | crt   | crt      | no[^crt]    |
+| `free`                | 0x44ff10     | 0x44fd70     |              | crt   | crt      | no[^crt]    |
+| `_lseek`              | 0x44ff60     | 0x44fd60     |              | crt   | crt      | no[^crt]    |
+| `_read`               | 0x450020     | 0x44fe80     |              | crt   | crt      | no[^crt]    |
+| `fseek`               | 0x450370     | 0x4501d0     |              | crt   | crt      | no[^crt]    |
+| `ftell`               | 0x450410     | 0x450270     |              | crt   | crt      | no[^crt]    |
+| `fclose`              | 0x4506a0     | 0x450500     |              | crt   | crt      | no[^crt]    |
+| `fwrite`              | 0x450760     | 0x4505c0     |              | crt   | crt      | no[^crt]    |
+| `fopen`               | 0x4508e0     | 0x450740     |              | crt   | crt      | no[^crt]    |
+| `fread`               | 0x450a90     | 0x4508f0     |              | crt   | crt      | no[^crt]    |
+| `_close`              | 0x4513d0     | 0x451230     |              | crt   | crt      | no[^crt]    |
+| `_open`               | 0x458620     | 0x458480     |              | crt   | crt      | no[^crt]    |
 
-[^1]: C runtime function; will not be decompiled
-[^2]: all functions that do nothing have the same address
-[^3]: all functions that just return 0 have the same address
+[^null]: all functions that do nothing have the same address in PC versions
+[^ret0]: all functions that just return 0 have the same address in PC versions
+[^macro]: macro in the Psy-Q SDK, implemented as a function for PC port
+[^crt]: C runtime function; will not be decompiled
