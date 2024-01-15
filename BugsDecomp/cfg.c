@@ -8,7 +8,7 @@
 #include "rogl.h"
 
 
-void WriteConfig()
+void WriteConfig(void)
 {
     char path[MAX_PATH];
 
@@ -143,17 +143,17 @@ void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
     }
 }
 
-void SaveAltConfig()
+void SaveAltConfig(void)
 {
     altConfig = config;
 }
 
-void LoadAltConfig()
+void LoadAltConfig(void)
 {
     config = altConfig;
 }
 
-void ReadConfig()
+void ReadConfig(void)
 {
     char path[MAX_PATH];
 
