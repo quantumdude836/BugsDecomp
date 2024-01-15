@@ -51,13 +51,13 @@
     <ClCompile Include="stdafx_c.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input.c">
-      <Filter>Source Files\Bugs</Filter>
-    </ClCompile>
     <ClCompile Include="rogl.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
     <ClCompile Include="list.c">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
+    <ClCompile Include="pad.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,9 +92,6 @@
     <ClInclude Include="track.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>Header Files\Bugs</Filter>
-    </ClInclude>
     <ClInclude Include="rogl.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
@@ -103,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="scancodes.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pad.h">
+      <Filter>Header Files\Bugs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

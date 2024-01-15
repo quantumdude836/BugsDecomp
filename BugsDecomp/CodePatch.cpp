@@ -9,7 +9,7 @@
 #include "crt.h"
 #include "fs.h"
 #include "gte.h"
-#include "input.h"
+#include "pad.h"
 #include "misc.h"
 #include "list.h"
 #include "rogl.h"

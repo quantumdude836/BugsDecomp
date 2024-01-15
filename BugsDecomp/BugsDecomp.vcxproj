@@ -114,15 +114,15 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
-    <ClCompile Include="input.c">
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
-    </ClCompile>
     <ClCompile Include="misc.c">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <ClCompile Include="list.c">
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <ClCompile Include="pad.c">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
@@ -155,9 +155,9 @@
     <ClInclude Include="fs.h" />
     <ClInclude Include="GameVersion.h" />
     <ClInclude Include="gte.h" />
-    <ClInclude Include="input.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="list.h" />
+    <ClInclude Include="pad.h" />
     <ClInclude Include="rogl.h" />
     <ClInclude Include="scancodes.h" />
     <ClInclude Include="stdafx.h" />

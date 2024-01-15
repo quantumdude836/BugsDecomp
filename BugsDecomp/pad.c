@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 #include "common.h"
-#include "input.h"
+#include "pad.h"
 #include "cfg.h"
 #include "misc.h"
 #include "scancodes.h"
