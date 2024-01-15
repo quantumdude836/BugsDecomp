@@ -12,6 +12,7 @@
 #include "list.h"
 #include "misc.h"
 #include "pad.h"
+#include "pad_prv.h"
 #include "rogl.h"
 #include "track.h"
 #include "track_prv.h"

@@ -2,21 +2,10 @@
 #include "stdafx.h"
 #include "common.h"
 #include "pad.h"
+#include "pad_prv.h"
 #include "cfg.h"
 #include "misc.h"
 #include "scancodes.h"
-
-
-// used for GetKeyName
-typedef struct KEY_INFO
-{
-    char name[32];
-    int scancode;
-} KEY_INFO;
-
-
-// keyboard reader function pointer
-typedef void (*KBD_READ_FN)(void);
 
 
 // DirectInput data formats
