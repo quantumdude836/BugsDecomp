@@ -9,9 +9,9 @@
 #include "crt.h"
 #include "fs.h"
 #include "gte.h"
-#include "pad.h"
-#include "misc.h"
 #include "list.h"
+#include "misc.h"
+#include "pad.h"
 #include "rogl.h"
 #include "track.h"
 
