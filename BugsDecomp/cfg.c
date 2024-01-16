@@ -6,6 +6,7 @@
 #include "fs.h"
 #include "misc.h"
 #include "rogl.h"
+#include "scancodes.h"
 
 
 void WriteConfig(void)
@@ -106,22 +107,22 @@ void SetConfigDefaults(BYTE flags, CONFIG_PC *cfg)
 
     if (flags & CFG_DEF_KBDMAP)
     {
-        cfg->kbdMap[0] = 0xc8; // up arrow
-        cfg->kbdMap[1] = 0xd0; // down arrow
-        cfg->kbdMap[2] = 0xcd; // right arrow
-        cfg->kbdMap[3] = 0xcb; // left arrow
-        cfg->kbdMap[4] = 0x10; // Q
-        cfg->kbdMap[5] = 0x11; // W
-        cfg->kbdMap[6] = 0x12; // E
-        cfg->kbdMap[7] = 0x13; // R
-        cfg->kbdMap[8] = 0x1e; // A
-        cfg->kbdMap[9] = 0x1f; // S
-        cfg->kbdMap[10] = 0x20; // D
-        cfg->kbdMap[11] = 0x21; // F
-        cfg->kbdMap[12] = 0x0f; // tab?
-        cfg->kbdMap[13] = 0x1c; // enter?
-        cfg->kbdMap[14] = 0x0f; // tab?
-        cfg->kbdMap[15] = 0x1c; // enter?
+        cfg->kbdMap[0] = SK_UP;
+        cfg->kbdMap[1] = SK_DOWN;
+        cfg->kbdMap[2] = SK_RIGHT;
+        cfg->kbdMap[3] = SK_LEFT;
+        cfg->kbdMap[4] = SK_Q;
+        cfg->kbdMap[5] = SK_W;
+        cfg->kbdMap[6] = SK_E;
+        cfg->kbdMap[7] = SK_R;
+        cfg->kbdMap[8] = SK_A;
+        cfg->kbdMap[9] = SK_S;
+        cfg->kbdMap[10] = SK_D;
+        cfg->kbdMap[11] = SK_F;
+        cfg->kbdMap[12] = SK_TAB;
+        cfg->kbdMap[13] = SK_RETURN;
+        cfg->kbdMap[14] = SK_TAB;
+        cfg->kbdMap[15] = SK_RETURN;
     }
 
     if (flags & CFG_DEF_SOUND)
