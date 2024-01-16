@@ -50,3 +50,14 @@ std::optional<GameVersion> detectVersion()
 
     return *cachedVer;
 }
+
+
+extern "C" bool is_1_0()
+{
+    return *detectVersion() == GameVersion::Version1_0;
+}
+
+extern "C" bool is_1_6()
+{
+    return *detectVersion() == GameVersion::Version1_6;
+}
