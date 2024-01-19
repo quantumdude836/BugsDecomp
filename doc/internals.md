@@ -162,51 +162,51 @@ renderer options)
 | 1   | `loading`  | generic LS (Loading Screen)                                          |
 | 2   | `language` | file does not exist; language select                                 |
 | 3   | `ls01`     | time period select                                                   |
-| 4   | `l01a`     | _Wabbit on the run!_                                                 |
-| 5   | `l01b`     | _Wabbit on the run!_                                                 |
+| 4   | `l01a`     | _Wabbit on the run!_; _Dinosaur Mountain_; level start               |
+| 5   | `l01b`     | _Wabbit on the run!_; _Pterodactyl Cliff_; level end                 |
 | 6   | `l01c`     | _Guess who needs a kick start_                                       |
-| 7   | `l01d1`    | _Magic Hare Blower_                                                  |
-| 8   | `l01d2`    | _Magic Hare Blower_                                                  |
-| 9   | `l02a1`    | _What's cookin', Doc?_                                               |
-| 10  | `l02a2`    | _What's cookin', Doc?_                                               |
-| 11  | `l02a3`    | _What's cookin', Doc?_                                               |
-| 12  | `l02a4`    | _What's cookin', Doc?_                                               |
-| 13  | `l02a5`    | _What's cookin', Doc?_                                               |
-| 14  | `l02a6`    | _What's cookin', Doc?_                                               |
-| 15  | `l02b1`    | _"Witch" way to Albuquerque?_                                        |
-| 16  | `l02b2`    | _"Witch" way to Albuquerque?_                                        |
-| 17  | `l02c1`    | _The Carrot-henge Mystery_                                           |
-| 18  | `l02c2`    | _The Carrot-henge Mystery_                                           |
-| 19  | `l02c3`    | _The Carrot-henge Mystery_                                           |
-| 20  | `l02c4`    | _The Carrot-henge Mystery_                                           |
-| 21  | `l03a`     | _Hey... What's up, Dock?_                                            |
-| 22  | `l03acom`  | _Hey... What's up, Dock?_                                            |
-| 23  | `l03a2`    | _Hey... What's up, Dock?_                                            |
+| 7   | `l01d1`    | _Magic Hare Blower_; _Dinosaur Mountain_; level start                |
+| 8   | `l01d2`    | _Magic Hare Blower_; _Pterodactyl Cliff_; level end                  |
+| 9   | `l02a1`    | _What's cookin', Doc?_; _King's Fields_; level start                 |
+| 10  | `l02a2`    | _What's cookin', Doc?_; _Royal Square_/_Spiral Tower_                |
+| 11  | `l02a3`    | _What's cookin', Doc?_; _Royal Apple Tree Gardens_                   |
+| 12  | `l02a4`    | _What's cookin', Doc?_; _Ramparts_                                   |
+| 13  | `l02a5`    | _What's cookin', Doc?_; _Forgotten Woods_                            |
+| 14  | `l02a6`    | _What's cookin', Doc?_; level end                                    |
+| 15  | `l02b1`    | _"Witch" way to Albuquerque?_; _Hazel's Hill_; level start           |
+| 16  | `l02b2`    | _"Witch" way to Albuquerque?_; _Windmill Road_; level end            |
+| 17  | `l02c1`    | _The Carrot-henge Mystery_; _Frozen Duck valley_; level start        |
+| 18  | `l02c2`    | _The Carrot-henge Mystery_; _Carrot-henge_                           |
+| 19  | `l02c3`    | _The Carrot-henge Mystery_; _Robin Duck's Lair_/_Slide Hare_         |
+| 20  | `l02c4`    | _The Carrot-henge Mystery_; _Zee Cavern_/_Raquette Hare!_            |
+| 21  | `l03a`     | _Hey... What's up, Dock?_; _The Docks_; level start                  |
+| 22  | `l03acom`  | _Hey... What's up, Dock?_; level end                                 |
+| 23  | `l03a2`    | _Hey... What's up, Dock?_; _Shark Islands_                           |
 | 24  | `l03b`     | _When Sam met Bunny_                                                 |
-| 25  | `l03c`     | _Mine or mine?_                                                      |
-| 26  | `l03c1`    | _Mine or mine?_                                                      |
-| 27  | `l03c2`    | _Mine or mine?_                                                      |
+| 25  | `l03c`     | _Mine or mine?_; _Pirate's Cove_; level start                        |
+| 26  | `l03c1`    | _Mine or mine?_; _Sam' S Mine. No Tresspassers!_                     |
+| 27  | `l03c2`    | _Mine or mine?_; level end                                           |
 | 28  | `l03d1`    | _Follow the Red Pirate Road_                                         |
-| 29  | `l04a1`    | _The Big Bank Withdrawal_                                            |
-| 30  | `l04a2`    | _The Big Bank Withdrawal_                                            |
-| 31  | `l04a3`    | _The Big Bank Withdrawal_                                            |
-| 32  | `l04b1`    | _The Greatest Escape_                                                |
-| 33  | `l04b2`    | _The Greatest Escape_                                                |
-| 34  | `l04b3`    | _The Greatest Escape_                                                |
-| 35  | `l04c1`    | _The Carrot Factory_                                                 |
-| 36  | `l04c2`    | _The Carrot Factory_                                                 |
-| 37  | `l04c3`    | _The Carrot Factory_                                                 |
-| 38  | `l04d1`    | _The Carrot Factory_                                                 |
-| 39  | `l04d2`    | _The Carrot Factory_                                                 |
-| 40  | `l04e`     | _Objects in the mirror are closer than they appear!_                 |
-| 41  | `l04e2`    | _Objects in the mirror are closer than they appear!_                 |
-| 42  | `l05a1`    | _The Planet X File!_                                                 |
-| 43  | `l05a2`    | _The Planet X File!_                                                 |
-| 44  | `l05a3a`   | _Train your Brain!_                                                  |
-| 45  | `l05a3b`   | _Train your Brain!_                                                  |
-| 46  | `l05a3c`   | _Train your Brain!_                                                  |
-| 47  | `l05a4`    | _Train your Brain!_                                                  |
-| 48  | `l05a5`    | _The Planet X File!_                                                 |
+| 29  | `l04a1`    | _The Big Bank Withdrawal_; _Bank Basement_; level start              |
+| 30  | `l04a2`    | _The Big Bank Withdrawal_; _Inside the Bank_                         |
+| 31  | `l04a3`    | _The Big Bank Withdrawal_; _Bank Rooftop_; level end                 |
+| 32  | `l04b1`    | _The Greatest Escape_; _Hotel Hall_; level start                     |
+| 33  | `l04b2`    | _The Greatest Escape_; _First Floor_/_Second Floor_                  |
+| 34  | `l04b3`    | _The Greatest Escape_; _Hotel Rooftop_; level end                    |
+| 35  | `l04c1`    | _The Carrot Factory_; _Carrot Steamer_; level start                  |
+| 36  | `l04c2`    | _The Carrot Factory_; _Carrot Packers_                               |
+| 37  | `l04c3`    | _The Carrot Factory_; _Expedition Room_; level end                   |
+| 38  | `l04d1`    | _The Carrot Factory_; _Warehouse 1_                                  |
+| 39  | `l04d2`    | _The Carrot Factory_; _Warehouse 2_                                  |
+| 40  | `l04e`     | _Objects in the mirror are closer than they appear!_; level start    |
+| 41  | `l04e2`    | _Objects in the mirror are closer than they appear!_; level end      |
+| 42  | `l05a1`    | _The Planet X File!_; _Space Base, AREA 1_; level start              |
+| 43  | `l05a2`    | _The Planet X File!_; _Space Base, AREA 4_                           |
+| 44  | `l05a3a`   | _Train your Brain!_; _Neuronal Synaptal Network_; level start        |
+| 45  | `l05a3b`   | _Train your Brain!_; _Hare Dance_                                    |
+| 46  | `l05a3c`   | _Train your Brain!_; _ACME Mind_                                     |
+| 47  | `l05a4`    | _Train your Brain!_; bike race; level end                            |
+| 48  | `l05a5`    | _The Planet X File!_; _Space Modulator_; level end                   |
 | 49  | `l05b1`    | _The Conquest for Planet X!_                                         |
 | 50  | `l05c`     | _Vort "X" Room_                                                      |
 | 51  | `merlin`   | _Nowhere_                                                            |
