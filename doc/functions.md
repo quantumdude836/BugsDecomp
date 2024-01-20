@@ -67,11 +67,11 @@ game versions, including PSX (US):
 | `gte_ApplyMatrix`     | 0x408a80     | 0x408a60     | none[^macro] | sdk   | gte      | yes         |
 | `gte_ApplyMatrixSV`   | 0x408b20     | 0x408b00     | none[^macro] | sdk   | gte      | yes         |
 | `Square0`             | 0x408bc0     | 0x408ba0     | 0x80056ef4   | sdk   | gte      | yes         |
-| `WriteConfig`         | 0x409a40     | 0x409a10     | ?            | misc  | cfg      | yes         |
-| `SetConfigDefaults`   | 0x409ac0     | 0x409a90     | ?            | misc  | cfg      | yes         |
-| `SaveAltConfig`       | 0x409ce0     | 0x409c80     | ?            | misc  | cfg      | yes         |
-| `LoadAltConfig`       | 0x409d00     | 0x409ca0     | ?            | misc  | cfg      | yes         |
-| `ReadConfig`          | 0x409d20     | 0x409cc0     | ?            | misc  | cfg      | yes         |
+| `WriteConfig`         | 0x409a40     | 0x409a10     |              | port  | cfg      | yes         |
+| `SetConfigDefaults`   | 0x409ac0     | 0x409a90     |              | port  | cfg      | yes         |
+| `SaveAltConfig`       | 0x409ce0     | 0x409c80     |              | port  | cfg      | yes         |
+| `LoadAltConfig`       | 0x409d00     | 0x409ca0     |              | port  | cfg      | yes         |
+| `ReadConfig`          | 0x409d20     | 0x409cc0     |              | port  | cfg      | yes         |
 | `GsSetProjection`     | 0x40cd80     | 0x40cd20     | 0x80055afc   | sdk   | gs       | no          |
 | `GsMapModelingData`   | 0x40cdc0     | 0x40cd60     | 0x80055a8c   | sdk   | gs       | no          |
 | `GsInitCoordinate2`   | 0x40ce90     | 0x40ce30     | 0x800551ac   | sdk   | gs       | no          |
