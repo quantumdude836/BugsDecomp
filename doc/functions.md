@@ -82,7 +82,7 @@ game versions, including PSX (US):
 | `AllocListNode`       | 0x4489c0     | 0x448850     | 0x80036204   | game  | list     | yes         |
 | `InitListPool`        | 0x448a00     | 0x448890     | 0x80036250   | game  | list     | yes         |
 | `RemoveListNode`      | 0x448a40     | 0x4488d0     | 0x800362d0   | game  | list     | yes         |
-| `ClearList`           | 0x448a90     | 0x448920     | 0x80036350   | game  | list     | yes         |
+| `ClearList`           | 0x448a90     | 0x448920     | 0x80036358   | game  | list     | yes         |
 | `AppendListNode`      | 0x448ac0     | 0x448950     | 0x8003638c   | game  | list     | yes         |
 | `malloc`              | 0x44fdd0     | 0x44fc30     |              | crt   | crt      | no[^crt]    |
 | `free`                | 0x44ff10     | 0x44fd70     |              | crt   | crt      | no[^crt]    |
