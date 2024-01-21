@@ -46,7 +46,9 @@ to be bugged (relying on an uninitialized variable)
 - /mul`N` - unknown; value scaled by 1/100
 - /gam`N` - unknown; value scaled by 1/100
 
-# config.pc
+# Config Files
+
+## config.pc
 
 This binary file contains the game's settings. It is 128 bytes and is directly
 loaded into memory, so the in-memory structure matches the file layout.
@@ -140,7 +142,7 @@ keyboard map (entries are scancodes):
 | 14    | PSX select    |
 | 15    | PSX start     |
 
-# bugs.ini
+## bugs.ini
 
 This is a simple text file containing `Key=Value` lines. It is mostly used by
 the vanilla launcher (BugsBunny.exe).
@@ -154,7 +156,9 @@ to 0 after first launch
 - CheckGDI - whether to check for OpenGL acceleration (which affects available
 renderer options)
 
-# Level List
+# Levels
+
+## Level List
 
 | ID  | filename   | description                                                          |
 |-----|------------|----------------------------------------------------------------------|
@@ -270,7 +274,7 @@ renderer options)
 | 109 | `screen4`  | file does not exist                                                  |
 | 110 | `screen5`  | file does not exist                                                  |
 
-# Level Format
+## Level Format
 
 The BZE file format is detailed [here](bze.md).
 
@@ -339,3 +343,144 @@ Button map:
 | 13    | right    |
 | 14    | down     |
 | 15    | left     |
+
+# Game Saves
+
+PC game saves are split across multiple files stored in the `bin` directory:
+`Gamedata.dat` and `Gamesave<N>.dat`, where N is the slot number from 1 to 6.
+
+For comparison, the PSX version stores everything in a single memory card block
+with the following frame layout (each frame is 128 bytes):
+
+| frame | usage                    |
+|-------|--------------------------|
+| 0-3   | PSX standard title/icon  |
+| 4-7   | main data (Gamedata.dat) |
+| 8-11  | slot 1 (Gamesave1.dat)   |
+| 12-15 | slot 2 (Gamesave2.dat)   |
+| 16-19 | slot 3 (Gamesave3.dat)   |
+| 20-23 | slot 4 (Gamesave4.dat)   |
+| 24-27 | slot 5 (Gamesave5.dat)   |
+| 28-31 | slot 6 (Gamesave6.dat)   |
+| 32-63 | unused                   |
+
+Each item is less than 512 bytes (aka 4 full frames); for PSX, the remaining
+bytes are undefined/garbage on write, and ignored on read.
+
+## Gamedata.dat
+
+Main save data; 360 bytes. Most of it is unknown/unused.
+
+| offset | type | usage        | notes                      |
+|--------|------|--------------|----------------------------|
+| 0x000  | int  | checksum     | sum of signed bytes        |
+| 0x004  | int  | active slots | bit N = slot (N + 1) valid |
+| 0x008  | SLOT | slot 1       |                            |
+| 0x034  | SLOT | slot 2       |                            |
+| 0x060  | SLOT | slot 3       |                            |
+| 0x08c  | SLOT | slot 4       |                            |
+| 0x0b8  | SLOT | slot 5       |                            |
+| 0x0e4  | SLOT | slot 6       |                            |
+
+The 44-byte SLOT sub-structure contains a summary of the save slot:
+
+| offset | type  | usage               |
+|--------|-------|---------------------|
+| 0x00   | short | golden carrot count |
+| 0x02   | short | clock count         |
+
+## GamesaveN.dat
+
+Save data for each slot; 320 bytes. For the PSX version, the active data exists
+in memory at the start of usable RAM (aka 0x80010000); thus the save slot is
+basically a raw dump of the first 320 bytes of this region.
+
+| offset | type      | usage               |
+|--------|-----------|---------------------|
+| 0x00   | int       | current level       |
+| 0x04   | int       | checksum            |
+| 0x08   | short     |                     |
+| 0x0a   | short     |                     |
+| 0x0c   | short     |                     |
+| 0x0e   | short     |                     |
+| 0x10   | short     |                     |
+| 0x12   | short     |                     |
+| 0x14   | short     |                     |
+| 0x16   | short     |                     |
+| 0x18   | short     |                     |
+| 0x1a   | short     |                     |
+| 0x1c   | short     |                     |
+| 0x1e   | short     |                     |
+| 0x20   | short     |                     |
+| 0x22   | short     |                     |
+| 0x24   | short     |                     |
+| 0x26   | short     |                     |
+| 0x28   | short     |                     |
+| 0x2a   | short     |                     |
+| 0x2c   | short     |                     |
+| 0x2e   | short     |                     |
+| 0x30   | short     |                     |
+| 0x32   | short     |                     |
+| 0x34   | short     |                     |
+| 0x36   | short     |                     |
+| 0x38   | short     |                     |
+| 0x3a   | short     |                     |
+| 0x3c   | short     |                     |
+| 0x3e   | short     |                     |
+| 0x40   | byte[256] | level logic globals |
+
+The following table lists known offsets/values in the level logic globals:
+
+| offset | usage                         |
+|--------|-------------------------------|
+| 0x00   |                               |
+| 0x01   | current health (half-carrots) |
+| 0x02   | max health (usually 6)        |
+| 0x03   | total carrot count            |
+| 0x04   |                               |
+| 0x05   | total clock count             |
+| 0x07   | total GC count bits 0-7       |
+| 0x08   |                               |
+| 0x09   |                               |
+| 0x0a   |                               |
+| 0x0b   |                               |
+| 0x0c   |                               |
+| 0x0e   |                               |
+| 0x0f   |                               |
+| 0x10   |                               |
+| 0x11   |                               |
+| 0x25   | current world                 |
+| 0x2d   |                               |
+| 0x30   |                               |
+| 0x31   |                               |
+| 0x32   |                               |
+| 0x33   |                               |
+| 0x36   |                               |
+| 0x8d   |                               |
+| 0x90   |                               |
+| 0x9f   | slot (1-based)                |
+| 0xa5   |                               |
+| 0xa6   |                               |
+| 0xa7   |                               |
+| 0xa8   |                               |
+| 0xb2   | merlin.bze GC bitmask         |
+| 0xb3   | merlin.bze GC bitmask         |
+| 0xb5   | merlin.bze GC count           |
+| 0xb6   |                               |
+| 0xb7   |                               |
+| 0xb8   |                               |
+| 0xb9   |                               |
+| 0xba   |                               |
+| 0xc0   | merlin.bze clock bitmask      |
+| 0xc1   | merlin.bze clock count        |
+| 0xfb   |                               |
+| 0xfc   | total GC count bits 8-15      |
+
+Values for `current world`:
+
+- 1 - _The Stone Age_
+- 2 - _The Medieval Period_
+- 3 - _The Pirate Years_
+- 4 - _The 1930s_
+- 5 - _Dimension X_
+- 6 - _Nowhere_
