@@ -85,3 +85,71 @@ If the item type is 1, then the next byte is copied straight to output.
 
 This section consists of a sequence of tags/"instructions" that tell the game
 how to load assets and build up the world and entities inside it.
+
+# Level Logic
+
+Game logic in each level is built out of logic "items", each of which consists
+of a condition and an action; each condition/action has up to two arguments,
+8/16 bits each, respectively.
+
+The following table lists known condition codes, with arguments A and B (all
+comparisons are unsigned unless otherwise specified):
+
+| code | condition                   |
+|------|-----------------------------|
+| 0x00 | always `true`               |
+| 0x01 | `A == scratch[B]`[^1]       |
+| 0x02 | `A == globals[B]`[^2]       |
+| 0x03 | `A < scratch[B]`            |
+| 0x04 | `A < globals[B]`            |
+| 0x05 | `A <= scratch[B]`           |
+| 0x06 | `A <= globals[B]`           |
+| 0x07 | `A > scratch[B]`            |
+| 0x08 | `A > globals[B]`            |
+| 0x09 | `A >= scratch[B]`           |
+| 0x0a | `A >= globals[B]`           |
+| 0x0f | `scratch[A] == scratch[B]`  |
+| 0x10 | `globals[A] == globals[B]`  |
+| 0x1e | `(A & scratch[B]) != 0`     |
+| 0x1f | `(A & globals[B]) != 0`     |
+| 0x22 | `(A & scratch[B]) == 0`     |
+| 0x23 | `(A & globals[B]) == 0`     |
+| 0x25 | `A != scratch[B]`           |
+| 0x26 | `A != globals[B]`           |
+| 0x27 | same as code 0x22           |
+| 0x28 | same as code 0x23           |
+| 0x2e | same as code 0x01           |
+| 0x2f | same as code 0x02           |
+| 0x31 | action key pressed          |
+| 0x33 | player is stationary        |
+| 0x35 | player is moving            |
+| 0x3d | same as code 0x0f           |
+| 0x3e | same as code 0x10           |
+| 0x3f | `scratch[A] != scratch[B]`  |
+| 0x40 | `globals[A] != globals[B]`  |
+| 0x41 | `scratch[A] < scratch[B]`   |
+| 0x42 | `globals[A] < globals[B]`   |
+| 0x43 | `scratch[A] > scratch[B]`   |
+| 0x44 | `globals[A] > globals[B]`   |
+| 0x46 | signed version of code 0x03 |
+| 0x47 | signed version of code 0x07 |
+| 0x48 | signed version of code 0x41 |
+| 0x49 | signed version of code 0x43 |
+| 0x51 | action key released         |
+| 0x58 | signed version of code 0x04 |
+| 0x59 | signed version of code 0x08 |
+
+The following table lists known action codes, with arguments X and Y:
+
+| code | action                           |
+|------|----------------------------------|
+| 0x00 | do nothing                       |
+| 0x04 | `globals[Y]++`[^3]               |     
+| 0x0c | `globals[Y] |= X`                |
+| 0x17 | `globals[Y]++, globals[X]++`[^3] |
+| 0x30 | give carrot                      |
+
+[^1]: `scratch` refers to a small array of temporary data
+[^2]: `globals` refers to the 256-byte array at the end of GamesaveN.dat
+[^3]: the game has special code to handle the total golden carrot count, which
+is split across two bytes
