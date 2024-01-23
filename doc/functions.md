@@ -79,6 +79,8 @@ game versions, including PSX (US):
 | `SetGLPixelFormat`    | 0x40df80         | 0x40df20         |              | port  | rogl     | yes         |
 | `TestGL`              | 0x40e0b0         | 0x40e050         |              | port  | rogl     | yes         |
 | `UnloadGL`            | 0x40e210         | 0x40e1b0         |              | port  | rogl     | yes         |
+| `TestLogicCond`       | 0x42a850         | 0x42a7d0         | 0x8002f9f8   | game  | logic    | yes         |
+| `RunLogicAction`      | 0x42c760         | 0x42c6d0         | 0x80030ecc   | game  | logic    | yes         |
 | `AllocListNode`       | 0x4489c0         | 0x448850         | 0x80036204   | game  | list     | yes         |
 | `InitListPool`        | 0x448a00         | 0x448890         | 0x80036250   | game  | list     | yes         |
 | `RemoveListNode`      | 0x448a40         | 0x4488d0         | 0x800362d0   | game  | list     | yes         |

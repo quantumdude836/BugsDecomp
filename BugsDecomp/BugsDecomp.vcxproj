@@ -114,6 +114,10 @@
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="logic.c">
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
     <ClCompile Include="misc.c">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)$(TargetName)_c.pch</PrecompiledHeaderOutputFile>
@@ -155,6 +159,8 @@
     <ClInclude Include="fs.h" />
     <ClInclude Include="GameVersion.h" />
     <ClInclude Include="gte.h" />
+    <ClInclude Include="logic.h" />
+    <ClInclude Include="logic_prv.h" />
     <ClInclude Include="misc.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="pad.h" />

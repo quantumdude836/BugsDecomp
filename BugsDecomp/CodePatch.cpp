@@ -10,6 +10,8 @@
 #include "fs.h"
 #include "gte.h"
 #include "list.h"
+#include "logic.h"
+#include "logic_prv.h"
 #include "misc.h"
 #include "pad.h"
 #include "pad_prv.h"

@@ -60,6 +60,9 @@
     <ClCompile Include="pad.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
+    <ClCompile Include="logic.c">
+      <Filter>Source Files\Bugs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -108,6 +111,12 @@
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
     <ClInclude Include="pad_prv.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="logic.h">
+      <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="logic_prv.h">
       <Filter>Header Files\Bugs</Filter>
     </ClInclude>
   </ItemGroup>
