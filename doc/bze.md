@@ -118,8 +118,8 @@ comparisons are unsigned unless otherwise specified):
 | 0x26 | `A != globals[B]`           |
 | 0x27 | same as code 0x22           |
 | 0x28 | same as code 0x23           |
-| 0x2e | same as code 0x01           |
-| 0x2f | same as code 0x02           |
+| 0x2e | `(A ^ scratch[B]) == 0`     |
+| 0x2f | `(A ^ globals[B]) == 0`     |
 | 0x31 | action key pressed          |
 | 0x33 | player is stationary        |
 | 0x35 | player is moving            |
