@@ -22,10 +22,10 @@ ReadKbdDInput,0x402810,0x402810,,port,pad,yes
 ReadKbdWinMsg,0x4028a0,0x4028a0,,port,pad,yes
 PadStartCom,0x402fd0,0x402fd0,0x8005714c,sdk,pad,yes
 PadGetState,0x402fe0,0x402fe0,0x800571d8,sdk,pad,yes
-PadInfoMode,null,null,0x800572a4,sdk,pad,yes
-PadSetActAlign,null,null,0x80057518,sdk,pad,yes
-PadSetMainMode,null,null,0x80057550,sdk,pad,yes
-PadSetAct,ret0,ret0,0x80057598,sdk,pad,yes
+PadInfoMode,0x408a70*,0x408a50*,0x800572a4,sdk,pad,yes
+PadSetActAlign,0x408a70*,0x408a50*,0x80057518,sdk,pad,yes
+PadSetMainMode,0x408a70*,0x408a50*,0x80057550,sdk,pad,yes
+PadSetAct,0x42d400*,0x417010*,0x80057598,sdk,pad,yes
 PadInitDirect,0x402ff0,0x402ff0,0x8005960c,sdk,pad,yes
 MapJoystickInput,0x403010,0x403010,,port,pad,yes
 GetPressedButton,0x403210,0x403210,,port,pad,yes

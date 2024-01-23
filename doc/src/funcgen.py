@@ -1,8 +1,10 @@
 
 
 def check_addr_tags(s):
-    if s in ["null", "ret0", "macro"]:
-        return f"none[^{s}]"
+    if s == "macro":
+        return "none[^macro]"
+    if s.endswith("*"):
+        return f"{s[:-1]}[^merge]"
     return s
 
 def check_decomp_tags(s):
