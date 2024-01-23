@@ -138,15 +138,39 @@ comparisons are unsigned unless otherwise specified):
 | 0x51 | action key released         |
 | 0x58 | signed version of code 0x04 |
 | 0x59 | signed version of code 0x08 |
+| 0x60 | escape key pressed          |
 
 The following table lists known action codes, with arguments X and Y:
 
 | code | action                           |
 |------|----------------------------------|
 | 0x00 | do nothing                       |
-| 0x04 | `globals[Y]++`[^3]               |     
+| 0x03 | `scratch[Y]++`                   |
+| 0x04 | `globals[Y]++`[^3]               |
+| 0x05 | `scratch[Y]--`                   |
+| 0x06 | `globals[Y]--`[^3]               |
+| 0x07 | `scratch[Y] = 0`                 |
+| 0x08 | `globals[Y] = 0`                 |
+| 0x09 | `scratch[Y] = -scratch[Y]`       |
+| 0x0a | `globals[Y] = -globals[Y]`       |
+| 0x0b | `scratch[Y] |= X`                |
 | 0x0c | `globals[Y] |= X`                |
+| 0x0d | `scratch[Y] &= X`                |
+| 0x0e | `globals[Y] &= X`                |
+| 0x0f | `scratch[Y] = rand() % X`        |
+| 0x10 | `globals[Y] = rand() % X`        |
+| 0x12 | `scratch[Y] = X`                 |
+| 0x13 | `globals[Y] = X`                 |
+| 0x14 | `scratch[Y] = scratch[X]`        |
+| 0x15 | `globals[Y] = globals[X]`        |
+| 0x16 | `scratch[Y]++, scratch[X]++`     |
 | 0x17 | `globals[Y]++, globals[X]++`[^3] |
+| 0x1b | `globals[Y] = scratch[X]`        |
+| 0x1c | `scratch[Y] = globals[X]`        |
+| 0x24 | `scratch[Y] += X`                |
+| 0x25 | `globals[Y] += X`[^3]            |
+| 0x27 | `scratch[Y] -= X`                |
+| 0x28 | `globals[Y] -= X`[^3]            |
 | 0x30 | give carrot                      |
 
 [^1]: `scratch` refers to a small array of temporary data
