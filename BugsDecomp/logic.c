@@ -22,6 +22,29 @@
 #define GLOBALS (gameData->logicGlobals)
 
 
+// helper for dealing with 2-byte golden carrot count
+
+static inline void AddGlobal(WORD offset, WORD adj)
+{
+    // targeting the total GCs?
+    if (offset == 0x07)
+    {
+        // read bytes and merge
+        WORD gcTotal = (GLOBALS[0xfc] << 8) | GLOBALS[0x07];
+        // adjust value
+        gcTotal += adj;
+        // split bytes and write
+        GLOBALS[0x07] = gcTotal & 0xff;
+        GLOBALS[0xfc] = gcTotal >> 8;
+    }
+    else
+    {
+        // just adjust the byte
+        GLOBALS[offset] += adj;
+    }
+}
+
+
 BOOL TestLogicCond(void *ent, const LOGIC_ITEM *item)
 {
     if (item->condCode < ARRAYSIZE(condTable))
@@ -233,4 +256,157 @@ void RunLogicAction(void *ent, const LOGIC_ITEM *item)
 {
     if (item->actionCode < ARRAYSIZE(actionTable))
         actionTable[item->actionCode](ent, item);
+}
+
+void ActionNop(void *ent, const LOGIC_ITEM *item)
+{
+}
+
+void ActionIncs(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2]++;
+}
+
+void ActionIncg(void *ent, const LOGIC_ITEM *item)
+{
+    AddGlobal(item->actionArg2, 1);
+}
+
+void ActionMovsi(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] = (BYTE)item->actionArg1;
+}
+
+void ActionMovgi(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] = (BYTE)item->actionArg1;
+}
+
+void ActionDecs(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2]--;
+}
+
+void ActionDecg(void *ent, const LOGIC_ITEM *item)
+{
+    AddGlobal(item->actionArg2, -1);
+}
+
+void ActionClrs(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] = 0;
+}
+
+void ActionClrg(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] = 0;
+}
+
+void ActionNegs(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] *= -1;
+}
+
+void ActionNegg(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] *= -1;
+}
+
+void ActionOrsi(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] |= item->actionArg1;
+}
+
+void ActionOrgi(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] |= item->actionArg1;
+}
+
+void ActionAndsi(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] &= item->actionArg1;
+}
+
+void ActionAndgi(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] &= item->actionArg1;
+}
+
+void ActionMovss(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] = SCRATCH[item->actionArg1];
+}
+
+void ActionMovgg(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] = GLOBALS[item->actionArg1];
+}
+
+void ActionMovgs(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] = SCRATCH[item->actionArg1];
+}
+
+void ActionMovsg(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] = GLOBALS[item->actionArg1];
+}
+
+void ActionIncss(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2]++;
+    SCRATCH[item->actionArg1]++;
+}
+
+void ActionIncgg(void *ent, const LOGIC_ITEM *item)
+{
+    AddGlobal(item->actionArg2, 1);
+    AddGlobal(item->actionArg1, 1);
+}
+
+void ActionRnds(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] = BugsRand() % item->actionArg1;
+}
+
+void ActionRndg(void *ent, const LOGIC_ITEM *item)
+{
+    GLOBALS[item->actionArg2] = BugsRand() % item->actionArg1;
+}
+
+void ActionAddsi(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] += item->actionArg1;
+}
+
+void ActionAddgi(void *ent, const LOGIC_ITEM *item)
+{
+    AddGlobal(item->actionArg2, item->actionArg1);
+}
+
+void ActionSubsi(void *ent, const LOGIC_ITEM *item)
+{
+    SCRATCH[item->actionArg2] -= item->actionArg1;
+}
+
+void ActionSubgi(void *ent, const LOGIC_ITEM *item)
+{
+    AddGlobal(item->actionArg2, -item->actionArg1);
+}
+
+void ActionGvcrt(void *ent, const LOGIC_ITEM *item)
+{
+    // is player at full health?
+    BYTE curHealth = GLOBALS[0x01];
+    BYTE maxHealth = GLOBALS[0x02];
+    if (curHealth != maxHealth)
+    {
+        // no; increment health
+        GLOBALS[0x01]++;
+    }
+    else
+    {
+        // yes; increment other global (assume it's NOT total GC count)
+        GLOBALS[item->actionArg2]++;
+    }
 }

@@ -459,3 +459,296 @@ PATCH_CODE(0x42b3e0, 0x42b360, CondTbuact);
 /// <returns>Condition result</returns>
 EXTERN_C BOOL CondTkdesc(void *ent, const LOGIC_ITEM *item);
 PATCH_CODE(0x42c700, 0x42c670, CondTkdesc);
+
+/// <summary>
+/// Handler for action code 0x00.
+/// 
+/// This action does nothing.
+/// 
+/// This function does not separately exist in the game, but is merged with
+/// all other functions which do nothing.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionNop(void *ent, const LOGIC_ITEM *item);
+
+/// <summary>
+/// Handler for action code 0x03.
+/// 
+/// Increment scratch: `scratch[Y]++`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionIncs(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c790, 0x42c700, ActionIncs);
+
+/// <summary>
+/// Handler for action code 0x04.
+/// 
+/// Increment global: `globals[Y]++`. Handles two-byte total golden carrot
+/// count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionIncg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c7b0, 0x42c720, ActionIncg);
+
+/// <summary>
+/// Handler for action code 0x12.
+/// 
+/// Move to scratch from immed: `scratch[Y] = X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovsi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c800, 0x42c770, ActionMovsi);
+
+/// <summary>
+/// Handler for action code 0x13.
+/// 
+/// Move to global from immed: `globals[Y] = X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovgi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c820, 0x42c790, ActionMovgi);
+
+/// <summary>
+/// Handler for action code 0x05.
+/// 
+/// Decrement scratch: `scratch[Y]--`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionDecs(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c840, 0x42c7b0, ActionDecs);
+
+/// <summary>
+/// Handler for action code 0x06.
+/// 
+/// Decrement global: `globals[Y]--`. Handles two-byte total golden carrot
+/// count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionDecg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c860, 0x42c7d0, ActionDecg);
+
+/// <summary>
+/// Handler for action code 0x07.
+/// 
+/// Clear scratch: `scratch[Y] = 0`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionClrs(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c8c0, 0x42c830, ActionClrs);
+
+/// <summary>
+/// Handler for action code 0x08.
+/// 
+/// Clear global: `globals[Y] = 0`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionClrg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c8e0, 0x42c850, ActionClrg);
+
+/// <summary>
+/// Handler for action code 0x09.
+/// 
+/// Negate scratch: `scratch[Y] = -scratch[Y]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionNegs(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c900, 0x42c870, ActionNegs);
+
+/// <summary>
+/// Handler for action code 0x0a.
+/// 
+/// Negate global: `globals[Y] = -globals[Y]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionNegg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c920, 0x42c890, ActionNegg);
+
+/// <summary>
+/// Handler for action code 0x0b.
+/// 
+/// Bitwise-or scratch with immed: `scratch[Y] |= X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionOrsi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c950, 0x42c8c0, ActionOrsi);
+
+/// <summary>
+/// Handler for action code 0x0c.
+/// 
+/// Bitwise-or global with immed: `globals[Y] |= X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionOrgi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c970, 0x42c8e0, ActionOrgi);
+
+/// <summary>
+/// Handler for action code 0x0d.
+/// 
+/// Bitwise-and scratch with immed: `scratch[Y] &= X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionAndsi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c990, 0x42c900, ActionAndsi);
+
+/// <summary>
+/// Handler for action code 0x0e.
+/// 
+/// Bitwise-and global with immed: `globals[Y] &= X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionAndgi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c9b0, 0x42c920, ActionAndgi);
+
+/// <summary>
+/// Handler for action code 0x14.
+/// 
+/// Move to scratch from scratch: `scratch[Y] = scratch[X]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovss(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c9d0, 0x42c940, ActionMovss);
+
+/// <summary>
+/// Handler for action code 0x15.
+/// 
+/// Move to global from global: `globals[Y] = globals[X]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovgg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42c9f0, 0x42c960, ActionMovgg);
+
+/// <summary>
+/// Handler for action code 0x1b.
+/// 
+/// Move to global from scratch: `globals[Y] = scratch[X]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovgs(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42ca20, 0x42c990, ActionMovgs);
+
+/// <summary>
+/// Handler for action code 0x1c.
+/// 
+/// Move to scratch from global: `scratch[Y] = globals[X]`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionMovsg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42ca50, 0x42c9c0, ActionMovsg);
+
+/// <summary>
+/// Handler for action code 0x16.
+/// 
+/// Increment two scratches: `scratch[Y]++, scratch[X]++`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionIncss(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42ca80, 0x42c9f0, ActionIncss);
+
+/// <summary>
+/// Handler for action code 0x17.
+/// 
+/// Increment two globals: `globals[Y]++, globals[X]++`. Handles two-byte total
+/// golden carrot count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionIncgg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cab0, 0x42ca20, ActionIncgg);
+
+/// <summary>
+/// Handler for action code 0x0f.
+/// 
+/// Randomize scratch: `scratch[Y] = rand() % X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionRnds(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cb50, 0x42cac0, ActionRnds);
+
+/// <summary>
+/// Handler for action code 0x10.
+/// 
+/// Randomize global: `globals[Y] = rand() % X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionRndg(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cb80, 0x42caf0, ActionRndg);
+
+/// <summary>
+/// Handler for action code 0x24.
+/// 
+/// Add scratch with immed: `scratch[Y] += X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionAddsi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42ced0, 0x42ce40, ActionAddsi);
+
+/// <summary>
+/// Handler for action code 0x25.
+/// 
+/// Add global with immed: `globals[Y] += X`. Handles two-byte total golden
+/// carrot count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionAddgi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cef0, 0x42ce60, ActionAddgi);
+
+/// <summary>
+/// Handler for action code 0x27.
+/// 
+/// Subtract scratch with immed: `scratch[Y] -= X`.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionSubsi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cf50, 0x42cec0, ActionSubsi);
+
+/// <summary>
+/// Handler for action code 0x28.
+/// 
+/// Subtract global with immed: `globals[Y] -= X`. Handles two-byte total golden
+/// carrot count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionSubgi(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42cf70, 0x42cee0, ActionSubgi);
+
+/// <summary>
+/// Handler for action code 0x30.
+/// 
+/// Give carrot:
+///     if {current health} != {max health}:
+///         {max health}++
+///     else:
+///         globals[Y]++
+/// 
+/// Does NOT handle two-byte total golden carrot count.
+/// </summary>
+/// <param name="ent">Entity used for logic context</param>
+/// <param name="item">Item to run action for</param>
+EXTERN_C void ActionGvcrt(void *ent, const LOGIC_ITEM *item);
+PATCH_CODE(0x42d1a0, 0x42d110, ActionGvcrt);
