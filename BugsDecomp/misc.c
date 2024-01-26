@@ -3,6 +3,8 @@
 #include "common.h"
 #include "misc.h"
 #include "crt.h"
+#include "enhancements.h"
+#include "dbg.h"
 
 
 // console output handle; does not appear to be initialized by the game
@@ -20,6 +22,10 @@ void ConPrintf(const char *fmt, ...)
     va_end(ap);
 
     WriteConsoleA(hConsoleOutput, buf, strlen(buf), &nWritten, NULL);
+
+#if ENH_DEBUG_CONSOLE
+    Dbg("%s", buf);
+#endif
 }
 
 int ShowRetryDialog(const char *fmt, ...)
