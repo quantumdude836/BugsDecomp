@@ -274,6 +274,13 @@ renderer options)
 | 109 | `screen4`  | file does not exist                                                  |
 | 110 | `screen5`  | file does not exist                                                  |
 
+## Level Variants
+
+Some levels have variants indicated by a `_<N>` in the filename. For N=0-5, this
+corresponds to a language ID, and is used for loading screens. N=8 is currently
+unknown, and is only used for a hardcoded list of level IDs (7, 8, 21-25, 34,
+and 54).
+
 ## Level Format
 
 The BZE file format is detailed [here](bze.md).
