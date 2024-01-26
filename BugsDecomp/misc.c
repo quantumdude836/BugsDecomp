@@ -38,3 +38,8 @@ int ShowRetryDialog(const char *fmt, ...)
         MB_RETRYCANCEL
     );
 }
+
+int BugsRand(void)
+{
+    return rand();
+}

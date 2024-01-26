@@ -106,3 +106,10 @@ PATCH_CODE(0x4055d0, 0x4055d0, ConPrintf);
 /// <returns>Selected dialog option</returns>
 EXTERN_C int ShowRetryDialog(const char *fmt, ...);
 PATCH_CODE(0x405640, 0x405640, ShowRetryDialog);
+
+/// <summary>
+/// Random number generator. Simply calls CRT `rand`.
+/// </summary>
+/// <returns>Random number</returns>
+EXTERN_C int BugsRand(void);
+PATCH_CODE(0x4312c0, 0x431150, BugsRand);

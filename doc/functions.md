@@ -123,6 +123,7 @@ game versions, including PSX (US):
 | `CondTpmov`           | 0x42b490         | 0x42b410         | 0x800307f4   | game  | logic    | no          |
 | `CondTkdesc`          | 0x42c700         | 0x42c670         |              | port  | logic    | yes         |
 | `RunLogicAction`      | 0x42c760         | 0x42c6d0         | 0x80030ecc   | game  | logic    | yes         |
+| `BugsRand`            | 0x4312c0         | 0x431150         | 0x80032874   | game  | misc     | yes         |
 | `AllocListNode`       | 0x4489c0         | 0x448850         | 0x80036204   | game  | list     | yes         |
 | `InitListPool`        | 0x448a00         | 0x448890         | 0x80036250   | game  | list     | yes         |
 | `RemoveListNode`      | 0x448a40         | 0x4488d0         | 0x800362d0   | game  | list     | yes         |
@@ -137,6 +138,7 @@ game versions, including PSX (US):
 | `fclose`              | 0x4506a0         | 0x450500         |              | crt   | crt      | no[^crt]    |
 | `fwrite`              | 0x450760         | 0x4505c0         |              | crt   | crt      | no[^crt]    |
 | `fopen`               | 0x4508e0         | 0x450740         |              | crt   | crt      | no[^crt]    |
+| `rand`                | 0x4509b0         | 0x450810         | 0x8004e8dc   | crt   | crt      | no[^crt]    |
 | `fread`               | 0x450a90         | 0x4508f0         |              | crt   | crt      | no[^crt]    |
 | `_close`              | 0x4513d0         | 0x451230         |              | crt   | crt      | no[^crt]    |
 | `_open`               | 0x458620         | 0x458480         |              | crt   | crt      | no[^crt]    |
