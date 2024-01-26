@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "common.h"
 #include "misc.h"
+#include "crt.h"
 
 
 // console output handle; does not appear to be initialized by the game
@@ -41,5 +42,5 @@ int ShowRetryDialog(const char *fmt, ...)
 
 int BugsRand(void)
 {
-    return rand();
+    return rand_bugs();
 }

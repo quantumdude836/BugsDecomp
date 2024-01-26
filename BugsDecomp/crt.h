@@ -40,6 +40,10 @@
     FILE *(*)(const char *, const char *) \
 )VER(0x4508e0, 0x450740))
 
+#define rand_bugs (( \
+    int (*)(void) \
+)VER(0x4509b0, 0x450810))
+
 #define fread_bugs (( \
     size_t (*)(void *, size_t, size_t, FILE *) \
 )VER(0x450a90, 0x4508f0))
