@@ -3,6 +3,7 @@
 // code patches will be registered here
 #define REGISTER_PATCHES
 #include "CodePatch.h"
+#include "dbg.h"
 
 // include all decompiled headers to gather and register all the patches
 #include "cfg.h"
@@ -74,6 +75,8 @@ bool CodePatch::applyAll()
         // only apply the patch if it applies to the current running version
         if (entry.ver != curVer)
             continue;
+
+        Dbg("Patching jump: 0x%x -> 0x%x\n", entry.patchAddr, entry.tgtAddr);
 
         // 32-bit relative jump: E9 xx xx xx xx
         buf[0] = 0xe9;

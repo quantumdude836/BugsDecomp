@@ -63,6 +63,9 @@
     <ClCompile Include="logic.c">
       <Filter>Source Files\Bugs</Filter>
     </ClCompile>
+    <ClCompile Include="dbg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="logic_prv.h">
       <Filter>Header Files\Bugs</Filter>
+    </ClInclude>
+    <ClInclude Include="dbg.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

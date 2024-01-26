@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "GameVersion.h"
+#include "dbg.h"
 
 
 // helper for accessing a possibly-invalid address
@@ -46,7 +47,25 @@ std::optional<GameVersion> detectVersion()
     static std::optional<std::optional<GameVersion>> cachedVer = std::nullopt;
 
     if (!cachedVer)
-        cachedVer = detectVersionImpl();
+    {
+        std::optional<GameVersion> ver = detectVersionImpl();
+        cachedVer = ver;
+
+        if (ver)
+        {
+            switch (*ver)
+            {
+            case GameVersion::Version1_0:
+                Dbg("Detected game version 1.0\n");
+                break;
+            case GameVersion::Version1_6:
+                Dbg("Detected game version 1.6\n");
+                break;
+            }
+        }
+        else
+            Dbg("Unable to detect valid game version!\n");
+    }
 
     return *cachedVer;
 }
