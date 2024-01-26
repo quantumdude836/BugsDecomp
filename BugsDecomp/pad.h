@@ -9,7 +9,7 @@
 
 // mask of extra input keys that aren't mapped to PSX buttons; bit 0 = return,
 // bit 1 = escape, bit 2 = space
-#define extraInputKeys (*(WORD *)0x4b18d0)
+#define extraInputKeys (*(short *)0x4b18d0)
 
 
 /// <summary>

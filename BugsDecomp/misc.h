@@ -4,6 +4,46 @@
 #pragma once
 
 
+// main game data (FIXME: relocate)
+typedef struct GAME_DATA
+{
+    // currently loaded level ID
+    int currentLevel;
+    // checksum of game data; only used in PSX version
+    int checksum;
+    WORD field_8;
+    WORD buttons_A;
+    WORD buttons_C;
+    WORD buttons_E;
+    WORD buttons_10;
+    short stickX;
+    short stickY;
+    WORD field_16;
+    WORD field_18;
+    WORD field_1A;
+    WORD field_1C;
+    WORD field_1E;
+    WORD field_20;
+    WORD field_22;
+    WORD field_24;
+    WORD field_26;
+    WORD field_28;
+    WORD field_2A;
+    WORD field_2C;
+    WORD field_2E;
+    WORD field_30;
+    WORD field_32;
+    WORD field_34;
+    WORD field_36;
+    WORD field_38;
+    WORD field_3A;
+    WORD field_3C;
+    WORD field_3E;
+    // globals array for level logic
+    BYTE logicGlobals[256];
+} GAME_DATA;
+
+
 // byte size of audio segments in the speech files; indexed by language, then by
 // segment number (index 0 = segment 2?)
 #define speechPartSizes (*(const size_t (*)[6][64])0x45c340)
@@ -35,11 +75,18 @@
 // CPU speed, in MHz (FIXME: relocate)
 #define cpuSpeed (*(int *)0x4b1de4)
 
+// emulated PSX RAM for hardcoded addresses
+#define psxRam (*(BYTE **)0x52fd00)
+
 // currently playing speech track (FIXME: relocate)
 #define speechTrack (*(struct TRACK *)0x5532a0)
 
 // currently playing music track (FIXME: relocate)
 #define musicTrack (*(struct TRACK *)0x553320)
+
+
+// active game data; stored in emulated PSX RAM (FIXME: relocate)
+#define gameData ((GAME_DATA *)(psxRam + 0x10000))
 
 
 /// <summary>
