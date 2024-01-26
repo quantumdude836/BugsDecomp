@@ -161,6 +161,7 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="crt.h" />
     <ClInclude Include="dbg.h" />
+    <ClInclude Include="enhancements.h" />
     <ClInclude Include="fs.h" />
     <ClInclude Include="GameVersion.h" />
     <ClInclude Include="gte.h" />
