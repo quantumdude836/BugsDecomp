@@ -70,3 +70,7 @@ game without DLL injection, it'd be just as easy to use the vanilla launcher.
 
 The `/pause` option allows a debugger to be attached to the game process before
 any code is run (including the DLL's attach code).
+
+NOTE: because the launcher is a DLL injector, it may be incorrectly flagged as a
+virus by your AntiVirus. If so, you will need to add the launcher to its list of
+exclusions.
