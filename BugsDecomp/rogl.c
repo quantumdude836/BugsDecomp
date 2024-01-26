@@ -35,7 +35,7 @@ typedef struct GL_FUNC
 
 /// <summary>
 /// Loads the GL library.
-/// 
+///
 /// This function does not directly exist in the game, but is inlined in other
 /// functions.
 /// </summary>

@@ -56,9 +56,9 @@ PATCH_CODE(0x402fe0, 0x402fe0, PadGetState);
 
 /// <summary>
 /// Gets controller mode information.
-/// 
+///
 /// Emulated gamepad does not support vibration, so this always returns 0.
-/// 
+///
 /// This function does not separately exist in the game, but is merged with
 /// other functions which just return 0.
 /// </summary>
@@ -70,9 +70,9 @@ EXTERN_C int PadInfoMode(int port, int term, int offs);
 
 /// <summary>
 /// Sets controller actuator parameters.
-/// 
+///
 /// Requests are always rejected for PC.
-/// 
+///
 /// This function does not separately exist in the game, but is merged with
 /// other functions which just return 0.
 /// </summary>
@@ -83,9 +83,9 @@ EXTERN_C int PadSetActAlign(int port, BYTE *data);
 
 /// <summary>
 /// Sets controller mode selector.
-/// 
+///
 /// Requests are always rejected for PC.
-/// 
+///
 /// This function does not separately exist in the game, but is merged with
 /// other functions which just return 0.
 /// </summary>
@@ -97,9 +97,9 @@ EXTERN_C int PadSetMainMode(int port, int offs, int lock);
 
 /// <summary>
 /// Sets transmit buffer for controller.
-/// 
+///
 /// This does nothing for PC.
-/// 
+///
 /// This function does not separately exist in the game, but is merged with
 /// all other functions which do nothing.
 /// </summary>

@@ -7,7 +7,7 @@
 /// <summary>
 /// Opens a file descriptor for the given path. If it fails, retries with the
 /// path relative to the datas root.
-/// 
+///
 /// NOTE: the path should start with "..\", as the retry strips the first 3
 /// characters from the path.
 /// </summary>
@@ -20,7 +20,7 @@ PATCH_CODE(0x4056c0, 0x4056c0, FsOpen);
 /// <summary>
 /// Opens a file object for the given path. If it fails, retries with the path
 /// relative to the datas root.
-/// 
+///
 /// NOTE: the path should start with "..\", as the retry strips the first 3
 /// characters from the path.
 /// </summary>

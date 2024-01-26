@@ -31,7 +31,7 @@ private:
 public:
     /// <summary>
     /// Applies all registered code patches for the current game version.
-    /// 
+    ///
     /// NOTE: Patches are not reverted on failure; this will likely lead to a
     /// game crash, and is (somewhat) intentional.
     /// </summary>

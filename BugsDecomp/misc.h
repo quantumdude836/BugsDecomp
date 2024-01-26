@@ -91,7 +91,7 @@ typedef struct GAME_DATA
 
 /// <summary>
 /// Writes formatted output to the console, if attached.
-/// 
+///
 /// NOTE: this will likely not work, as the console handle it writes to is never
 /// properly initialized.
 /// </summary>
