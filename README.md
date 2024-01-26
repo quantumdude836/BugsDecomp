@@ -55,6 +55,7 @@ Launcher options:
 - `/cwd:<work dir>` - sets the working directory for the game
 - `/cmdline:<cmdline>` - specifies command line for the game
 - `/dll:<dll path>` - set path to the DLL to inject
+- `/pause` - pauses launcher before DLL injection
 
 Currently, the `/exe:` and `/cwd:` options are required; in the future, the
 launcher will have the ability to check the registry for an installed copy of
@@ -66,3 +67,6 @@ about game options can be found [here](doc/internals.md#launch-options).
 
 The `/dll:` option is required; while the launcher could be coded to launch the
 game without DLL injection, it'd be just as easy to use the vanilla launcher.
+
+The `/pause` option allows a debugger to be attached to the game process before
+any code is run (including the DLL's attach code).

@@ -23,7 +23,8 @@ static const char *checkArgPrefix(const char *arg, const char *prefix)
 
 
 Launcher::Launcher() :
-    cmdline(" /b00 /win /x1024 /y768 /opengl")
+    cmdline(" /b00 /win /x1024 /y768 /opengl"),
+    pause(false)
 {
 }
 
@@ -36,6 +37,7 @@ void Launcher::showUsage()
     puts("    /cwd:<work dir>     Set game working directory");
     puts("    /cmdline:<cmdline>  Specify command line for the game");
     puts("    /dll:<dll path>     Set path to the DLL to inject");
+    puts("    /pause              Pause before DLL injection");
 }
 
 std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
@@ -76,6 +78,12 @@ std::optional<int> Launcher::parseArgs(std::vector<const char *> &&args)
         if (const char *val = checkArgPrefix(arg, "/dll:"))
         {
             dllPath = val;
+            continue;
+        }
+
+        if (!strcmp(arg, "/pause"))
+        {
+            pause = true;
             continue;
         }
 
@@ -214,6 +222,13 @@ int Launcher::run(int argc, char **argv)
     {
         fputs("Unable to start game\n", stderr);
         return 3;
+    }
+
+    // pause if requested
+    if (pause)
+    {
+        puts("Pausing before DLL injection");
+        system("pause");
     }
 
     // inject the DLL into the process

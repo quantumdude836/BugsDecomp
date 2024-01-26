@@ -63,4 +63,6 @@ private:
     std::string cmdline;
     // path to the injected DLL
     std::string dllPath;
+    // whether to pause before DLL injection
+    bool pause;
 };
