@@ -19,11 +19,15 @@ The checksum is simply the 32-bit sum of bytes 0x000-0x7fb, treated as signed
 
 Each entry has the following structure:
 
-| offset | type | usage        |
-|--------|------|--------------|
-| 0x0    | int  | section ID   |
-| 0x4    | int  | actual size? |
-| 0x8    | int  | file size    |
+| offset | type | usage       |
+|--------|------|-------------|
+| 0x0    | int  | section ID  |
+| 0x4    | int  | actual size |
+| 0x8    | int  | file size   |
+
+Sections are stored consectively in the BZE in the order given by the header.
+Each section occupies `file size` bytes in the BZE, of which `actual size` bytes
+are valid (the rest are padding).
 
 Known section IDs:
 
