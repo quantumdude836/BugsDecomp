@@ -37,53 +37,87 @@ Known section IDs:
 
 # Compression Algorithm
 
-BBLiT uses a custom LZ-like algorithm for compressing certain sections, allowing
-repeated runs of bytes to be efficiently encoded.
+BBLiT uses a custom LZSS implementation for compression; repeated runs of bytes
+are converted to small offset/length pairs, and lengths are further compressed
+using a simple lookup table.
 
-The first byte in a compressed blob encodes a `shift` and `step` field:
+## Compression Header
+
+The first four bytes form a small header that encode compression options and the
+number of compression "items". The first byte encodes the offset size for
+offset/length pairs as well as the step size for the length lookup table (LUT):
 
     |7 5|4  3|2   0|
-    |---|step|shift|
+    |---|step|osize|
 
-These fields are used to compute the following values:
+    offset_size = 9 + osize;
+    length_size = 7 - osize;
 
-    lut_size = 128 >> shift;
-    lut_thres = (lut_size >= 32) ? 19 : (lut_size >> 1) - 1;
+Note that an `osize` of 7 is not valid (since no lengths could be encoded).
 
-These values are then used to build a LUT (look-up table) of size `lut_size`.
-Entry `i` is computed as follows:
+The remaining 3 bytes form a 24-bit big-endian integer that represents the
+number of compression "items"; the stored value is one less than the actual
+value (so there is always at least one "item").
+
+## Length Encoding
+
+Length values are further compressed via a LUT that can be pre-calculated from
+the first header byte. The entries start at 3[^lut] (the "break-even" point) and
+increment by 1 until they hit a threshold, at which point they increment by a
+larger step.
+
+The size of the LUT is given by the size of the length field; this is then used
+to calculate the threshold:
+
+    lut_size = 1 << length_size;
+    if (lut_size >= 32)
+        lut_thres = 19;
+    else
+        lut_thres = lut_size / 2 - 1;
+
+Entry `i` in the LUT is then computed as follows:
 
     if (i > lut_thres)
-        lut[i] = ((i - lut_thres) << step) + lut_thres + 2;
+        lut[i] = 3 + ((i - lut_thres) << step) + lut_thres;
     else
-        lut[i] = i + 2;
+        lut[i] = 3 + i;
 
-This LUT allows for longer runs to be encoded than what could normally be stored
-in a small integer.
+[^lut]: The game actually builds the LUT with entries starting at 2, but uses
+them to represent 0-based counts; the given description/code is equivalent.
 
-The next 3 bytes form a big-endian 24-bit integer encoding the number of "items"
-that follow; the value stored is 1 less than the actual count. Items are grouped
-by 8; each group is prefixed with a byte indicating each item type, where the
-lowest bit corresponds to the first group.
+## Compression Body
 
-If the item type is 0, the next two bytes form a big-endian 16-bit integer,
-where `N = 7 - shift`:
+The remainder of the compressed section is a sequence of compression "items".
+Items are grouped by 8 and prefixed with a byte that encodes their types; bit 0
+(lsb) corresponds to the first item. If the number of items is not divisible by
+8, the unused bits in the last group prefix byte are 0.
 
-    |15   N|N-1     0|
-    |offset|lut_index|
+Item type 0 represents an offset/length pair. The next two bytes form a 16-bit
+big-endian integer which encode the offset and compressed length according to
+the bit sizes calculated from the header; the offset field resides in the upper
+bits of the 16-bit integer. The compressed length field is used as an index into
+the LUT to get the actual length.
 
-`lut_index` encodes a size according to the LUT:
+The resulting offset/length pair means "copy 'length' bytes starting 'offset'
+bytes backward from the end of the current decompressed buffer". In some cases,
+the length may be greater than the offset, meaning that some/all of the bytes
+are copied multiple times. For example, given an offset/length pair of 3/8, and
+assuming the last 4 decompressed bytes are `de ad be ef`, then the additional
+decompressed bytes would be `ad be ef ad be ef ad de`.
 
-    size = lut[lut_index];
+Example C code (`src` points to current item; `dst` points to destination):
 
-Together `offset` and `size` refer to a run of previously-decompressed bytes to
-copy; specifically, `offset` points backwards from the current output position.
-Note that `size` can be larger than `offset`, meaning that the previous run of
-bytes is effectively duplicated. For example, given an `offset/size` pair of
-`3/8`, and assuming the last 3 decompressed bytes are `24 68 ac`, then the
-additional decompressed bytes would be `24 68 ac 24 68 ac 24 68`.
+    tmp = (src[0] << 8) | src[1];
+    src += 2;
+    offset = (tmp >> length_size) & ((1 << offset_size) - 1);
+    length_enc = tmp & ((1 << length_size) - 1);
+    length = lut[length_enc];
+    const BYTE *dst_hist = dst - offset;
+    for (i = 0; i < length; i++)
+        *dst++ = *dst_hist++;
 
-If the item type is 1, then the next byte is copied straight to output.
+Item type 1 represents a literal byte, which is simply copied from input to
+output.
 
 # Section 1
 
