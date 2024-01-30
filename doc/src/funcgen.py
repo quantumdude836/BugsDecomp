@@ -2,14 +2,12 @@
 
 def check_addr_tags(s):
     if s == "macro":
-        return "none[^macro]"
+        return "N/A (macro)"
     if s.endswith("*"):
-        return f"{s[:-1]}[^merge]"
+        return f"*{s[:-1]}*"
     return s
 
 def check_decomp_tags(s):
-    if s in ["crt"]:
-        return f"no[^crt]"
     return s
 
 def gen_table_line(parts, widths):
@@ -50,7 +48,6 @@ widths = [len(field) for field in hdr]
 for line in lines:
     for i, field in enumerate(line):
         widths[i] = max(widths[i], len(field))
-
 
 # generate table
 # header
