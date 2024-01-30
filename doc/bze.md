@@ -131,13 +131,14 @@ of a condition and an action; each condition/action has up to two arguments,
 8/16 bits each, respectively. More details about condition/action codes can be
 found in the decompiled source in `logic_prv.h`.
 
-The following table summarizes known condition codes:
+The following table summarizes known condition codes (codes in *italics* are
+specific to the PC port):
 
 | code | mnemonic | meaning                                       |
 |------|----------|-----------------------------------------------|
 | 0x00 | true     | always true                                   |
-| 0x01 | ciseq    | compare immed/scratch equal[^1]               |
-| 0x02 | cigeq    | compare immed/global equal[^2]                |
+| 0x01 | ciseq    | compare immed/scratch[^scratch] equal         |
+| 0x02 | cigeq    | compare immed/global[^global] equal           |
 | 0x03 | cisltu   | compare immed/scratch less than, unsigned     |
 | 0x04 | cigltu   | compare immed/global less than, unsigned      |
 | 0x05 | cisleu   | compare immed/scratch less/equal, unsigned    |
@@ -176,7 +177,7 @@ The following table summarizes known condition codes:
 | 0x51 | tbuact   | test button up: action                        |
 | 0x58 | ciglt    | compare immed/global less than, signed        |
 | 0x59 | ciggt    | compare immed/global greater than, signed     |
-| 0x60 | tkdesc   | test key down: escape                         |
+| 0x60 | *tkdesc* | test key down: escape                         |
 
 The following table summarizes known action codes:
 
@@ -184,7 +185,7 @@ The following table summarizes known action codes:
 |------|----------|---------------------------|
 | 0x00 | nop      | no operation              |
 | 0x03 | incs     | increment scratch         |
-| 0x04 | incg     | increment global[^3]      |
+| 0x04 | incg     | increment global[^gmod]   |
 | 0x05 | decs     | decrement scratch         |
 | 0x06 | decg     | decrement global          |
 | 0x07 | clrs     | clear scratch             |
@@ -211,7 +212,7 @@ The following table summarizes known action codes:
 | 0x28 | subgi    | sub global with immed     |
 | 0x30 | gvcrt    | give carrot               |
 
-[^1]: `scratch` refers to a 256-byte array of temporary data
-[^2]: `global` refers to the 256-byte array at the end of GamesaveN.dat
-[^3]: the game has special code to handle the total golden carrot count, which
-is split across two bytes
+[^scratch]: `scratch` refers to a 256-byte array of temporary data
+[^global]: `global` refers to the 256-byte array at the end of GamesaveN.dat
+[^gmod]: most operations that modify globals have code to handle the total
+golden carrot count, which is split across two bytes
