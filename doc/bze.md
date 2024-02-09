@@ -124,6 +124,237 @@ output.
 This section consists of a sequence of tags/"instructions" that tell the game
 how to load assets and build up the world and entities inside it.
 
+Most of the section consists of "chunks" that start with a `2d` byte and end
+with a `2e` byte; these chunks are described in the next paragraph. Additional
+"top-level" meaningful bytes include `2c` and `4b`, which have unknown meanings,
+and `2f`, which signals the end of the section. Finally, if the section starts
+with `2d 45`, the game reads a pseudo-chunk before main scanning.
+
+Each chunk starts with a `2d` byte, a "type" byte, zero or more "attribute" or
+"modifier" tags, and a terminating `2e` byte. Each tag is an identifier byte
+followed by a fixed number of bytes, depending on the identifier. The following
+sub-sections list known details about chunks, valid tags, and the number of
+extra bytes for each tag.
+
+Some notes about data types:
+* position/scale coordinates are signed fixed-point longs (20.12)
+* angles are signed fixed-point shorts (4.12), where 0x1000 means 360 degrees
+
+## Type 0x00
+
+| tag  | length |
+|------|--------|
+| 0x01 | 8      |
+| 0x02 | 8      |
+| 0x04 | 8      |
+| 0x44 | 12     |
+| 0x4c | 48     |
+| 0x4d | 48     |
+
+## Type 0x05
+
+| tag  | length |
+|------|--------|
+| 0x06 | 3      |
+
+## Type 0x07/0x08/0x0a
+
+This chunk seems to indicate an entity/object.
+
+| tag  | length |
+|------|--------|
+| 0x0b | 4      |
+| 0x0c | 4      |
+| 0x0f | 2      |
+| 0x10 | 12     |
+| 0x11 | 6      |
+| 0x12 | 12     |
+| 0x13 | 1      |
+| 0x15 | 1      |
+| 0x16 | 8      |
+| 0x17 | 36     |
+| 0x18 | 16     |
+| 0x19 | 4      |
+| 0x1a | 4      |
+| 0x1b | 6      |
+| 0x1c | 8      |
+| 0x1d | 4      |
+| 0x1e | 2      |
+| 0x1f | 1      |
+| 0x27 | 4      |
+| 0x30 | 32     |
+| 0x31 | 32     |
+| 0x32 | 12     |
+| 0x34 | 24     |
+| 0x35 | 40     |
+| 0x38 | 2      |
+| 0x39 | 2      |
+| 0x3a | 4      |
+| 0x41 | 20     |
+| 0x42 | 6      |
+| 0x46 | 2      |
+
+### Tag 0x10
+
+Initial entity position.
+
+| offset | type | usage |
+|--------|------|-------|
+| 0      | long | X     |
+| 4      | long | Y     |
+| 8      | long | Z     |
+
+### Tag 0x11
+
+Initial entity rotation.
+
+| offset | type  | usage |
+|--------|-------|-------|
+| 0      | short | angle |
+| 2      | short | angle |
+| 4      | short | angle |
+
+### Tag 0x12
+
+Initial entity scale.
+
+| offset | type | usage |
+|--------|------|-------|
+| 0      | long | X     |
+| 4      | long | Y     |
+| 8      | long | Z     |
+
+### Tag 0x13
+
+This tag consists of a single byte. All that's known is that if this byte is
+`01`, the chunk corresponds to the player.
+
+### Tag 0x27
+
+This tag includes the entity ID.
+
+| offset | type  | usage     |
+|--------|-------|-----------|
+| 0      | short | entity ID |
+| 2      | short |           |
+
+### Tag 0x31
+
+This tag is related to BZE logic. Condition/action codes and args are detailed
+in the "Level Logic" section.
+
+| offset | type  | usage           |
+|--------|-------|-----------------|
+| 12     | byte  | condition code  |
+| 13     | byte  | condition arg 1 |
+| 14     | byte  | condition arg 2 |
+| 15     | byte  | action code     |
+| 16     | short | action arg 1    |
+| 18     | short | action arg 2    |
+
+## Type 0x09
+
+| tag  | length |
+|------|--------|
+| 0x10 | 12     |
+| 0x11 | 6      |
+| 0x16 | 8      |
+| 0x1c | 8      |
+| 0x1f | 1      |
+| 0x33 | 32     |
+
+## Type 0x20
+
+| tag  | length |
+|------|--------|
+| 0x10 | 12     |
+| 0x11 | 6      |
+| 0x12 | 12     |
+| 0x21 | 4      |
+| 0x24 | 8      |
+| 0x39 | 2      |
+| 0x43 | 1      |
+
+## Type 0x22
+
+This chunk may be used to load an asset.
+
+| tag  | length |
+|------|--------|
+| 0x0d | 12     |
+| 0x24 | 8      |
+| 0x25 | 8      |
+| 0x26 | 4      |
+| 0x27 | 4      |
+| 0x28 | 3      |
+| 0x3f | 12     |
+| 0x40 | 8      |
+
+### Tag 0x25
+
+| offset | type | usage       |
+|--------|------|-------------|
+| 0      | int  | offset      |
+| 4      | int  | header size |
+
+### Tag 0x27
+
+This tag includes the asset ID, which is how entities reference them.
+
+| offset | type  | usage    |
+|--------|-------|----------|
+| 2      | short | asset ID |
+
+### Tag 0x40
+
+| offset | type | usage       |
+|--------|------|-------------|
+| 0      | int  | offset      |
+| 4      | int  | header size |
+
+## Type 0x29
+
+| tag  | length |
+|------|--------|
+| 0x2a | 8      |
+
+## Type 0x36
+
+| tag  | length |
+|------|--------|
+| 0x37 | 8      |
+
+## Type 0x3b
+
+| tag  | length |
+|------|--------|
+| 0x2b | 12     |
+| 0x3c | 4      |
+| 0x3d | 6      |
+| 0x3e | 28     |
+
+### Tag 0x2b
+
+This seems to set the initial camera position.
+
+| offset | type | usage |
+|--------|------|-------|
+| 0      | long | X     |
+| 4      | long | Y     |
+| 8      | long | Z     |
+
+## Type 0x47
+
+| tag  | length |
+|------|--------|
+| 0x48 | 8      |
+
+## Type 0x49
+
+| tag  | length |
+|------|--------|
+| 0x4a | 48     |
+
 # Level Logic
 
 Game logic in each level is built out of logic "items", each of which consists
