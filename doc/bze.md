@@ -31,9 +31,21 @@ are valid (the rest are padding).
 
 Known section IDs:
 
-| ID | compressed? | usage               |
-|----|-------------|---------------------|
-| 1  | yes         | load "instructions" |
+| ID | usage                               |
+|----|-------------------------------------|
+| 1  | load "instructions"                 |
+| 2  | unknown/ignored                     |
+| 3  | textures, SFX, text (all languages) |
+| 4  | models                              |
+| 5  | French assets                       |
+| 6  | English assets                      |
+| 7  | German assets                       |
+| 8  | Spanish assets                      |
+| 9  | Italian assets                      |
+| 10 | Dutch assets                        |
+
+NOTE: Despite each section having an ID, the game makes some assumptions about
+section order: 1, 2, 3, 6, (5-10 except 6) in any order, then 4.
 
 # Compression Algorithm
 
@@ -124,11 +136,46 @@ output.
 This section consists of a sequence of tags/"instructions" that tell the game
 how to load assets and build up the world and entities inside it.
 
-Most of the section consists of "chunks" that start with a `2d` byte and end
-with a `2e` byte; these chunks are described in the next paragraph. Additional
-"top-level" meaningful bytes include `2c` and `4b`, which have unknown meanings,
-and `2f`, which signals the end of the section. Finally, if the section starts
-with `2d 45`, the game reads a pseudo-chunk before main scanning.
+The section is made up of a handful of top-level "command" bytes:
+
+| cmd  | usage               |
+|------|---------------------|
+| 0x2c | multiple; see below |
+| 0x2d | chunk               |
+| 0x2f | end of section      |
+| 0x4b | multiple; see below |
+
+## Command 0x2c
+
+This command does multiple things, including:
+
+* Initializes a bunch of linked-list node pools
+* Loads section 4 and makes it the active section for asset data
+
+## Command 0x4b
+
+This command does multiple things, including:
+
+* Loads the language-specific section and makes it the active section for asset
+data
+
+## Pseudo-Chunk
+
+If the first two bytes of the section are `2d 45`, the game reads a chunk, but
+without a type byte (hence the term "pseudo-chunk"). The only valid tag is `45`,
+which has a single extra byte. Each instance of the `45` tag (including the one
+in the initial `2d 45` sequence) causes the game to read (and ignore/discard) a
+section of the level; the extra byte is ignored.
+
+NOTE: the game incorrectly uses the section's actual size instead of its file
+size when skipping the section; however the relevant file read function rounds
+the read size up to the next multiple of 2048 (aka the PS1 CD sector size),
+which is how the section's file size is computed.
+
+Once the pseudo-chunk has been processed (if it exists), the next section in the
+file (usually section 3) is loaded and made the active section for asset data.
+
+# Chunk Details
 
 Each chunk starts with a `2d` byte, a "type" byte, zero or more "attribute" or
 "modifier" tags, and a terminating `2e` byte. Each tag is an identifier byte
@@ -265,6 +312,8 @@ in the "Level Logic" section.
 
 ## Type 0x20
 
+This chunk is used to load models for static world geometry.
+
 | tag  | length |
 |------|--------|
 | 0x10 | 12     |
@@ -275,9 +324,53 @@ in the "Level Logic" section.
 | 0x39 | 2      |
 | 0x43 | 1      |
 
+### Tag 0x10
+
+Sets the position for the model.
+
+| offset | type | usage |
+|--------|------|-------|
+| 0      | long | X     |
+| 4      | long | Y     |
+| 8      | long | Z     |
+
+### Tag 0x11
+
+Sets the rotation for the model.
+
+| offset | type  | usage |
+|--------|-------|-------|
+| 0      | short | angle |
+| 2      | short | angle |
+| 4      | short | angle |
+
+### Tag 0x12
+
+Sets the scale for the model.
+
+| offset | type | usage |
+|--------|------|-------|
+| 0      | long | X     |
+| 4      | long | Y     |
+| 8      | long | Z     |
+
+### Tag 0x21
+
+This tag includes an ID. Not to be confused with normal asset IDs.
+
+| offset | type  | usage |
+|--------|-------|-------|
+| 0      | short | ID    |
+
+### Tag 0x24
+
+Loads a model from the active asset section. This tag is detailed below in chunk
+type `22`.
+
 ## Type 0x22
 
-This chunk may be used to load an asset.
+This chunk is used to load an asset for entities. The asset is added to a global
+asset list.
 
 | tag  | length |
 |------|--------|
@@ -290,12 +383,29 @@ This chunk may be used to load an asset.
 | 0x3f | 12     |
 | 0x40 | 8      |
 
+### Tag 0x24/0x40
+
+Both tags are used to load a model from the active asset section. The tag data
+specifies the offset/size of the entire model data. The difference between the
+two tags is currently unknown.
+
+| offset | type | usage  |
+|--------|------|--------|
+| 0      | int  | offset |
+| 4      | int  | size   |
+
 ### Tag 0x25
 
-| offset | type | usage       |
-|--------|------|-------------|
-| 0      | int  | offset      |
-| 4      | int  | header size |
+| offset | type | usage  |
+|--------|------|--------|
+| 0      | int  | offset |
+| 4      | int  | size   |
+
+### Tag 0x26
+
+| offset | type  | usage   |
+|--------|-------|---------|
+| 0      | short | unknown |
 
 ### Tag 0x27
 
@@ -303,14 +413,24 @@ This tag includes the asset ID, which is how entities reference them.
 
 | offset | type  | usage    |
 |--------|-------|----------|
+| 0      | short | unknown  |
 | 2      | short | asset ID |
 
-### Tag 0x40
+### Tag 0x28
 
-| offset | type | usage       |
-|--------|------|-------------|
-| 0      | int  | offset      |
-| 4      | int  | header size |
+| offset | type | usage   |
+|--------|------|---------|
+| 0      | byte | unknown |
+| 1      | byte | unknown |
+| 2      | byte | unknown |
+
+### Tag 0x3f
+
+| offset | type  | usage   |
+|--------|-------|---------|
+| 0      | short | unknown |
+| 4      | int   | offset  |
+| 8      | int   | size    |
 
 ## Type 0x29
 

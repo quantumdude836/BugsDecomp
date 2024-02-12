@@ -454,7 +454,7 @@ The following table lists known offsets/values in the level logic globals:
 | 0x0c   |                               |
 | 0x0e   |                               |
 | 0x0f   |                               |
-| 0x10   |                               |
+| 0x10   | language                      |
 | 0x11   |                               |
 | 0x25   | current world                 |
 | 0x2d   |                               |
