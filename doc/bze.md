@@ -27,7 +27,8 @@ Each entry has the following structure:
 
 Sections are stored consectively in the BZE in the order given by the header.
 Each section occupies `file size` bytes in the BZE, of which `actual size` bytes
-are valid (the rest are padding).
+are valid (the rest are padding). Note that `actual size` is usually rounded up
+to the next multiple of 4.
 
 Known section IDs:
 
@@ -70,6 +71,10 @@ Note that an `osize` of 7 is not valid (since no lengths could be encoded).
 The remaining 3 bytes form a 24-bit big-endian integer that represents the
 number of compression "items"; the stored value is one less than the actual
 value (so there is always at least one "item").
+
+NOTE: for some sections, the stored number of items seems to be the actual
+number, i.e. it's not one less than the actual number. There currently does not
+appear to be an obvious pattern to these off-by-1 errors.
 
 ## Length Encoding
 
