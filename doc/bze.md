@@ -155,13 +155,13 @@ The section is made up of a handful of top-level "command" bytes:
 This command does multiple things, including:
 
 * Initializes a bunch of linked-list node pools
-* Loads section 4 and makes it the active section for asset data
+* Loads section 4 and makes it the active section for model data
 
 ## Command 0x4b
 
 This command does multiple things, including:
 
-* Loads the language-specific section and makes it the active section for asset
+* Loads the language-specific section and makes it the active section for model
 data
 
 ## Pseudo-Chunk
@@ -369,7 +369,7 @@ This tag includes an ID. Not to be confused with normal asset IDs.
 
 ### Tag 0x24
 
-Loads a model from the active asset section. This tag is detailed below in chunk
+Loads a model from the active model section. This tag is detailed below in chunk
 type `22`.
 
 ## Type 0x22
@@ -390,7 +390,7 @@ asset list.
 
 ### Tag 0x24/0x40
 
-Both tags are used to load a model from the active asset section. The tag data
+Both tags are used to load a model from the active model section. The tag data
 specifies the offset/size of the entire model data. The difference between the
 two tags is currently unknown.
 
