@@ -113,6 +113,3 @@ PATCH_CODE(0x405640, 0x405640, ShowRetryDialog);
 /// <returns>Random number</returns>
 EXTERN_C int BugsRand(void);
 PATCH_CODE(0x4312c0, 0x431150, BugsRand);
-
-EXTERN_C void GsMapModelingData(void *p);
-PATCH_CODE_1_6(0x40cd60, GsMapModelingData);
